@@ -15,7 +15,6 @@ public class MapCanvas extends Canvas {
     int lastX = -1;
     int lastY = -1;
 
-    //private Canvas mapRenderCanvas;
     private Canvas frontCanvas;
     private Pane layerPane;
 
