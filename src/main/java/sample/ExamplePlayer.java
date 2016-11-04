@@ -121,7 +121,7 @@ public class ExamplePlayer extends Thread
     {
         // Set the URL as the first argument, if any.
         // String url = args.length > 0 ? url = args[0] : null;
-        String url = "file:///home/fabien/Development/Projects/Java/JavaFX/templeLevel.ogg";
+        String url = "file:///C:/Users/Fabien/Development/Java/JavaFX_Test/templeLevel.ogg";
 
         /*
          * If the url variable is set, start the thread. If not, give an error

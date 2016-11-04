@@ -70,4 +70,16 @@ public class Map {
     public void setTileset(Tileset tileset) {
         this.tileset = tileset;
     }
+
+    public Tileset getTileset() {
+        return this.tileset;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
 }

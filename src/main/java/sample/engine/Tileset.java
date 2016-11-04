@@ -20,4 +20,8 @@ public class Tileset {
                    x * cellSize,y * cellSize,cellSize,cellSize);
     }
 
+    public Image getTilesetImage() {
+        return this.tilesetImage;
+    }
+
 }
