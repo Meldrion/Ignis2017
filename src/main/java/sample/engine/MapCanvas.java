@@ -73,24 +73,48 @@ public class MapCanvas extends Canvas {
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_MOVED,t -> {
             int x = (int)t.getX()/32;
             int y = (int)t.getY()/32;
-
             if (x != lastX || y != lastY) {
-
-                int w = 5 * 32;
-                GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
-                g.clearRect(lastX * 32,lastY * 32,w,w);
-
-                g.setGlobalAlpha(0.5);
-                g.setFill(Color.RED);
-                g.fillRect(x * 32,y * 32,w,w);
-                g.drawImage(this.map.getTileset().getTilesetImage(),0,0,w,w,x * 32,y * 32,w,w);
-
-                g.setGlobalAlpha(1.0);
-
+                this.renderCursor(x,y,false);
                 lastX = x;
                 lastY = y;
             }
         });
+
+        this.frontCanvas.addEventFilter(MouseEvent.MOUSE_EXITED,t -> {
+            int x = (int)t.getX()/32;
+            int y = (int)t.getY()/32;
+            lastX = x;
+            lastY = y;
+
+            this.renderCursor(x,y,true);
+
+        });
+
+        this.frontCanvas.addEventFilter(MouseEvent.MOUSE_ENTERED,t -> {
+
+            int x = (int)t.getX()/32;
+            int y = (int)t.getY()/32;
+            this.renderCursor(x,y,false);
+            lastX = x;
+            lastY = y;
+
+        });
+    }
+
+    private void renderCursor(int x,int y,boolean clearOnly) {
+
+        int w = 5 * 32;
+        GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
+        g.clearRect(lastX * 32,lastY * 32,w,w);
+
+        if (!clearOnly) {
+            g.setGlobalAlpha(0.5);
+            g.setFill(Color.RED);
+            g.fillRect(x * 32, y * 32, w, w);
+            g.drawImage(this.map.getTileset().getTilesetImage(), 0, 0, w, w, x * 32, y * 32, w, w);
+            g.setGlobalAlpha(1.0);
+        }
+
     }
 
     public void linkLayerPane(Pane pane) {
