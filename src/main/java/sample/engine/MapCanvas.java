@@ -2,6 +2,7 @@ package sample.engine;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -19,6 +20,7 @@ public class MapCanvas extends Canvas {
     private Pane layerPane;
 
     private Map map;
+    private int activeLayerId;
 
     public MapCanvas(int width,int height) {
         super(width,height);
@@ -39,7 +41,9 @@ public class MapCanvas extends Canvas {
     }
 
     public void render() {
-        this.map.renderMap(this.getGraphicsContext2D());
+        GraphicsContext g = this.getGraphicsContext2D();
+        g.clearRect(0,0,this.getWidth(),this.getHeight());
+        this.map.renderMap(g);
     }
 
     public void renderPartial(int x,int y) {
@@ -97,6 +101,25 @@ public class MapCanvas extends Canvas {
             lastX = x;
             lastY = y;
 
+        });
+
+        this.frontCanvas.setFocusTraversable(true);
+        this.frontCanvas.addEventFilter(MouseEvent.ANY, (e) -> this.frontCanvas.requestFocus());
+        this.frontCanvas.setOnKeyPressed((key) -> {
+            switch (key.getCode()) {
+                case DIGIT1:
+                    this.map.setActiveLayerIndex(0);
+                    this.render();
+                    break;
+                case DIGIT2:
+                    this.map.setActiveLayerIndex(1);
+                    this.render();
+                    break;
+                case DIGIT3:
+                    this.map.setActiveLayerIndex(2);
+                    this.render();
+                    break;
+            }
         });
     }
 
