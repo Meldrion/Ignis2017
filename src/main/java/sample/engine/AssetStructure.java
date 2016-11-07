@@ -56,22 +56,15 @@ public class AssetStructure {
     }
 
     public String getAsset() {
-/*        return this.filesystem.toOSStylePath(this.filesystem.concat(
-                this.projectRoot,AssetStructure.ASSET));*/
-        return "";
+        return FilesystemHandler.concat(this.rootPath,AssetStructure.ASSET);
     }
 
     public String getPath(String assetName) {
-/*        return this.filesystem.toOSStylePath(this.filesystem.concat(
-                this.projectRoot,
-                this.filesystem.concat(AssetStructure.ASSET,assetName)));*/
-        return "";
+        return FilesystemHandler.concat(this.getAsset(),assetName);
     }
 
     public String getProjectJSON() {
-/*        return this.filesystem.toOSStylePath(this.filesystem.concat(
-                this.projectRoot,"project.json"));*/
-            return "";
+            return FilesystemHandler.concat(this.rootPath,"project.json");
     }
 
 

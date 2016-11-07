@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,7 +27,11 @@ public class FilesystemHandler {
         return System.getProperty("user.home");
     }
 
-    public void writeJson(JSONObject json,String path) {
+    public static boolean createFolder(String path) {
+        return (new File(path)).mkdir();
+    }
+
+    public boolean writeJson(JSONObject json,String path) {
         try {
 
             FileWriter file = new FileWriter(path);
@@ -34,8 +39,11 @@ public class FilesystemHandler {
             file.flush();
             file.close();
 
+            return true;
+
         } catch (IOException e) {
             LOGGER.error(e);
+            return false;
         }
     }
 
@@ -43,6 +51,7 @@ public class FilesystemHandler {
 
         JSONParser parser = new JSONParser();
         Object obj = null;
+
         try {
             obj = parser.parse(new FileReader(path));
             return (JSONObject) obj;
@@ -51,6 +60,7 @@ public class FilesystemHandler {
             LOGGER.error(e);
             return null;
         }
+
     }
 
 }
