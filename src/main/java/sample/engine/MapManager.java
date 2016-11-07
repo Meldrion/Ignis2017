@@ -55,6 +55,10 @@ public class MapManager {
         return this.root.find(uniqueMapId);
     }
 
+    public Map getRoot() {
+        return this.root;
+    }
+
     public List<Map> getChildren() {
         return this.root.getChildren();
     }

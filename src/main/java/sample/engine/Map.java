@@ -19,10 +19,11 @@ public class Map {
     private List<Map> children;
     private Map parent;
     private String uniqueId;
+    private String name;
 
     public Map() {
         this.activeLayerIndex = 0;
-
+        this.name = "Untitled";
         this.children = new ArrayList<>();
         this.parent = null;
         this.layers = new ArrayList<>();
@@ -30,6 +31,20 @@ public class Map {
         for (int i = 0; i < 3; i++) {
             this.layers.add(new TilesetLayer());
         }
+
+        this.uniqueId = String.valueOf((int) (Math.random() * 99999));
+    }
+
+    public String getMapId() {
+        return this.uniqueId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setDimension(int x, int y) {

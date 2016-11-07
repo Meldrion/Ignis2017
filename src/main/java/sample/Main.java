@@ -100,7 +100,14 @@ public class Main extends Application {
         leftSplitter.setOrientation(Orientation.VERTICAL);
         leftSplitter.getItems().add(tilesetScroller);
 
+        mapManager.addMap(newMap);
+        mapManager.addMap(new Map());
+        newMap.addMap(new Map());
+        mapManager.addMap(new Map());
+
+
         MapTree mapTree = new MapTree();
+        mapTree.buildFromMapManager(mapManager);
         leftSplitter.getItems().add(mapTree);
         leftSplitter.setDividerPosition(0,0.7);
 
