@@ -102,10 +102,11 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         this.frontCanvas.addEventFilter(MouseEvent.MOUSE_EXITED,t -> {
             int x = (int)t.getX()/32;
             int y = (int)t.getY()/32;
-            lastX = x;
-            lastY = y;
 
             this.renderCursor(x,y,true);
+
+            lastX = x;
+            lastY = y;
 
         });
 
