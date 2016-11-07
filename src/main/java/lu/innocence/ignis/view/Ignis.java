@@ -41,6 +41,7 @@ public class Ignis extends Application implements ActiveProjectListener{
         Menu fileMenu = new Menu("File");
 
         MenuItem newProject = new MenuItem("New Project...");
+        newProject.setOnAction(e -> new CreateProjectDialog());
         newProject.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
         MenuItem loadProject = new MenuItem("Load Project");
         MenuItem saveProject = new MenuItem("Save Project");
@@ -66,13 +67,15 @@ public class Ignis extends Application implements ActiveProjectListener{
         topContainer.getChildren().add(toolBar);
 
         Button newProjectBtn = new Button();
+        newProjectBtn.setFocusTraversable(false);
+
         newProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Document-Blank-icon-24.png").getFile()));
-        newProjectBtn.setOnAction(e -> {
-            CreateProjectDialog createProjectDialog = new CreateProjectDialog();
-        });
+        newProjectBtn.setOnAction(e -> new CreateProjectDialog());
         Button openProjectBtn = new Button();
+        openProjectBtn.setFocusTraversable(false);
         openProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Files-icon-24.png").getFile()));
         Button saveProjectBtn = new Button();
+        saveProjectBtn.setFocusTraversable(false);
         saveProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Actions-document-save-icon.png").getFile()));
 
         toolBar.getItems().addAll(newProjectBtn,openProjectBtn,saveProjectBtn);
