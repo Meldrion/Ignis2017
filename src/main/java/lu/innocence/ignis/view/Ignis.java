@@ -92,7 +92,7 @@ public class Ignis extends Application implements ActiveProjectListener{
         leftSplitter.getItems().add(tilesetScroller);
 
         this.mapTree = new MapTree();
-        //mapTree.buildFromMapManager(mapManager);
+
         leftSplitter.getItems().add(mapTree);
         leftSplitter.setDividerPosition(0,0.7);
 
@@ -107,6 +107,8 @@ public class Ignis extends Application implements ActiveProjectListener{
         ProjectManager.getInstance().init();
         ProjectManager.getInstance().addActiveProjectListener(this);
 
+        buildUserInterface(primaryStage);
+
         ProjectManager.getInstance().loadProject("/home/fabien/ignis/ES2016");
 
     }
@@ -114,6 +116,7 @@ public class Ignis extends Application implements ActiveProjectListener{
     @Override
     public void activeProjectChanged(Project p) {
 
+        this.mapTree.setRoot(null);
 
         if (p != null) {
 
@@ -123,6 +126,7 @@ public class Ignis extends Application implements ActiveProjectListener{
             mapManager.addActiveMapListener(mapCanvas);
 
             Map newMap =  mapManager.createNewMap();
+            newMap.setName("First map");
             newMap.setDimension(50,50);
 
             Tileset tileset = new Tileset();
@@ -141,7 +145,17 @@ public class Ignis extends Application implements ActiveProjectListener{
             caveLevel.setDimension(30,30);
             newMap.addMap(caveLevel);
             mapManager.addMap(mapManager.createNewMap());
+
+            this.mapTree.buildFromMapManager(mapManager);
         }
 
     }
+
+
+    // RunConfig Linux
+    // -Dprism.verbose=true -Dprism.forceGPU=true
+    public static void main(String args[]) {
+        launch(args);
+    }
+
 }

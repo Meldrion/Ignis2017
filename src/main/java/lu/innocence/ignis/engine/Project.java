@@ -14,11 +14,16 @@ public class Project {
     private FilesystemHandler filesystemHandler;
     private AssetStructure assetStructure;
 
+    private String projectTitle;
+    private String author;
+    private String devCompany;
+
     /**
      *
      */
     public Project() {
         this.filesystemHandler = new FilesystemHandler();
+        this.mapManager = new MapManager();
     }
 
 
@@ -49,7 +54,11 @@ public class Project {
                 allOk &= FilesystemHandler.createFolder(this.assetStructure.getPath(name));
             }
 
-            allOk &= this.filesystemHandler.writeJson(projectJSON,this.assetStructure.getProjectJSON());
+            this.projectTitle = projectTitle;
+            this.author = author;
+            this.devCompany = devCompany;
+
+            allOk &= FilesystemHandler.writeJson(projectJSON,this.assetStructure.getProjectJSON());
             return allOk;
 
         } else {
@@ -59,8 +68,23 @@ public class Project {
     }
 
 
-    public boolean load() {
-        return true;
+    public boolean load(String rootFolder) {
+        this.rootFolder = rootFolder;
+        this.assetStructure = new AssetStructure(this.rootFolder);
+        JSONObject projectJSON = FilesystemHandler.readJSON(this.assetStructure.getProjectJSON());
+
+        if (projectJSON != null) {
+
+            this.projectTitle = (String) projectJSON.get("title");
+            this.author = (String) projectJSON.get("author");
+            this.devCompany = (String) projectJSON.get("company");
+
+            return true;
+
+        } else {
+            return false;
+        }
+
     }
 
     public boolean saveProject() {

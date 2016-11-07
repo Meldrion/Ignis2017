@@ -2,6 +2,7 @@ package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class Map {
     private Map parent;
     private String uniqueId;
     private String name;
+    private String mapFilePath;
 
 
     public Map() {
@@ -34,6 +36,10 @@ public class Map {
         for (int i = 0; i < 3; i++) {
             this.layers.add(new TilesetLayer());
         }
+    }
+
+    public void setMapFilePath(String path) {
+        this.mapFilePath = path;
     }
 
     public String getMapId() {
@@ -153,5 +159,14 @@ public class Map {
 
     public List<Map> getChildren() {
         return this.children;
+    }
+
+    public void save() {
+        JSONObject mapJSON = new JSONObject();
+        mapJSON.put("name",this.getName());
+        mapJSON.put("width",this.getWidth());
+        mapJSON.put("height",this.getHeight());
+
+        FilesystemHandler.writeJson(mapJSON,this.mapFilePath);
     }
 }

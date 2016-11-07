@@ -72,9 +72,9 @@ public class ExamplePlayer extends Thread
     private InputStream inputStream = null;
 
     /*
-     * We need a buffer, it's size, a count to know how many bytes we have read
+     * We need a buffer, it's size, a count to know how many bytes we have readJSON
      * and an index to keep track of where we are. This is standard networking
-     * stuff used with read().
+     * stuff used with readJSON().
      */
     byte[] buffer = null;
     int bufferSize = 2048;
@@ -111,7 +111,7 @@ public class ExamplePlayer extends Thread
     private Info jorbisInfo = new Info();
 
     /**
-     * The programs <code>main()</code> method. Will read the first
+     * The programs <code>main()</code> method. Will readJSON the first
      * command-line argument and use it as URL, after which it will start the
      * thread.
      *
@@ -214,7 +214,7 @@ public class ExamplePlayer extends Thread
     /**
      * This method is probably easiest understood by looking at the body.
      * However, it will - if no problems occur - call methods to initialize the
-     * JOgg JOrbis libraries, read the header, initialize the sound system, read
+     * JOgg JOrbis libraries, readJSON the header, initialize the sound system, readJSON
      * the body of the stream and clean up.
      */
     public void run()
@@ -231,8 +231,8 @@ public class ExamplePlayer extends Thread
         initializeJOrbis();
 
         /*
-         * If we can read the header, we try to inialize the sound system. If we
-         * could initialize the sound system, we try to read the body.
+         * If we can readJSON the header, we try to inialize the sound system. If we
+         * could initialize the sound system, we try to readJSON the body.
          */
         if(readHeader())
         {
@@ -274,27 +274,27 @@ public class ExamplePlayer extends Thread
      * This method reads the header of the stream, which consists of three
      * packets.
      *
-     * @return true if the header was successfully read, false otherwise
+     * @return true if the header was successfully readJSON, false otherwise
      */
     private boolean readHeader()
     {
-        debugOutput("Starting to read the header.");
+        debugOutput("Starting to readJSON the header.");
 
         /*
          * Variable used in loops below. While we need more data, we will
-         * continue to read from the InputStream.
+         * continue to readJSON from the InputStream.
          */
         boolean needMoreData = true;
 
         /*
-         * We will read the first three packets of the header. We start off by
+         * We will readJSON the first three packets of the header. We start off by
          * defining packet = 1 and increment that value whenever we have
-         * successfully read another packet.
+         * successfully readJSON another packet.
          */
         int packet = 1;
 
         /*
-         * While we need more data (which we do until we have read the three
+         * While we need more data (which we do until we have readJSON the three
          * header packets), this loop reads from the stream and has a big
          * <code>switch</code> statement which does what it's supposed to do in
          * regards to the current packet.
@@ -308,15 +308,15 @@ public class ExamplePlayer extends Thread
             }
             catch(IOException exception)
             {
-                System.err.println("Could not read from the input stream.");
+                System.err.println("Could not readJSON from the input stream.");
                 System.err.println(exception);
             }
 
-            // We let SyncState know how many bytes we read.
+            // We let SyncState know how many bytes we readJSON.
             joggSyncState.wrote(count);
 
             /*
-             * We want to read the first three packets. For the first packet, we
+             * We want to readJSON the first three packets. For the first packet, we
              * need to initialize the StreamState object and a couple of other
              * things. For packet two and three, the procedure is the same: we
              * take out a page, and then we take out the packet.
@@ -344,7 +344,7 @@ public class ExamplePlayer extends Thread
                         }
 
                         /*
-                         * We got where we wanted. We have successfully read the
+                         * We got where we wanted. We have successfully readJSON the
                          * first packet, and we will now initialize and reset
                          * StreamState, and initialize the Info and Comment
                          * objects. Afterwards we will check that the page
@@ -403,7 +403,7 @@ public class ExamplePlayer extends Thread
 
                     /*
                      * Note how we are NOT breaking here if we have proceeded to
-                     * the second packet. We don't want to read from the input
+                     * the second packet. We don't want to readJSON from the input
                      * stream again if it's not necessary.
                      */
                     if(packet == 1) break;
@@ -609,7 +609,7 @@ public class ExamplePlayer extends Thread
 
         /*
          * Variable used in loops below, like in readHeader(). While we need
-         * more data, we will continue to read from the InputStream.
+         * more data, we will continue to readJSON from the InputStream.
          */
         boolean needMoreData = true;
 
@@ -697,7 +697,7 @@ public class ExamplePlayer extends Thread
                     return;
                 }
 
-                // We let SyncState know how many bytes we read.
+                // We let SyncState know how many bytes we readJSON.
                 joggSyncState.wrote(count);
 
                 // There's no more data in the stream.

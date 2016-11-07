@@ -14,12 +14,21 @@ public class MapManager {
     private Map root;
     private Map activeMap;
     private List<ActiveMapListener> mapListener;
+    private String mapFolder;
 
 
     public MapManager() {
         this.idGenerator = new MapIDGenerator();
         this.root = new Map();
         this.mapListener = new ArrayList<>();
+    }
+
+    public void setMapFolder(String folder) {
+        this.mapFolder = folder;
+    }
+
+    public String getMapFolder() {
+        return this.mapFolder;
     }
 
     public void setActiveMap(Map activeMap) {
@@ -60,7 +69,12 @@ public class MapManager {
     public Map createNewMap() {
         Map map = new Map();
         map.setUniqueId(String.format("%s.json",this.generateMapId()));
+        map.setMapFilePath(FilesystemHandler.concat(this.mapFolder,map.getMapId()));
         return map;
+    }
+
+    public void saveMapFile(Map map) {
+        map.save();
     }
 
     public Map find(String uniqueMapId) {

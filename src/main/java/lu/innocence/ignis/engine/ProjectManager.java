@@ -61,7 +61,7 @@ public class ProjectManager {
 
     public Project loadProject(String path) {
         Project project = new Project();
-        if (project.load()) {
+        if (project.load(path)) {
             this.setProject(project);
             return project;
         } else {

@@ -31,7 +31,7 @@ public class FilesystemHandler {
         return (new File(path)).mkdir();
     }
 
-    public boolean writeJson(JSONObject json,String path) {
+    public static boolean writeJson(JSONObject json,String path) {
         try {
 
             FileWriter file = new FileWriter(path);
@@ -47,7 +47,7 @@ public class FilesystemHandler {
         }
     }
 
-    public JSONObject read(String path) {
+    public static JSONObject readJSON(String path) {
 
         JSONParser parser = new JSONParser();
         Object obj = null;
