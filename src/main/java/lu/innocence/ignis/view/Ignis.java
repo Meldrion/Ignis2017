@@ -108,8 +108,9 @@ public class Ignis extends Application implements ActiveProjectListener{
         ProjectManager.getInstance().addActiveProjectListener(this);
 
         buildUserInterface(primaryStage);
-
-        ProjectManager.getInstance().loadProject("/home/fabien/ignis/ES2016");
+/*        ProjectManager.getInstance().createProject(ProjectManager.getInstance().getRootFolder(),"ES2016","Endless Sorrow",
+                "Fabien Steines","Innocence Studios");*/
+        ProjectManager.getInstance().loadProject(ProjectManager.getInstance().getRootFolder() + "/ES2016");
 
     }
 

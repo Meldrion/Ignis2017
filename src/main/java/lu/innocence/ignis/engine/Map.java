@@ -83,7 +83,6 @@ public class Map {
         for (int i = 0; i < this.width; i++) {
             for (int j = 0; j < this.height; j++) {
 
-
                 switch (index) {
                     case 0:
                         this.tileset.drawTileTo(g, i, j, 0, 0);
@@ -93,6 +92,8 @@ public class Map {
                         break;
                     case 2:
                         this.tileset.drawTileTo(g, i, j, 0, 3);
+                        break;
+                    default:
                         break;
                 }
 
