@@ -1,14 +1,14 @@
-package sample.component;
+package lu.innocence.ignis.component;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import sample.IgnisGlobals;
-import sample.engine.Map;
-import sample.engine.Tileset;
-import sample.event.ActiveMapListener;
-import sample.event.TilesetSelectionChanged;
+import lu.innocence.ignis.IgnisGlobals;
+import lu.innocence.ignis.engine.Tileset;
+import lu.innocence.ignis.event.ActiveMapListener;
+import lu.innocence.ignis.event.TilesetSelectionChanged;
+import lu.innocence.ignis.engine.Map;
 
 import java.util.ArrayList;
 import java.util.List;

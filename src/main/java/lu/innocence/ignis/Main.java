@@ -1,4 +1,4 @@
-package sample;
+package lu.innocence.ignis;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -12,12 +12,12 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import lu.innocence.ignis.component.MapCanvas;
+import lu.innocence.ignis.component.MapTree;
+import lu.innocence.ignis.component.TilesetCanvas;
+import lu.innocence.ignis.engine.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sample.component.MapTree;
-import sample.engine.*;
-import sample.component.MapCanvas;
-import sample.component.TilesetCanvas;
 
 public class Main extends Application {
 

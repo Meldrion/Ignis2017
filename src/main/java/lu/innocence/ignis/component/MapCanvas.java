@@ -1,19 +1,19 @@
-package sample.component;
+package lu.innocence.ignis.component;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import sample.engine.Map;
-import sample.event.ActiveMapListener;
-import sample.event.TilesetSelectionChanged;
+import lu.innocence.ignis.event.ActiveMapListener;
+import lu.innocence.ignis.event.TilesetSelectionChanged;
+import lu.innocence.ignis.engine.Map;
 
 
 /**
  * @author Fabien Steines
  */
-public class MapCanvas extends Canvas implements TilesetSelectionChanged , ActiveMapListener {
+public class MapCanvas extends Canvas implements TilesetSelectionChanged, ActiveMapListener {
 
     int lastX = -1;
     int lastY = -1;

@@ -1,4 +1,4 @@
-package sample.component;
+package lu.innocence.ignis.component;
 
 import javafx.scene.control.TreeItem;
 

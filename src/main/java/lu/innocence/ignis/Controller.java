@@ -1,4 +1,4 @@
-package sample;
+package lu.innocence.ignis;
 
 public class Controller {
 }

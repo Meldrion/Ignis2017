@@ -1,4 +1,4 @@
-package sample.engine;
+package lu.innocence.ignis.engine;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

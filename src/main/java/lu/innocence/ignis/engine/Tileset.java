@@ -1,4 +1,4 @@
-package sample.engine;
+package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

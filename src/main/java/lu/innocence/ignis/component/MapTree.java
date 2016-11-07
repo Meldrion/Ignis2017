@@ -1,9 +1,9 @@
-package sample.component;
+package lu.innocence.ignis.component;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import sample.engine.Map;
-import sample.engine.MapManager;
+import lu.innocence.ignis.engine.Map;
+import lu.innocence.ignis.engine.MapManager;
 
 import java.util.List;
 

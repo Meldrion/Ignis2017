@@ -1,4 +1,4 @@
-package sample.engine;
+package lu.innocence.ignis.engine;
 
 /**
  * @author Fabien Steines

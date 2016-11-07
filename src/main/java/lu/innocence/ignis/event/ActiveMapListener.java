@@ -1,6 +1,6 @@
-package sample.event;
+package lu.innocence.ignis.event;
 
-import sample.engine.Map;
+import lu.innocence.ignis.engine.Map;
 
 /**
  * @author Fabien Steines

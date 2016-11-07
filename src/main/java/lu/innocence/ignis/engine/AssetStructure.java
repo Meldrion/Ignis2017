@@ -1,4 +1,4 @@
-package sample.engine;
+package lu.innocence.ignis.engine;
 
 import java.util.ArrayList;
 import java.util.List;

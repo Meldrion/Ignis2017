@@ -1,6 +1,6 @@
-package sample.engine;
+package lu.innocence.ignis.engine;
 
-import sample.event.ActiveMapListener;
+import lu.innocence.ignis.event.ActiveMapListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,6 @@ public class MapManager {
     private final MapIDGenerator idGenerator;
     private Map root;
     private Map activeMap;
-
-
     private List<ActiveMapListener> mapListener;
 
 
@@ -41,7 +39,7 @@ public class MapManager {
        }
     }
 
-    public String generateMapId() {
+    private String generateMapId() {
         return this.idGenerator.generateUniqueName();
     }
 
@@ -61,7 +59,7 @@ public class MapManager {
 
     public Map createNewMap() {
         Map map = new Map();
-        map.setUniqueId(this.generateMapId());
+        map.setUniqueId(String.format("%s.json",this.generateMapId()));
         return map;
     }
 

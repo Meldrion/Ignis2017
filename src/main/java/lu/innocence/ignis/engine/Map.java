@@ -1,4 +1,4 @@
-package sample.engine;
+package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -24,7 +24,7 @@ public class Map {
 
     public Map() {
 
-        this.uniqueId = "-1";
+        this.uniqueId = "root";
         this.activeLayerIndex = 0;
         this.name = "Untitled";
         this.children = new ArrayList<>();

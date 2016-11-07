@@ -1,4 +1,4 @@
-package sample.event;
+package lu.innocence.ignis.event;
 
 /**
  * @author Fabien Steines

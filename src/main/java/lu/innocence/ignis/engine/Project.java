@@ -1,8 +1,7 @@
-package sample.engine;
+package lu.innocence.ignis.engine;
 
 import org.json.simple.JSONObject;
 
-import java.io.File;
 import java.util.List;
 
 /**
