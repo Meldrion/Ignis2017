@@ -58,6 +58,8 @@ public class Project {
             this.author = author;
             this.devCompany = devCompany;
 
+            this.mapManager.setMapFolder(this.assetStructure.getPath(AssetStructure.MAP));
+
             allOk &= FilesystemHandler.writeJson(projectJSON,this.assetStructure.getProjectJSON());
             return allOk;
 
@@ -78,6 +80,8 @@ public class Project {
             this.projectTitle = (String) projectJSON.get("title");
             this.author = (String) projectJSON.get("author");
             this.devCompany = (String) projectJSON.get("company");
+
+            this.mapManager.setMapFolder(this.assetStructure.getPath(AssetStructure.MAP));
 
             return true;
 
