@@ -2,18 +2,18 @@ package sample.component;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import sample.engine.Map;
+import sample.event.ActiveMapListener;
 import sample.event.TilesetSelectionChanged;
 
 
 /**
  * @author Fabien Steines
  */
-public class MapCanvas extends Canvas implements TilesetSelectionChanged {
+public class MapCanvas extends Canvas implements TilesetSelectionChanged , ActiveMapListener {
 
     int lastX = -1;
     int lastY = -1;
@@ -46,6 +46,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged {
         if (this.layerPane != null) {
             this.layerPane.setPrefSize(map.getWidth() * 32,map.getHeight() * 32);
         }
+        this.render();
     }
 
     public void render() {
@@ -162,5 +163,10 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged {
         this.tilesetY = startY;
         this.tilesetWidth = width;
         this.tilesetHeight = height;
+    }
+
+    @Override
+    public void activeMapChanged(Map map) {
+        this.setMap(map);
     }
 }

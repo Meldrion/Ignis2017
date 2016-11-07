@@ -16,9 +16,15 @@ public class Map {
     private int height;
     private Tileset tileset;
     private int activeLayerIndex;
+    private List<Map> children;
+    private Map parent;
+    private String uniqueId;
 
     public Map() {
         this.activeLayerIndex = 0;
+
+        this.children = new ArrayList<>();
+        this.parent = null;
         this.layers = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
@@ -103,5 +109,28 @@ public class Map {
 
     public void setActiveLayerIndex(int activeLayerIndex) {
         this.activeLayerIndex = activeLayerIndex;
+    }
+
+    public void addMap(Map map) {
+        if (!this.children.contains(map)) {
+            this.children.add(map);
+            map.parent = this;
+        }
+    }
+
+    public Map find(String uniqueId) {
+
+        int index = 0;
+        int maxIndex = this.children.size();
+        Map foundMap = this.uniqueId.equals(uniqueId) ? this : null;
+        while (foundMap == null && index < maxIndex) {
+            foundMap = this.children.get(index).find(uniqueId);
+        }
+        return foundMap;
+
+    }
+
+    public List<Map> getChildren() {
+        return this.children;
     }
 }

@@ -6,12 +6,16 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import sample.component.MapTree;
 import sample.engine.Map;
 import sample.component.MapCanvas;
+import sample.engine.MapManager;
 import sample.engine.Tileset;
 import sample.component.TilesetCanvas;
 
@@ -34,7 +38,8 @@ public class Main extends Application {
 
         Menu fileMenu = new Menu("File");
 
-        MenuItem newProject = new MenuItem("New Project");
+        MenuItem newProject = new MenuItem("New Project...");
+        newProject.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
         MenuItem loadProject = new MenuItem("Load Project");
         MenuItem saveProject = new MenuItem("Save Project");
         MenuItem closeProject = new MenuItem("Close Project");
@@ -75,15 +80,18 @@ public class Main extends Application {
         tileset.loadImage("tileset.png");
 
         newMap.setTileset(tileset);
-        mapCanvas.setMap(newMap);
-        mapCanvas.render();
+
 
         TilesetCanvas tilesetCanvas = new TilesetCanvas();
         ScrollPane tilesetScroller = new ScrollPane();
         tilesetScroller.setContent(tilesetCanvas);
         tilesetScroller.setPrefWidth(280);
-        tilesetCanvas.setTileset(tileset);
-        tilesetCanvas.render();
+
+        MapManager mapManager = new MapManager();
+        mapManager.addActiveMapListener(tilesetCanvas);
+        mapManager.addActiveMapListener(mapCanvas);
+
+        mapManager.setActiveMap(newMap);
 
         tilesetCanvas.addSelecitonListener(mapCanvas);
 

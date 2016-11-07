@@ -5,7 +5,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import sample.IgnisGlobals;
+import sample.engine.Map;
 import sample.engine.Tileset;
+import sample.event.ActiveMapListener;
 import sample.event.TilesetSelectionChanged;
 
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.List;
 /**
  * @author Fabien Steines
  */
-public class TilesetCanvas extends Canvas {
+public class TilesetCanvas extends Canvas implements ActiveMapListener {
 
     private final int cellSize;
     private Tileset linkedTileset;
@@ -120,6 +122,7 @@ public class TilesetCanvas extends Canvas {
             this.setWidth(0);
             this.setHeight(0);
         }
+        this.render();
     }
 
     public void addSelecitonListener(TilesetSelectionChanged listener) {
@@ -139,4 +142,8 @@ public class TilesetCanvas extends Canvas {
         }
     }
 
+    @Override
+    public void activeMapChanged(Map map) {
+        this.setTileset(map.getTileset() != null ? map.getTileset() : null);
+    }
 }
