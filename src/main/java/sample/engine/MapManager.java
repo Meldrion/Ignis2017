@@ -10,12 +10,16 @@ import java.util.List;
  */
 public class MapManager {
 
+    private final MapIDGenerator idGenerator;
     private Map root;
     private Map activeMap;
+
+
     private List<ActiveMapListener> mapListener;
 
 
     public MapManager() {
+        this.idGenerator = new MapIDGenerator();
         this.root = new Map();
         this.mapListener = new ArrayList<>();
     }
@@ -35,6 +39,10 @@ public class MapManager {
        for (ActiveMapListener listener : this.mapListener) {
            listener.activeMapChanged(this.activeMap);
        }
+    }
+
+    public String generateMapId() {
+        return this.idGenerator.generateUniqueName();
     }
 
     public void addMap(Map map) {

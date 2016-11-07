@@ -12,20 +12,22 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sample.component.MapTree;
-import sample.engine.Map;
+import sample.engine.*;
 import sample.component.MapCanvas;
-import sample.engine.MapManager;
-import sample.engine.Project;
-import sample.engine.Tileset;
 import sample.component.TilesetCanvas;
 
 public class Main extends Application {
 
-
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        ProjectManager.getInstance().init();
+        Project p = ProjectManager.getInstance().loadProject("/home/fabien/ignis/ES2016");
 
         BorderPane root = new BorderPane();
         primaryStage.setTitle("Hello World");
@@ -112,6 +114,10 @@ public class Main extends Application {
         newMap.addMap(caveLevel);
         mapManager.addMap(new Map());
 
+        for (int i=0;i<50;i++) {
+            LOGGER.info(mapManager.generateMapId());
+        }
+
 
         MapTree mapTree = new MapTree();
         mapTree.buildFromMapManager(mapManager);
@@ -121,8 +127,6 @@ public class Main extends Application {
         root.setLeft(leftSplitter);
         primaryStage.show();
 
-        Project p = new Project();
-        p.create("/home/fabien/Desktop","EndlessSorrow","Endless Sorrow","Fabien Steines","Innocence Studios");
 
     }
 

@@ -21,7 +21,9 @@ public class Map {
     private String uniqueId;
     private String name;
 
+
     public Map() {
+
         this.activeLayerIndex = 0;
         this.name = "Untitled";
         this.children = new ArrayList<>();
