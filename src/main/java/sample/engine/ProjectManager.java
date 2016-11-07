@@ -5,6 +5,7 @@ package sample.engine;
  */
 public class ProjectManager {
 
+    private static ProjectManager instance;
     private Project currentProject;
     private FilesystemHandler filesystemHandler;
 
@@ -21,6 +22,14 @@ public class ProjectManager {
         this.filesystemHandler = new FilesystemHandler();
         this.rootFolder = "";
 
+    }
+
+    public static ProjectManager getInstance() {
+        if (ProjectManager.instance == null ) {
+            ProjectManager.instance = new ProjectManager();
+        }
+
+        return ProjectManager.instance;
     }
 
     public void setProject(Project project) {
@@ -49,6 +58,27 @@ public class ProjectManager {
         } else {
             return null;
         }
+    }
+
+    public void init() {
+
+        this.rootFolder = FilesystemHandler.concat(FilesystemHandler.getUserHomeDir(),"ignis");
+
+        // Hidden Folder for config files
+        FilesystemHandler.createFolder(
+                FilesystemHandler.concat(FilesystemHandler.getUserHomeDir(),".ignis"));
+
+        // Project Folder
+        FilesystemHandler.createFolder(this.rootFolder);
+    }
+
+
+    public String getRootFolder() {
+        return this.rootFolder;
+    }
+
+    public void setRootFolder(String rootPath) {
+        this.rootFolder = rootPath;
     }
 
 }
