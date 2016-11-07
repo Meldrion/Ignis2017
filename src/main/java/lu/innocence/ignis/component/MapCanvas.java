@@ -122,21 +122,24 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         this.frontCanvas.setFocusTraversable(true);
         this.frontCanvas.addEventFilter(MouseEvent.ANY, (e) -> this.frontCanvas.requestFocus());
         this.frontCanvas.setOnKeyPressed((key) -> {
-            switch (key.getCode()) {
-                case DIGIT1:
-                    this.map.setActiveLayerIndex(0);
-                    this.render();
-                    break;
-                case DIGIT2:
-                    this.map.setActiveLayerIndex(1);
-                    this.render();
-                    break;
-                case DIGIT3:
-                    this.map.setActiveLayerIndex(2);
-                    this.render();
-                    break;
-                default:
-                    break;
+
+            if (this.map != null) {
+                switch (key.getCode()) {
+                    case DIGIT1:
+                        this.map.setActiveLayerIndex(0);
+                        this.render();
+                        break;
+                    case DIGIT2:
+                        this.map.setActiveLayerIndex(1);
+                        this.render();
+                        break;
+                    case DIGIT3:
+                        this.map.setActiveLayerIndex(2);
+                        this.render();
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }
@@ -163,6 +166,14 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     public void linkLayerPane(Pane pane) {
         this.layerPane = pane;
+    }
+
+
+    public void setActiveLayerId(int layerIndex) {
+        if (this.map != null) {
+            this.map.setActiveLayerIndex(layerIndex);
+            this.render();
+        }
     }
 
 
