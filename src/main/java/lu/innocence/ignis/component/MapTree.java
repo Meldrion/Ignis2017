@@ -17,8 +17,14 @@ public class MapTree extends TreeView<String> {
     public MapTree() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             MapTreeNode selectedItem = (MapTreeNode) newValue;
-            Map map = this.mapManager.find(selectedItem.getMapId());
-            this.mapManager.setActiveMap(map);
+
+            if (selectedItem != null) {
+                Map map = this.mapManager.find(selectedItem.getMapId());
+                this.mapManager.setActiveMap(map);
+            } else {
+                this.mapManager.setActiveMap(null);
+            }
+
         });
     }
 

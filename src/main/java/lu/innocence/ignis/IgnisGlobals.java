@@ -1,5 +1,7 @@
 package lu.innocence.ignis;
 
+import java.net.URL;
+
 /**
  * @author Fabien Steines
  */
@@ -28,6 +30,10 @@ public class IgnisGlobals {
 
         int[] returnArray = {startX,startY,endX,endY};
         return returnArray;
+    }
+
+    public static URL loadFromResourceFolder(String path) {
+        return IgnisGlobals.class.getClassLoader().getResource(path);
     }
 
 

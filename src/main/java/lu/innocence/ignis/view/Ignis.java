@@ -5,12 +5,16 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.component.MapCanvas;
 import lu.innocence.ignis.component.MapTree;
 import lu.innocence.ignis.component.TilesetCanvas;
@@ -19,6 +23,8 @@ import lu.innocence.ignis.event.ActiveProjectListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.net.URL;
+
 public class Ignis extends Application implements ActiveProjectListener{
 
     private static final Logger LOGGER = LogManager.getLogger(Ignis.class);
@@ -26,14 +32,13 @@ public class Ignis extends Application implements ActiveProjectListener{
     private TilesetCanvas tilesetCanvas;
     private MapTree mapTree;
 
-    private void buildMainMenu(Stage primaryStage,BorderPane root) {
+    private void buildMainMenu(VBox topContainer) {
         MenuBar menuBar = new MenuBar();
 
         // Use system menu bar
         menuBar.setUseSystemMenuBar(true);
-        menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
-        root.setTop(menuBar);
 
+        topContainer.getChildren().add(menuBar);
         Menu fileMenu = new Menu("File");
 
         MenuItem newProject = new MenuItem("New Project...");
@@ -50,13 +55,25 @@ public class Ignis extends Application implements ActiveProjectListener{
         fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(exit);
 
-
         Menu webMenu = new Menu("Edit");
         Menu sqlMenu = new Menu("SQL");
 
         menuBar.getMenus().addAll(fileMenu, webMenu, sqlMenu);
-
         menuBar.setUseSystemMenuBar(true);
+    }
+
+    private void buildToolbar(VBox topContainer) {
+        ToolBar toolBar = new ToolBar();  //Creates our tool-bar to hold the buttons.
+        topContainer.getChildren().add(toolBar);
+
+        Button newProjectBtn = new Button();
+        newProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Document-Blank-icon-24.png").getFile()));
+        Button openProjectBtn = new Button();
+        openProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Files-icon-24.png").getFile()));
+        Button saveProjectBtn = new Button();
+        saveProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Actions-document-save-icon.png").getFile()));
+
+        toolBar.getItems().addAll(newProjectBtn,openProjectBtn,saveProjectBtn);
     }
 
     private void buildUserInterface(Stage primaryStage) {
@@ -64,14 +81,17 @@ public class Ignis extends Application implements ActiveProjectListener{
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 640, 480));
 
-        buildMainMenu(primaryStage,root);
+        VBox topContainer = new VBox();
+        root.setTop(topContainer);
+
+        buildMainMenu(topContainer);
+        buildToolbar(topContainer);
 
         this.mapCanvas = new MapCanvas(640,480);
         Canvas uiLayer = new Canvas(640,480);
         mapCanvas.linkFrontCanvas(uiLayer);
         Pane pane = new Pane(mapCanvas,uiLayer);
         mapCanvas.linkLayerPane(pane);
-
 
         ScrollPane s1 = new ScrollPane();
         s1.setPrefSize(640  , 480);
@@ -82,7 +102,6 @@ public class Ignis extends Application implements ActiveProjectListener{
         ScrollPane tilesetScroller = new ScrollPane();
         tilesetScroller.setContent(tilesetCanvas);
         tilesetScroller.setPrefWidth(280);
-
 
         tilesetCanvas.addSelecitonListener(mapCanvas);
 
