@@ -1,11 +1,12 @@
 package lu.innocence.ignis.view;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -22,8 +23,6 @@ import lu.innocence.ignis.engine.*;
 import lu.innocence.ignis.event.ActiveProjectListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.net.URL;
 
 public class Ignis extends Application implements ActiveProjectListener{
 
@@ -68,6 +67,9 @@ public class Ignis extends Application implements ActiveProjectListener{
 
         Button newProjectBtn = new Button();
         newProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Document-Blank-icon-24.png").getFile()));
+        newProjectBtn.setOnAction(e -> {
+            CreateProjectDialog createProjectDialog = new CreateProjectDialog();
+        });
         Button openProjectBtn = new Button();
         openProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Files-icon-24.png").getFile()));
         Button saveProjectBtn = new Button();
