@@ -1,6 +1,8 @@
 package lu.innocence.ignis.view;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -80,9 +82,8 @@ public class Ignis extends Application implements ActiveProjectListener{
         saveProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Actions-document-save-icon.png").getFile()));
 
 
-
+        // Tools Button Group
         ToggleGroup toolsGroup = new ToggleGroup();
-
 
         ToggleButton  penToolButton = new ToggleButton ();
         penToolButton.setFocusTraversable(false);
@@ -105,9 +106,57 @@ public class Ignis extends Application implements ActiveProjectListener{
         eraseToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-eraser-2.png").getFile()));
         eraseToolButton.setToggleGroup(toolsGroup);
 
+        toolsGroup.selectedToggleProperty().addListener((ov, toggle, newSelected) -> {
+            if (newSelected == null) {
+                toggle.setSelected(true);
+            } else {
+
+                if (toggle == penToolButton) {
+
+                }
+
+                if (toggle == brushToolButton) {
+
+                }
+
+                if (toggle == fillToolButton) {
+
+                }
+
+                if (toggle == eraseToolButton) {
+
+                }
+
+            }
+        });
+
+        // Tools Button Group
+        ToggleGroup layersGroup = new ToggleGroup();
+
+        ToggleButton  layer1Button = new ToggleButton ();
+        layer1Button.setFocusTraversable(false);
+        layer1Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_bottom_24.png").getFile()));
+        layer1Button.setToggleGroup(toolsGroup);
+        layer1Button.setSelected(true);
+
+        ToggleButton  layer2Button = new ToggleButton ();
+        layer2Button.setFocusTraversable(false);
+        layer2Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_middle_24.png").getFile()));
+        layer2Button.setToggleGroup(toolsGroup);
+
+        ToggleButton  layer3Button = new ToggleButton ();
+        layer3Button.setFocusTraversable(false);
+        layer3Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
+        layer3Button.setToggleGroup(toolsGroup);
+
+        ToggleButton  layer4Button = new ToggleButton ();
+        layer4Button.setFocusTraversable(false);
+        layer4Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
+        layer4Button.setToggleGroup(toolsGroup);
 
         toolBar.getItems().addAll(newProjectBtn,openProjectBtn,saveProjectBtn,new Separator(),
-                penToolButton,brushToolButton,fillToolButton,eraseToolButton);
+                penToolButton,brushToolButton,fillToolButton,eraseToolButton,new Separator(),
+                layer1Button,layer2Button,layer3Button,layer4Button);
 
     }
 
