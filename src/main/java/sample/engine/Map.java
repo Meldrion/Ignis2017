@@ -140,6 +140,7 @@ public class Map {
         Map foundMap = this.uniqueId.equals(uniqueId) ? this : null;
         while (foundMap == null && index < maxIndex) {
             foundMap = this.children.get(index).find(uniqueId);
+            index ++;
         }
         return foundMap;
 

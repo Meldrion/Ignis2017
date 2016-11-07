@@ -36,23 +36,30 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged , Activ
 
     public void setMap(Map map) {
         this.map = map;
-        this.setWidth(map.getWidth() * 32);
-        this.setHeight(map.getHeight() * 32);
+
+
+        int w = this.map != null ? this.map.getWidth() * 32 : 0;
+        int h = this.map != null ? this.map.getHeight() * 32 : 0;
+
+        this.setWidth(w);
+        this.setHeight(h);
 
         if (this.frontCanvas != null) {
-            this.frontCanvas.setWidth(map.getWidth() * 32);
-            this.frontCanvas.setHeight(map.getHeight() * 32);
+            this.frontCanvas.setWidth(w);
+            this.frontCanvas.setHeight(h);
         }
         if (this.layerPane != null) {
-            this.layerPane.setPrefSize(map.getWidth() * 32,map.getHeight() * 32);
+            this.layerPane.setPrefSize(w,h);
         }
+
         this.render();
     }
 
     public void render() {
         GraphicsContext g = this.getGraphicsContext2D();
         g.clearRect(0,0,this.getWidth(),this.getHeight());
-        this.map.renderMap(g);
+        if (this.map != null)
+            this.map.renderMap(g);
     }
 
     public void renderPartial(int x,int y) {

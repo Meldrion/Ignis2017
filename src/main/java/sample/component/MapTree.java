@@ -12,13 +12,13 @@ import java.util.List;
  */
 public class MapTree extends TreeView<String> {
 
+    private MapManager mapManager;
 
     public MapTree() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
             MapTreeNode selectedItem = (MapTreeNode) newValue;
-            System.out.println("Selected Text : " + selectedItem.getMapId());
-            // do what ever you want
+            Map map = this.mapManager.find(selectedItem.getMapId());
+            this.mapManager.setActiveMap(map);
         });
     }
 
@@ -29,6 +29,8 @@ public class MapTree extends TreeView<String> {
         this.setRoot(rootNode);
         buildFromNode(mapManager.getRoot(),rootNode);
         rootNode.setExpanded(true);
+
+        this.mapManager = mapManager;
     }
 
     public void buildFromNode(Map map,TreeItem<String> node) {

@@ -144,6 +144,6 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
 
     @Override
     public void activeMapChanged(Map map) {
-        this.setTileset(map.getTileset() != null ? map.getTileset() : null);
+        this.setTileset(map != null ? map.getTileset() : null);
     }
 }

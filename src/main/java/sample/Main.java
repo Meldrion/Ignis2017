@@ -16,6 +16,7 @@ import sample.component.MapTree;
 import sample.engine.Map;
 import sample.component.MapCanvas;
 import sample.engine.MapManager;
+import sample.engine.Project;
 import sample.engine.Tileset;
 import sample.component.TilesetCanvas;
 
@@ -79,6 +80,9 @@ public class Main extends Application {
         Tileset tileset = new Tileset();
         tileset.loadImage("tileset.png");
 
+        Tileset cave = new Tileset();
+        cave.loadImage("cave.png");
+
         newMap.setTileset(tileset);
 
 
@@ -102,7 +106,10 @@ public class Main extends Application {
 
         mapManager.addMap(newMap);
         mapManager.addMap(new Map());
-        newMap.addMap(new Map());
+        Map caveLevel = new Map();
+        caveLevel.setTileset(cave);
+        caveLevel.setDimension(30,30);
+        newMap.addMap(caveLevel);
         mapManager.addMap(new Map());
 
 
@@ -113,6 +120,9 @@ public class Main extends Application {
 
         root.setLeft(leftSplitter);
         primaryStage.show();
+
+        Project p = new Project();
+        p.create("/home/fabien/Desktop","EndlessSorrow","Endless Sorrow","Fabien Steines","Innocence Studios");
 
     }
 
