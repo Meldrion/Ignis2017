@@ -24,6 +24,7 @@ public class Map {
 
     public Map() {
 
+        this.uniqueId = "-1";
         this.activeLayerIndex = 0;
         this.name = "Untitled";
         this.children = new ArrayList<>();
@@ -33,12 +34,14 @@ public class Map {
         for (int i = 0; i < 3; i++) {
             this.layers.add(new TilesetLayer());
         }
-
-        this.uniqueId = String.valueOf((int) (Math.random() * 99999));
     }
 
     public String getMapId() {
         return this.uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     public String getName() {

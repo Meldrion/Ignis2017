@@ -76,16 +76,6 @@ public class Main extends Application {
 
         root.setCenter(s1);
 
-        Map newMap =  new Map();
-        newMap.setDimension(50,50);
-
-        Tileset tileset = new Tileset();
-        tileset.loadImage("tileset.png");
-
-        Tileset cave = new Tileset();
-        cave.loadImage("cave.png");
-
-        newMap.setTileset(tileset);
 
 
         TilesetCanvas tilesetCanvas = new TilesetCanvas();
@@ -97,7 +87,20 @@ public class Main extends Application {
         mapManager.addActiveMapListener(tilesetCanvas);
         mapManager.addActiveMapListener(mapCanvas);
 
+
+        Map newMap =  mapManager.createNewMap();
+        newMap.setDimension(50,50);
+
+        Tileset tileset = new Tileset();
+        tileset.loadImage("tileset.png");
+
+        Tileset cave = new Tileset();
+        cave.loadImage("cave.png");
+
+        newMap.setTileset(tileset);
         mapManager.setActiveMap(newMap);
+
+
 
         tilesetCanvas.addSelecitonListener(mapCanvas);
 
@@ -107,16 +110,14 @@ public class Main extends Application {
         leftSplitter.getItems().add(tilesetScroller);
 
         mapManager.addMap(newMap);
-        mapManager.addMap(new Map());
-        Map caveLevel = new Map();
+        mapManager.addMap(mapManager.createNewMap());
+
+
+        Map caveLevel = mapManager.createNewMap();
         caveLevel.setTileset(cave);
         caveLevel.setDimension(30,30);
         newMap.addMap(caveLevel);
-        mapManager.addMap(new Map());
-
-        for (int i=0;i<50;i++) {
-            LOGGER.info(mapManager.generateMapId());
-        }
+        mapManager.addMap(mapManager.createNewMap());
 
 
         MapTree mapTree = new MapTree();

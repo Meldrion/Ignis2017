@@ -59,6 +59,12 @@ public class MapManager {
         }
     }
 
+    public Map createNewMap() {
+        Map map = new Map();
+        map.setUniqueId(this.generateMapId());
+        return map;
+    }
+
     public Map find(String uniqueMapId) {
         return this.root.find(uniqueMapId);
     }
