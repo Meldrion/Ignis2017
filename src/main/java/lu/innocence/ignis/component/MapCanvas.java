@@ -37,7 +37,6 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     public void setMap(Map map) {
         this.map = map;
 
-
         int w = this.map != null ? this.map.getWidth() * 32 : 0;
         int h = this.map != null ? this.map.getHeight() * 32 : 0;
 
@@ -144,18 +143,20 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     private void renderCursor(int x,int y,boolean clearOnly) {
 
-        int w = this.tilesetWidth * 32;
-        int h = this.tilesetHeight * 32;
-        GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
-        g.clearRect(lastX * 32,lastY * 32,w,h);
+        if (this.map != null) {
+            int w = this.tilesetWidth * 32;
+            int h = this.tilesetHeight * 32;
+            GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
+            g.clearRect(lastX * 32, lastY * 32, w, h);
 
-        if (!clearOnly) {
-            g.setGlobalAlpha(0.5);
-            g.setFill(Color.RED);
-            g.fillRect(x * 32, y * 32, w, h);
-            g.drawImage(this.map.getTileset().getTilesetImage(), this.tilesetX * 32,this.tilesetY * 32,
-                    w, h, x * 32, y * 32, w, h);
-            g.setGlobalAlpha(1.0);
+            if (!clearOnly) {
+                g.setGlobalAlpha(0.5);
+                g.setFill(Color.RED);
+                g.fillRect(x * 32, y * 32, w, h);
+                g.drawImage(this.map.getTileset().getTilesetImage(), this.tilesetX * 32, this.tilesetY * 32,
+                        w, h, x * 32, y * 32, w, h);
+                g.setGlobalAlpha(1.0);
+            }
         }
 
     }

@@ -72,13 +72,43 @@ public class Ignis extends Application implements ActiveProjectListener{
         newProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Document-Blank-icon-24.png").getFile()));
         newProjectBtn.setOnAction(e -> new CreateProjectDialog());
         Button openProjectBtn = new Button();
+        openProjectBtn.setOnAction(e -> ProjectManager.getInstance().loadProject(ProjectManager.getInstance().getRootFolder() + "/ES2016"));
         openProjectBtn.setFocusTraversable(false);
         openProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Files-icon-24.png").getFile()));
         Button saveProjectBtn = new Button();
         saveProjectBtn.setFocusTraversable(false);
         saveProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Actions-document-save-icon.png").getFile()));
 
-        toolBar.getItems().addAll(newProjectBtn,openProjectBtn,saveProjectBtn);
+
+
+        ToggleGroup toolsGroup = new ToggleGroup();
+
+
+        ToggleButton  penToolButton = new ToggleButton ();
+        penToolButton.setFocusTraversable(false);
+        penToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-line-2.png").getFile()));
+        penToolButton.setToggleGroup(toolsGroup);
+        penToolButton.setSelected(true);
+
+        ToggleButton  brushToolButton = new ToggleButton ();
+        brushToolButton.setFocusTraversable(false);
+        brushToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-brush.png").getFile()));
+        brushToolButton.setToggleGroup(toolsGroup);
+
+        ToggleButton  fillToolButton = new ToggleButton ();
+        fillToolButton.setFocusTraversable(false);
+        fillToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-fill-2.png").getFile()));
+        fillToolButton.setToggleGroup(toolsGroup);
+
+        ToggleButton  eraseToolButton = new ToggleButton ();
+        eraseToolButton.setFocusTraversable(false);
+        eraseToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-eraser-2.png").getFile()));
+        eraseToolButton.setToggleGroup(toolsGroup);
+
+
+        toolBar.getItems().addAll(newProjectBtn,openProjectBtn,saveProjectBtn,new Separator(),
+                penToolButton,brushToolButton,fillToolButton,eraseToolButton);
+
     }
 
     private void buildUserInterface(Stage primaryStage) {
@@ -97,6 +127,7 @@ public class Ignis extends Application implements ActiveProjectListener{
         mapCanvas.linkFrontCanvas(uiLayer);
         Pane pane = new Pane(mapCanvas,uiLayer);
         mapCanvas.linkLayerPane(pane);
+        mapCanvas.setMap(null);
 
         ScrollPane s1 = new ScrollPane();
         s1.setPrefSize(640  , 480);
@@ -134,7 +165,6 @@ public class Ignis extends Application implements ActiveProjectListener{
         buildUserInterface(primaryStage);
 /*        ProjectManager.getInstance().createProject(ProjectManager.getInstance().getRootFolder(),"ES2016","Endless Sorrow",
                 "Fabien Steines","Innocence Studios");*/
-        ProjectManager.getInstance().loadProject(ProjectManager.getInstance().getRootFolder() + "/ES2016");
 
     }
 
