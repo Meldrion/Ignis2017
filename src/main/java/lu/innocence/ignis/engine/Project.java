@@ -67,4 +67,8 @@ public class Project {
         return true;
     }
 
+    public MapManager getMapManager() {
+        return this.mapManager;
+    }
+
 }

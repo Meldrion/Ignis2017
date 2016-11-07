@@ -1,5 +1,10 @@
 package lu.innocence.ignis.engine;
 
+import lu.innocence.ignis.event.ActiveProjectListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Fabien Steines
  */
@@ -15,9 +20,12 @@ public class ProjectManager {
     private String devName;
     private String devCompany;
 
+    private List<ActiveProjectListener> projectListeners;
+
 
     private ProjectManager() {
 
+        this.projectListeners = new ArrayList<>();
         this.currentProject = null;
         this.filesystemHandler = new FilesystemHandler();
         this.rootFolder = "";
@@ -34,6 +42,7 @@ public class ProjectManager {
 
     public void setProject(Project project) {
         this.currentProject = project;
+        this.fireUpdate();
     }
 
     public Project getProject() {
@@ -72,13 +81,24 @@ public class ProjectManager {
         FilesystemHandler.createFolder(this.rootFolder);
     }
 
-
     public String getRootFolder() {
         return this.rootFolder;
     }
 
     public void setRootFolder(String rootPath) {
         this.rootFolder = rootPath;
+    }
+
+    public void addActiveProjectListener(ActiveProjectListener listener) {
+        if (!this.projectListeners.contains(listener)) {
+            this.projectListeners.add(listener);
+        }
+    }
+
+    private void fireUpdate() {
+        for (ActiveProjectListener listener : this.projectListeners) {
+            listener.activeProjectChanged(this.currentProject);
+        }
     }
 
 }
