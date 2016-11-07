@@ -4,20 +4,14 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import sample.engine.Map;
-import sample.engine.MapCanvas;
+import sample.component.MapCanvas;
 import sample.engine.Tileset;
-
-import java.net.URL;
+import sample.component.TilesetCanvas;
 
 public class Main extends Application {
 
@@ -73,7 +67,7 @@ public class Main extends Application {
         root.setCenter(s1);
 
         Map newMap =  new Map();
-        newMap.setDimension(200,200);
+        newMap.setDimension(50,50);
 
         Tileset tileset = new Tileset();
         tileset.loadImage("tileset.png");
@@ -82,6 +76,14 @@ public class Main extends Application {
         canvas.setMap(newMap);
         canvas.render();
 
+        TilesetCanvas tilesetCanvas = new TilesetCanvas();
+        ScrollPane tilesetScroller = new ScrollPane();
+        tilesetScroller.setContent(tilesetCanvas);
+        tilesetScroller.setPrefWidth(280);
+        tilesetCanvas.setTileset(tileset);
+        tilesetCanvas.render();
+        root.setLeft(tilesetScroller);
+
         primaryStage.show();
 
     }
@@ -89,4 +91,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    // RunConfig Linux
+    // -Dprism.verbose=true -Dprism.forceGPU=true
 }

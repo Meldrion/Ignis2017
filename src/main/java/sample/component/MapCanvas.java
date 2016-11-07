@@ -1,4 +1,4 @@
-package sample.engine;
+package sample.component;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import sample.engine.Map;
 
 
 /**
@@ -118,6 +119,8 @@ public class MapCanvas extends Canvas {
                 case DIGIT3:
                     this.map.setActiveLayerIndex(2);
                     this.render();
+                    break;
+                default:
                     break;
             }
         });
