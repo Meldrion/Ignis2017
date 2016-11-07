@@ -2,12 +2,14 @@ package sample;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import sample.component.MapTree;
 import sample.engine.Map;
 import sample.component.MapCanvas;
 import sample.engine.Tileset;
@@ -53,12 +55,12 @@ public class Main extends Application {
 
         Platform.runLater(() -> menuBar.setUseSystemMenuBar(true));
 
-        final MapCanvas canvas = new MapCanvas(640,480);
+        final MapCanvas mapCanvas = new MapCanvas(640,480);
         final Canvas testCanvas = new Canvas(640,480);
-        canvas.linkFrontCanvas(testCanvas);
+        mapCanvas.linkFrontCanvas(testCanvas);
 
-        Pane pane = new Pane(canvas,testCanvas);
-        canvas.linkLayerPane(pane);
+        Pane pane = new Pane(mapCanvas,testCanvas);
+        mapCanvas.linkLayerPane(pane);
 
         ScrollPane s1 = new ScrollPane();
         s1.setPrefSize(640  , 480);
@@ -73,8 +75,8 @@ public class Main extends Application {
         tileset.loadImage("tileset.png");
 
         newMap.setTileset(tileset);
-        canvas.setMap(newMap);
-        canvas.render();
+        mapCanvas.setMap(newMap);
+        mapCanvas.render();
 
         TilesetCanvas tilesetCanvas = new TilesetCanvas();
         ScrollPane tilesetScroller = new ScrollPane();
@@ -82,8 +84,19 @@ public class Main extends Application {
         tilesetScroller.setPrefWidth(280);
         tilesetCanvas.setTileset(tileset);
         tilesetCanvas.render();
-        root.setLeft(tilesetScroller);
 
+        tilesetCanvas.addSelecitonListener(mapCanvas);
+
+        SplitPane leftSplitter = new SplitPane();
+        leftSplitter.setPrefWidth(280);
+        leftSplitter.setOrientation(Orientation.VERTICAL);
+        leftSplitter.getItems().add(tilesetScroller);
+
+        MapTree mapTree = new MapTree();
+        leftSplitter.getItems().add(mapTree);
+        leftSplitter.setDividerPosition(0,0.7);
+
+        root.setLeft(leftSplitter);
         primaryStage.show();
 
     }

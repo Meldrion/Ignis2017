@@ -6,6 +6,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import sample.IgnisGlobals;
 import sample.engine.Tileset;
+import sample.event.TilesetSelectionChanged;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Fabien Steines
@@ -22,11 +26,17 @@ public class TilesetCanvas extends Canvas {
     private int mouseEndX;
     private int mouseEndY;
 
+    private List<TilesetSelectionChanged> tilesetSelectionListener;
+
+
+
     public TilesetCanvas() {
 
         this.lastX = -1;
         this.lastY = -1;
         this.cellSize = 32;
+
+        this.tilesetSelectionListener = new ArrayList<>();
 
         this.addEventHandler(MouseEvent.MOUSE_PRESSED, t -> {
 
@@ -58,7 +68,10 @@ public class TilesetCanvas extends Canvas {
 
                 render();
             }
+        });
 
+        this.addEventHandler(MouseEvent.MOUSE_RELEASED,t -> {
+            fireUpdate();
         });
     }
 
@@ -106,6 +119,23 @@ public class TilesetCanvas extends Canvas {
             this.linkedTileset = null;
             this.setWidth(0);
             this.setHeight(0);
+        }
+    }
+
+    public void addSelecitonListener(TilesetSelectionChanged listener) {
+        if (!this.tilesetSelectionListener.contains(listener)) {
+            this.tilesetSelectionListener.add(listener);
+        }
+    }
+
+    private void fireUpdate() {
+
+        int[] coords = IgnisGlobals.fixCoords(this.mouseStartX,this.mouseStartY,this.mouseEndX,this.mouseEndY);
+        int w = coords[2] - coords[0];
+        int h = coords[3] - coords[1];
+
+        for (TilesetSelectionChanged listener : this.tilesetSelectionListener) {
+            listener.tilesetSelectionChanged(coords[0],coords[1],w,h);
         }
     }
 

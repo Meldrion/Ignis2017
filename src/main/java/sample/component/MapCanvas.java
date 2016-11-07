@@ -7,12 +7,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import sample.engine.Map;
+import sample.event.TilesetSelectionChanged;
 
 
 /**
  * @author Fabien Steines
  */
-public class MapCanvas extends Canvas {
+public class MapCanvas extends Canvas implements TilesetSelectionChanged {
 
     int lastX = -1;
     int lastY = -1;
@@ -22,6 +23,12 @@ public class MapCanvas extends Canvas {
 
     private Map map;
     private int activeLayerId;
+
+    private int tilesetX = 0;
+    private int tilesetY = 0;
+    private int tilesetWidth = 1;
+    private int tilesetHeight = 1;
+
 
     public MapCanvas(int width,int height) {
         super(width,height);
@@ -128,15 +135,17 @@ public class MapCanvas extends Canvas {
 
     private void renderCursor(int x,int y,boolean clearOnly) {
 
-        int w = 5 * 32;
+        int w = this.tilesetWidth * 32;
+        int h = this.tilesetHeight * 32;
         GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
-        g.clearRect(lastX * 32,lastY * 32,w,w);
+        g.clearRect(lastX * 32,lastY * 32,w,h);
 
         if (!clearOnly) {
             g.setGlobalAlpha(0.5);
             g.setFill(Color.RED);
-            g.fillRect(x * 32, y * 32, w, w);
-            g.drawImage(this.map.getTileset().getTilesetImage(), 0, 0, w, w, x * 32, y * 32, w, w);
+            g.fillRect(x * 32, y * 32, w, h);
+            g.drawImage(this.map.getTileset().getTilesetImage(), this.tilesetX * 32,this.tilesetY * 32,
+                    w, h, x * 32, y * 32, w, h);
             g.setGlobalAlpha(1.0);
         }
 
@@ -147,6 +156,11 @@ public class MapCanvas extends Canvas {
     }
 
 
-
-
+    @Override
+    public void tilesetSelectionChanged(int startX, int startY, int width, int height) {
+        this.tilesetX = startX;
+        this.tilesetY = startY;
+        this.tilesetWidth = width;
+        this.tilesetHeight = height;
+    }
 }
