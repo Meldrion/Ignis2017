@@ -103,8 +103,10 @@ public class ProjectManager {
     }
 
     public List<String> listAllProjectsInFolder(String folder) {
+
         return FilesystemHandler.readSubFolders(folder).stream().filter
-                (this::isValidProject).collect(Collectors.toList());
+                (subFolder -> isValidProject(FilesystemHandler.concat(folder, subFolder)))
+                .collect(Collectors.toList());
     }
 
     public void deleteProject(String path) {
