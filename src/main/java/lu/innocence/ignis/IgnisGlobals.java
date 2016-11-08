@@ -41,14 +41,19 @@ public class IgnisGlobals {
         return IgnisGlobals.class.getClassLoader().getResource(path);
     }
 
-    public static void chooseProjectRoot(Stage parent) {
+    public static boolean chooseProjectRoot(Stage parent) {
         final DirectoryChooser directoryChooser = new DirectoryChooser();
+
         directoryChooser.setInitialDirectory(new File(ProjectManager.getInstance().getRootFolder()));
         directoryChooser.setTitle("Select Root Folder");
         File dir = directoryChooser.showDialog(parent);
+
         if (dir != null) {
             ProjectManager.getInstance().setRootFolder(dir.getAbsolutePath());
+            return true;
         }
+
+        return false;
     }
 
 

@@ -19,6 +19,7 @@ import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.ProjectManager;
 
 import java.io.File;
+import java.util.List;
 
 
 /**
@@ -28,6 +29,7 @@ public class LoadProjectDialog extends Stage {
 
     //ProjectManager.getInstance().loadProject(ProjectManager.getInstance().getRootFolder() + "/ES2016")
     private TextField rootPathTextField;
+    private ListView<String> projectsList;
 
     public LoadProjectDialog(Stage parent) {
         this.initModality(Modality.APPLICATION_MODAL);
@@ -71,8 +73,10 @@ public class LoadProjectDialog extends Stage {
         Button button = new Button();
         button.setText("...");
         button.setOnAction(t -> {
-            IgnisGlobals.chooseProjectRoot(this);
-            this.rootPathTextField.setText(ProjectManager.getInstance().getRootFolder());
+            if (IgnisGlobals.chooseProjectRoot(this)) {
+                this.rootPathTextField.setText(ProjectManager.getInstance().getRootFolder());
+                this.buildProjectList();
+            }
         });
 
         grid.add(button,2,0);
@@ -81,8 +85,17 @@ public class LoadProjectDialog extends Stage {
         projectsLabel.setText("Projects in this path: ");
         grid.add(projectsLabel,0,1,3,1);
 
-        ListView<String> projectsList = new ListView<>();
+        this.projectsList = new ListView<>();
         grid.add(projectsList,0,2,3,1);
+
+
+        Button deleteButton = new Button();
+        deleteButton.setText("Delete");
+        deleteButton.setMaxWidth(500);
+        deleteButton.setOnAction(event -> {
+
+        });
+        grid.add(deleteButton,0,3,3,1);
 
         root.setCenter(grid);
 
@@ -108,6 +121,18 @@ public class LoadProjectDialog extends Stage {
 
     private void initData() {
         this.rootPathTextField.setText(ProjectManager.getInstance().getRootFolder());
+        this.buildProjectList();
+    }
+
+    private void buildProjectList() {
+
+        this.projectsList.getItems().clear();
+        List<String> projects = ProjectManager.getInstance().listAllProjectsInFolder
+                (ProjectManager.getInstance().getRootFolder());
+        for (String current : projects) {
+            this.projectsList.getItems().add(current);
+        }
+
     }
 
 }

@@ -4,6 +4,7 @@ import lu.innocence.ignis.event.ActiveProjectListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Fabien Steines
@@ -12,14 +13,7 @@ public class ProjectManager {
 
     private static ProjectManager instance;
     private Project currentProject;
-    private FilesystemHandler filesystemHandler;
-
     private String rootFolder;
-    private String projectName;
-    private String projectTitle;
-    private String devName;
-    private String devCompany;
-
     private List<ActiveProjectListener> projectListeners;
 
 
@@ -27,7 +21,6 @@ public class ProjectManager {
 
         this.projectListeners = new ArrayList<>();
         this.currentProject = null;
-        this.filesystemHandler = new FilesystemHandler();
         this.rootFolder = "";
 
     }
@@ -98,6 +91,21 @@ public class ProjectManager {
     private void fireUpdate() {
         for (ActiveProjectListener listener : this.projectListeners) {
             listener.activeProjectChanged(this.currentProject);
+        }
+    }
+
+    private boolean isValidProject(String folder) {
+        return true;
+    }
+
+    public List<String> listAllProjectsInFolder(String folder) {
+        return FilesystemHandler.readSubFolders(folder).stream().filter
+                (this::isValidProject).collect(Collectors.toList());
+    }
+
+    public void deleteProject(String path) {
+        if (isValidProject(path)) {
+
         }
     }
 
