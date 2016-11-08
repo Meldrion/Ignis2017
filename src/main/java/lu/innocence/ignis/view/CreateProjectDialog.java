@@ -30,7 +30,6 @@ public class CreateProjectDialog extends Stage{
         this.setWidth(340);
         this.setHeight(270);
         this.show();
-
     }
 
     private void buildGUI() {

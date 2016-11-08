@@ -23,15 +23,22 @@ import lu.innocence.ignis.component.MapTree;
 import lu.innocence.ignis.component.TilesetCanvas;
 import lu.innocence.ignis.engine.*;
 import lu.innocence.ignis.event.ActiveProjectListener;
+import lu.innocence.ignis.event.GUIButtonsUpdate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Ignis extends Application implements ActiveProjectListener{
+public class Ignis extends Application implements ActiveProjectListener , GUIButtonsUpdate{
 
     private static final Logger LOGGER = LogManager.getLogger(Ignis.class);
     private MapCanvas mapCanvas;
     private TilesetCanvas tilesetCanvas;
     private MapTree mapTree;
+
+    private ToggleButton layer1Button;
+    private ToggleButton layer2Button;
+    private ToggleButton layer3Button;
+    private ToggleButton layer4Button;
+
 
     private void buildMainMenu(VBox topContainer) {
         MenuBar menuBar = new MenuBar();
@@ -128,27 +135,26 @@ public class Ignis extends Application implements ActiveProjectListener{
         // Tools Button Group
         ToggleGroup layersGroup = new ToggleGroup();
 
-        ToggleButton  layer1Button = new ToggleButton ();
-        layer1Button.setFocusTraversable(false);
-        layer1Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_bottom_24.png").getFile()));
-        layer1Button.setToggleGroup(layersGroup);
-        layer1Button.setSelected(true);
+        this.layer1Button = new ToggleButton ();
+        this.layer1Button.setFocusTraversable(false);
+        this.layer1Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_bottom_24.png").getFile()));
+        this.layer1Button.setToggleGroup(layersGroup);
+        this.layer1Button.setSelected(true);
 
-        ToggleButton  layer2Button = new ToggleButton ();
-        layer2Button.setFocusTraversable(false);
-        layer2Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_middle_24.png").getFile()));
-        layer2Button.setToggleGroup(layersGroup);
+        this.layer2Button = new ToggleButton ();
+        this.layer2Button.setFocusTraversable(false);
+        this.layer2Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_middle_24.png").getFile()));
+        this.layer2Button.setToggleGroup(layersGroup);
 
-        ToggleButton  layer3Button = new ToggleButton ();
-        layer3Button.setFocusTraversable(false);
-        layer3Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
-        layer3Button.setToggleGroup(layersGroup);
+        this.layer3Button = new ToggleButton ();
+        this.layer3Button.setFocusTraversable(false);
+        this.layer3Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
+        this.layer3Button.setToggleGroup(layersGroup);
 
-        ToggleButton  layer4Button = new ToggleButton ();
-        layer4Button.setFocusTraversable(false);
-        layer4Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
-        layer4Button.setToggleGroup(layersGroup);
-
+        this.layer4Button = new ToggleButton ();
+        this.layer4Button.setFocusTraversable(false);
+        this.layer4Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
+        this.layer4Button.setToggleGroup(layersGroup);
 
         layersGroup.selectedToggleProperty().addListener((ov, toggle, newSelected) -> {
             if (newSelected == null) {
@@ -177,7 +183,7 @@ public class Ignis extends Application implements ActiveProjectListener{
 
     private void buildUserInterface(Stage primaryStage) {
         BorderPane root = new BorderPane();
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Ignis");
         primaryStage.setScene(new Scene(root, 640, 480));
 
         VBox topContainer = new VBox();
@@ -192,6 +198,7 @@ public class Ignis extends Application implements ActiveProjectListener{
         Pane pane = new Pane(mapCanvas,uiLayer);
         mapCanvas.linkLayerPane(pane);
         mapCanvas.setMap(null);
+        mapCanvas.addGUIButtonsListener(this);
 
         ScrollPane s1 = new ScrollPane();
         s1.setPrefSize(640  , 480);
@@ -280,4 +287,28 @@ public class Ignis extends Application implements ActiveProjectListener{
         launch(args);
     }
 
+    @Override
+    public void activeLayerChanged(int layerIndex) {
+        switch (layerIndex) {
+            case 0:
+                this.layer1Button.setSelected(true);
+                break;
+            case 1:
+                this.layer2Button.setSelected(true);
+                break;
+            case 2:
+                this.layer3Button.setSelected(true);
+                break;
+            case 3:
+                this.layer4Button.setSelected(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void activeToolChanged(int toolIndex) {
+
+    }
 }

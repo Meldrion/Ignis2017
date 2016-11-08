@@ -32,18 +32,23 @@ public class FilesystemHandler {
     }
 
     public static boolean writeJson(JSONObject json,String path) {
-        try {
 
-            FileWriter file = new FileWriter(path);
+        FileWriter file = null;
+        try {
+            file = new FileWriter(path);
             file.write(json.toJSONString());
             file.flush();
-            file.close();
-
             return true;
-
         } catch (IOException e) {
             LOGGER.error(e);
             return false;
+        } finally {
+            try {
+                if (file != null)
+                    file.close();
+            } catch (IOException e) {
+                LOGGER.error(e);
+            }
         }
     }
 
@@ -51,14 +56,22 @@ public class FilesystemHandler {
 
         JSONParser parser = new JSONParser();
         Object obj = null;
+        FileReader fReader = null;
 
         try {
-            obj = parser.parse(new FileReader(path));
+            fReader = new FileReader(path);
+            obj = parser.parse(fReader);
             return (JSONObject) obj;
-
         } catch (IOException | ParseException e) {
             LOGGER.error(e);
             return null;
+        } finally {
+            try {
+                if (fReader!=null)
+                    fReader.close();
+            } catch (IOException e) {
+                LOGGER.error(e);
+            }
         }
 
     }

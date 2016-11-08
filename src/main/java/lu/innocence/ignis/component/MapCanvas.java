@@ -6,8 +6,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import lu.innocence.ignis.event.ActiveMapListener;
+import lu.innocence.ignis.event.GUIButtonsUpdate;
 import lu.innocence.ignis.event.TilesetSelectionChanged;
 import lu.innocence.ignis.engine.Map;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,15 +27,20 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     private Map map;
     private int activeLayerId;
+    private int activeToolId;
 
     private int tilesetX = 0;
     private int tilesetY = 0;
     private int tilesetWidth = 1;
     private int tilesetHeight = 1;
 
+    private List<GUIButtonsUpdate> guiButtonsUpdate;
+
+
 
     public MapCanvas(int width,int height) {
         super(width,height);
+        this.guiButtonsUpdate = new ArrayList<>();
     }
 
     public void setMap(Map map) {
@@ -126,16 +135,13 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             if (this.map != null) {
                 switch (key.getCode()) {
                     case DIGIT1:
-                        this.map.setActiveLayerIndex(0);
-                        this.render();
+                        this.setActiveLayerId(0,true);
                         break;
                     case DIGIT2:
-                        this.map.setActiveLayerIndex(1);
-                        this.render();
+                        this.setActiveLayerId(1,true);
                         break;
                     case DIGIT3:
-                        this.map.setActiveLayerIndex(2);
-                        this.render();
+                        this.setActiveLayerId(2,true);
                         break;
                     default:
                         break;
@@ -170,9 +176,33 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
 
     public void setActiveLayerId(int layerIndex) {
-        if (this.map != null) {
+        this.setActiveLayerId(layerIndex,false);
+    }
+
+    public void setActiveLayerId(int layerIndex,boolean fireUpdate) {
+        if (this.map != null && layerIndex != this.activeLayerId) {
             this.map.setActiveLayerIndex(layerIndex);
+            if (fireUpdate)
+                this.fireUpdateLayerButtons();
             this.render();
+        }
+    }
+
+    public void addGUIButtonsListener(GUIButtonsUpdate listener) {
+        if (!this.guiButtonsUpdate.contains(listener)) {
+            this.guiButtonsUpdate.add(listener);
+        }
+    }
+
+    private void fireUpdateToolButtons() {
+        for (GUIButtonsUpdate current : this.guiButtonsUpdate) {
+            current.activeToolChanged(this.activeToolId);
+        }
+    }
+
+    private void fireUpdateLayerButtons() {
+        for (GUIButtonsUpdate current : this.guiButtonsUpdate) {
+            current.activeLayerChanged(this.activeLayerId);
         }
     }
 
@@ -189,4 +219,5 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     public void activeMapChanged(Map map) {
         this.setMap(map);
     }
+
 }
