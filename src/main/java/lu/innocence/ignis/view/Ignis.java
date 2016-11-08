@@ -175,16 +175,31 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
             }
         });
 
+        Button importManagerButton = new Button();
+        importManagerButton.setFocusTraversable(false);
+        importManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/import-icon-24.png").getFile()));
+        importManagerButton.setOnAction(event -> {
+            new ImportDialog(mainStage);
+        });
+
+        Button gameDBButton = new Button();
+        gameDBButton.setFocusTraversable(false);
+        gameDBButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/ignis24px.png").getFile()));
+
+        Button audioManagerButton = new Button();
+        audioManagerButton.setFocusTraversable(false);
+        audioManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/audioManager22.png").getFile()));
+
         toolBar.getItems().addAll(newProjectBtn,openProjectBtn,saveProjectBtn,new Separator(),
                 penToolButton,brushToolButton,fillToolButton,eraseToolButton,new Separator(),
-                layer1Button,layer2Button,layer3Button,layer4Button);
+                layer1Button,layer2Button,layer3Button,layer4Button,new Separator(),importManagerButton,gameDBButton,audioManagerButton);
 
     }
 
     private void buildUserInterface(Stage primaryStage) {
         BorderPane root = new BorderPane();
         primaryStage.setTitle("Ignis");
-        primaryStage.setScene(new Scene(root, 640, 480));
+        primaryStage.setScene(new Scene(root, 800, 600));
 
         VBox topContainer = new VBox();
         root.setTop(topContainer);

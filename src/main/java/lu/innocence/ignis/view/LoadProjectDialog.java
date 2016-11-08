@@ -114,6 +114,15 @@ public class LoadProjectDialog extends Stage {
 
         Button confirmButton = new Button();
         confirmButton.setText("Load Project");
+        confirmButton.setOnAction(event -> {
+            if (this.projectsList.getSelectionModel().getSelectedIndex() > -1) {
+                String selected = this.projectsList.getSelectionModel().getSelectedItem();
+                String path = FilesystemHandler.concat(ProjectManager.getInstance().getRootFolder(), selected);
+                if (ProjectManager.getInstance().loadProject(path) != null) {
+                    this.close();
+                }
+            }
+        });
 
         Button cancelButton = new Button();
         cancelButton.setText("Cancel");

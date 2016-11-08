@@ -114,5 +114,4 @@ public class ProjectManager {
             FilesystemHandler.deleteFolder(path);
         }
     }
-
 }
