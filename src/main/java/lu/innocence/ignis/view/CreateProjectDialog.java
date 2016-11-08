@@ -27,14 +27,14 @@ public class CreateProjectDialog extends Stage{
         this.setTitle("Create Project Window");
         this.setResizable(false);
         this.buildGUI();
-        this.setWidth(340);
+        this.setWidth(380);
         this.setHeight(270);
         this.show();
     }
 
     private void buildGUI() {
         BorderPane root = new BorderPane();
-        Scene scene = new Scene(root,340, 270);
+        Scene scene = new Scene(root,380, 270);
         this.setScene(scene);
 
 

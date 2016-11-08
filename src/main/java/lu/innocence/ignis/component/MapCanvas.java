@@ -176,7 +176,6 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         this.layerPane = pane;
     }
 
-
     public void setActiveLayerId(int layerIndex) {
         this.setActiveLayerId(layerIndex,false);
     }

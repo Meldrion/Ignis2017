@@ -81,7 +81,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         newProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Document-Blank-icon-24.png").getFile()));
         newProjectBtn.setOnAction(e -> new CreateProjectDialog());
         Button openProjectBtn = new Button();
-        openProjectBtn.setOnAction(e -> ProjectManager.getInstance().loadProject(ProjectManager.getInstance().getRootFolder() + "/ES2016"));
+        openProjectBtn.setOnAction(e -> new LoadProjectDialog());
         openProjectBtn.setFocusTraversable(false);
         openProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Files-icon-24.png").getFile()));
         Button saveProjectBtn = new Button();
