@@ -92,6 +92,18 @@ public class FilesystemHandler {
         return returnList;
     }
 
+    public static boolean isFile(String path) {
+        return (new File(path)).isFile();
+    }
+
+    public static boolean isFolder(String path) {
+        return (new File(path)).isDirectory();
+    }
+
+    public static boolean exists(String path) {
+        return (new File(path)).exists();
+    }
+
     /**
      *
      * @param path

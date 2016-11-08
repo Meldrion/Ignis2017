@@ -95,7 +95,11 @@ public class ProjectManager {
     }
 
     private boolean isValidProject(String folder) {
-        return true;
+        if (FilesystemHandler.isFolder(folder)) {
+            String pJSONPath = FilesystemHandler.concat(folder,"project.json");
+            return FilesystemHandler.isFile(pJSONPath);
+        }
+        return false;
     }
 
     public List<String> listAllProjectsInFolder(String folder) {
@@ -105,7 +109,7 @@ public class ProjectManager {
 
     public void deleteProject(String path) {
         if (isValidProject(path)) {
-
+            FilesystemHandler.deleteFolder(path);
         }
     }
 
