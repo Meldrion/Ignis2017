@@ -130,8 +130,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
         this.frontCanvas.setFocusTraversable(true);
         this.frontCanvas.addEventFilter(MouseEvent.ANY, (e) -> this.frontCanvas.requestFocus());
-        this.frontCanvas.setOnKeyPressed((key) -> {
-
+        this.frontCanvas.setOnKeyPressed(key -> {
             if (this.map != null) {
                 switch (key.getCode()) {
                     case DIGIT1:
@@ -142,6 +141,9 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                         break;
                     case DIGIT3:
                         this.setActiveLayerId(2,true);
+                        break;
+                    case DIGIT4:
+                        this.setActiveLayerId(3,true);
                         break;
                     default:
                         break;
@@ -181,6 +183,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     public void setActiveLayerId(int layerIndex,boolean fireUpdate) {
         if (this.map != null && layerIndex != this.activeLayerId) {
+            this.activeLayerId = layerIndex;
             this.map.setActiveLayerIndex(layerIndex);
             if (fireUpdate)
                 this.fireUpdateLayerButtons();
