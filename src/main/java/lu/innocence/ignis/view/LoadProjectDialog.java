@@ -16,6 +16,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.IgnisGlobals;
+import lu.innocence.ignis.engine.FilesystemHandler;
 import lu.innocence.ignis.engine.ProjectManager;
 
 import java.io.File;
@@ -93,7 +94,12 @@ public class LoadProjectDialog extends Stage {
         deleteButton.setText("Delete");
         deleteButton.setMaxWidth(500);
         deleteButton.setOnAction(event -> {
-
+            if (this.projectsList.getSelectionModel().getSelectedIndex() > -1) {
+                String selected = this.projectsList.getSelectionModel().getSelectedItem();
+                String path = FilesystemHandler.concat(ProjectManager.getInstance().getRootFolder(),selected);
+                ProjectManager.getInstance().deleteProject(path);
+                this.buildProjectList();
+            }
         });
         grid.add(deleteButton,0,3,3,1);
 
