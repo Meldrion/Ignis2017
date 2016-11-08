@@ -40,7 +40,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     private ToggleButton layer4Button;
 
 
-    private void buildMainMenu(VBox topContainer) {
+    private void buildMainMenu(VBox topContainer,Stage mainStage) {
         MenuBar menuBar = new MenuBar();
 
         // Use system menu bar
@@ -50,7 +50,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         Menu fileMenu = new Menu("File");
 
         MenuItem newProject = new MenuItem("New Project...");
-        newProject.setOnAction(e -> new CreateProjectDialog());
+        newProject.setOnAction(e -> new CreateProjectDialog(mainStage));
         newProject.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
         MenuItem loadProject = new MenuItem("Load Project");
         MenuItem saveProject = new MenuItem("Save Project");
@@ -71,7 +71,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         menuBar.setUseSystemMenuBar(true);
     }
 
-    private void buildToolbar(VBox topContainer) {
+    private void buildToolbar(VBox topContainer,Stage mainStage) {
         ToolBar toolBar = new ToolBar();  //Creates our tool-bar to hold the buttons.
         topContainer.getChildren().add(toolBar);
 
@@ -79,9 +79,9 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         newProjectBtn.setFocusTraversable(false);
 
         newProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Document-Blank-icon-24.png").getFile()));
-        newProjectBtn.setOnAction(e -> new CreateProjectDialog());
+        newProjectBtn.setOnAction(e -> new CreateProjectDialog(mainStage));
         Button openProjectBtn = new Button();
-        openProjectBtn.setOnAction(e -> new LoadProjectDialog());
+        openProjectBtn.setOnAction(e -> new LoadProjectDialog(mainStage));
         openProjectBtn.setFocusTraversable(false);
         openProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Files-icon-24.png").getFile()));
         Button saveProjectBtn = new Button();
@@ -189,8 +189,8 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         VBox topContainer = new VBox();
         root.setTop(topContainer);
 
-        buildMainMenu(topContainer);
-        buildToolbar(topContainer);
+        buildMainMenu(topContainer,primaryStage);
+        buildToolbar(topContainer,primaryStage);
 
         this.mapCanvas = new MapCanvas(640,480);
         Canvas uiLayer = new Canvas(640,480);

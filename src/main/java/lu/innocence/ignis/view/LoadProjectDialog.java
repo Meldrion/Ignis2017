@@ -12,8 +12,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lu.innocence.ignis.IgnisGlobals;
+import lu.innocence.ignis.engine.ProjectManager;
+
+import java.io.File;
 
 
 /**
@@ -22,12 +27,15 @@ import javafx.stage.Stage;
 public class LoadProjectDialog extends Stage {
 
     //ProjectManager.getInstance().loadProject(ProjectManager.getInstance().getRootFolder() + "/ES2016")
+    private TextField rootPathTextField;
 
-    public LoadProjectDialog() {
+    public LoadProjectDialog(Stage parent) {
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Load Project Window");
         this.setResizable(false);
         this.buildGUI();
+        this.initData();
+        this.initOwner(parent);
         this.setWidth(305);
         this.setHeight(300);
         this.show();
@@ -56,11 +64,17 @@ public class LoadProjectDialog extends Stage {
         rootPathLabel.setText("Root Path");
         grid.add(rootPathLabel,0,0);
 
-        TextField textField = new TextField();
-        grid.add(textField,1,0);
+        this.rootPathTextField = new TextField();
+        this.rootPathTextField.setEditable(false);
+        grid.add(this.rootPathTextField,1,0);
 
         Button button = new Button();
         button.setText("...");
+        button.setOnAction(t -> {
+            IgnisGlobals.chooseProjectRoot(this);
+            this.rootPathTextField.setText(ProjectManager.getInstance().getRootFolder());
+        });
+
         grid.add(button,2,0);
 
         Text projectsLabel = new Text();
@@ -92,6 +106,8 @@ public class LoadProjectDialog extends Stage {
 
     }
 
-
+    private void initData() {
+        this.rootPathTextField.setText(ProjectManager.getInstance().getRootFolder());
+    }
 
 }

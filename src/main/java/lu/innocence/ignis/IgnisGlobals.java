@@ -1,5 +1,10 @@
 package lu.innocence.ignis;
 
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+import lu.innocence.ignis.engine.ProjectManager;
+
+import java.io.File;
 import java.net.URL;
 
 /**
@@ -34,6 +39,16 @@ public class IgnisGlobals {
 
     public static URL loadFromResourceFolder(String path) {
         return IgnisGlobals.class.getClassLoader().getResource(path);
+    }
+
+    public static void chooseProjectRoot(Stage parent) {
+        final DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setInitialDirectory(new File(ProjectManager.getInstance().getRootFolder()));
+        directoryChooser.setTitle("Select Root Folder");
+        File dir = directoryChooser.showDialog(parent);
+        if (dir != null) {
+            ProjectManager.getInstance().setRootFolder(dir.getAbsolutePath());
+        }
     }
 
 

@@ -13,20 +13,29 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lu.innocence.ignis.IgnisGlobals;
+import lu.innocence.ignis.engine.ProjectManager;
+
+import java.io.File;
 
 /**
  * @author Fabien Steines
  */
 public class CreateProjectDialog extends Stage{
 
-    public CreateProjectDialog() {
+    private TextField rootPathTextField;
+
+    public CreateProjectDialog(Stage parentStage) {
 
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Create Project Window");
         this.setResizable(false);
         this.buildGUI();
+        this.initData();
+        this.initOwner(parentStage);
         this.setWidth(380);
         this.setHeight(270);
         this.show();
@@ -52,11 +61,17 @@ public class CreateProjectDialog extends Stage{
         Text rootLabel = new Text("Project Root ");
         grid.add(rootLabel, 0, 0);
 
-        TextField rootPathTextField = new TextField();
-        grid.add(rootPathTextField,1,0);
+        this.rootPathTextField = new TextField();
+        this.rootPathTextField.setEditable(false);
+        grid.add(this.rootPathTextField,1,0);
 
         Button lookUpButton = new Button();
         lookUpButton.setText("...");
+        lookUpButton.setOnAction(t -> {
+            IgnisGlobals.chooseProjectRoot(this);
+            this.rootPathTextField.setText(ProjectManager.getInstance().getRootFolder());
+        });
+
         grid.add(lookUpButton,2,0);
 
         Text folderNameLabel = new Text("Project Folder Name ");
@@ -110,6 +125,10 @@ public class CreateProjectDialog extends Stage{
         bottomBar.getChildren().addAll(confirmButton,cancelButton);
 
         root.setBottom(bottomBar);
+    }
+
+    private void initData() {
+        this.rootPathTextField.setText(ProjectManager.getInstance().getRootFolder());
     }
 
 }
