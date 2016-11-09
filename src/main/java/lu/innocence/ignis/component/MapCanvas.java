@@ -19,6 +19,15 @@ import java.util.List;
  */
 public class MapCanvas extends Canvas implements TilesetSelectionChanged, ActiveMapListener {
 
+    public static final int TOOL_PEN = 0x0;
+    public static final int TOOL_BRUSH = 0x1;
+    public static final int TOOL_FILL = 0x2;
+    public static final int TOOL_ERASE = 0x3;
+    public static final int LAYER_1 = 0x4;
+    public static final int LAYER_2 = 0x5;
+    public static final int LAYER_3 = 0x6;
+    public static final int LAYER_EVENT = 0x7;
+
     int lastX = -1;
     int lastY = -1;
 
@@ -34,8 +43,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     private int tilesetWidth = 1;
     private int tilesetHeight = 1;
 
-    private List<GUIButtonsUpdate> guiButtonsUpdate;
-
+    private List<GUIButtonsUpdate> guiButtonsUpdate;;
 
 
     public MapCanvas(int width,int height) {
@@ -222,4 +230,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         this.setMap(map);
     }
 
+    public void setActiveToolId(int activeTooldId) {
+        this.activeToolId = activeTooldId;
+    }
 }

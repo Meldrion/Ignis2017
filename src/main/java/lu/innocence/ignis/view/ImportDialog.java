@@ -11,6 +11,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.AssetStructure;
+import lu.innocence.ignis.engine.FilesystemHandler;
+import lu.innocence.ignis.engine.Project;
 
 import java.util.List;
 
@@ -20,10 +22,12 @@ import java.util.List;
  */
 public class ImportDialog extends Stage {
 
+    private Project project;
     private ListView<String> categoriesListView;
     private ListView<String> elementsListView;
 
-    public ImportDialog(Stage parent) {
+    public ImportDialog(Stage parent, Project project) {
+        this.project = project;
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Load Project Window");
         this.setResizable(false);
@@ -105,6 +109,11 @@ public class ImportDialog extends Stage {
         for (String current : AssetStructure.getAssetNames()) {
             this.categoriesListView.getItems().add(current);
         }
+    }
+
+    private void initSelectedCategory(String category) {
+        String cat = category.toLowerCase();
+
     }
 
 

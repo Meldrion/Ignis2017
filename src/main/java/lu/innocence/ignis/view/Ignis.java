@@ -38,6 +38,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     private ToggleButton layer2Button;
     private ToggleButton layer3Button;
     private ToggleButton layer4Button;
+    private Project project;
 
 
     private void buildMainMenu(VBox topContainer,Stage mainStage) {
@@ -118,16 +119,16 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
                 toggle.setSelected(true);
             } else {
                 if (newSelected == penToolButton) {
-
+                    this.mapCanvas.setActiveToolId(MapCanvas.TOOL_PEN);
                 }
                 if (newSelected == brushToolButton) {
-
+                    this.mapCanvas.setActiveToolId(MapCanvas.TOOL_BRUSH);
                 }
                 if (newSelected == fillToolButton) {
-
+                    this.mapCanvas.setActiveToolId(MapCanvas.TOOL_FILL);
                 }
                 if (newSelected == eraseToolButton) {
-
+                    this.mapCanvas.setActiveToolId(MapCanvas.TOOL_ERASE);
                 }
             }
         });
@@ -179,7 +180,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         importManagerButton.setFocusTraversable(false);
         importManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/import-icon-24.png").getFile()));
         importManagerButton.setOnAction(event -> {
-            new ImportDialog(mainStage);
+            new ImportDialog(mainStage,this.project);
         });
 
         Button gameDBButton = new Button();
@@ -249,8 +250,6 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         ProjectManager.getInstance().addActiveProjectListener(this);
 
         buildUserInterface(primaryStage);
-/*        ProjectManager.getInstance().createProject(ProjectManager.getInstance().getRootFolder(),"ES2016","Endless Sorrow",
-                "Fabien Steines","Innocence Studios");*/
 
     }
 
@@ -258,6 +257,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     public void activeProjectChanged(Project p) {
 
         this.mapTree.setRoot(null);
+        this.project = p;
 
         if (p != null) {
 
