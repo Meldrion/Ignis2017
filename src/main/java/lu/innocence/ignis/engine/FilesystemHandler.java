@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -98,6 +99,18 @@ public class FilesystemHandler {
 
     public static boolean isFolder(String path) {
         return (new File(path)).isDirectory();
+    }
+
+    public static boolean isAudio(String path) {
+        String mimeType = new MimetypesFileTypeMap().getContentType( new File(path) );
+        // mimeType should now be something like "image/png"
+        return mimeType.substring(0,5).equalsIgnoreCase("audio");
+    }
+
+    public static boolean isImage(String path) {
+        String mimeType = new MimetypesFileTypeMap().getContentType( new File(path) );
+        // mimeType should now be something like "image/png"
+        return mimeType.substring(0,5).equalsIgnoreCase("image");
     }
 
     public static boolean exists(String path) {

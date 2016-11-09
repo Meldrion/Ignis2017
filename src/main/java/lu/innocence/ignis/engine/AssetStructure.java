@@ -62,6 +62,25 @@ public class AssetStructure {
         return assetNames;
     }
 
+    public static boolean isAudio(String category) {
+        return category != null &&
+                ( category.equalsIgnoreCase(BACKGROUNDMUSIC)
+                        || category.equalsIgnoreCase(SOUNDEFFECT));
+    }
+
+    public static boolean isImage(String category) {
+        return category != null && !isAudio(category) &&
+                !category.equalsIgnoreCase(SCRIPT) && !category.equalsIgnoreCase(JSON);
+    }
+
+    public static boolean isScript(String category) {
+        return category != null && category.equalsIgnoreCase(SCRIPT);
+    }
+
+    public static boolean isJSON(String category) {
+        return category != null && category.equalsIgnoreCase(JSON);
+    }
+
     private static String capitalizeFirstLetter(String original) {
         if (original == null || original.length() == 0) {
             return original;

@@ -99,4 +99,9 @@ public class Project {
         return this.mapManager;
     }
 
+
+    public AssetStructure getAssetStructure() {
+        return this.assetStructure;
+    }
+
 }
