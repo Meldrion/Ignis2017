@@ -28,7 +28,7 @@ public class AssetStructure {
 
     private String rootPath;
 
-    public static List<String> getAssetNames() {
+    public static List<String> getAssetFolderNames() {
 
         List<String> assetNames = new ArrayList<>();
 
@@ -49,6 +49,24 @@ public class AssetStructure {
         assetNames.add(AssetStructure.UI);
 
         return assetNames;
+    }
+
+    public static List<String> getAssetNames() {
+
+        List<String> assetNames = getAssetFolderNames();
+
+        for (int i=0;i<assetNames.size();i++) {
+            assetNames.set(i,capitalizeFirstLetter(assetNames.get(i)));
+        }
+
+        return assetNames;
+    }
+
+    private static String capitalizeFirstLetter(String original) {
+        if (original == null || original.length() == 0) {
+            return original;
+        }
+        return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
     public AssetStructure(String rootPath) {

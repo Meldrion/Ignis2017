@@ -48,7 +48,7 @@ public class Project {
 
             this.assetStructure = new AssetStructure(this.rootFolder);
             boolean allOk = FilesystemHandler.createFolder(this.assetStructure.getAsset());
-            List<String> assetNames = AssetStructure.getAssetNames();
+            List<String> assetNames = AssetStructure.getAssetFolderNames();
 
             for (String name : assetNames) {
                 allOk &= FilesystemHandler.createFolder(this.assetStructure.getPath(name));
