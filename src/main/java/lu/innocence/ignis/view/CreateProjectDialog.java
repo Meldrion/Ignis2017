@@ -8,10 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
@@ -36,14 +33,12 @@ public class CreateProjectDialog extends Stage{
         this.buildGUI();
         this.initData();
         this.initOwner(parentStage);
-        this.setWidth(380);
-        this.setHeight(270);
         this.show();
     }
 
     private void buildGUI() {
         BorderPane root = new BorderPane();
-        Scene scene = new Scene(root,380, 270);
+        Scene scene = new Scene(root,430, 270);
         this.setScene(scene);
 
 
@@ -56,6 +51,11 @@ public class CreateProjectDialog extends Stage{
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
+
+        ColumnConstraints column1 = new ColumnConstraints(150);
+        ColumnConstraints column2 = new ColumnConstraints(200);
+
+        grid.getColumnConstraints().addAll(column1,column2);
         grid.setPadding(new Insets(10, 0, 0, 10));
 
         Text rootLabel = new Text("Project Root ");

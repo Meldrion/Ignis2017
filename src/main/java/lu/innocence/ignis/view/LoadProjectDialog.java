@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -39,15 +40,13 @@ public class LoadProjectDialog extends Stage {
         this.buildGUI();
         this.initData();
         this.initOwner(parent);
-        this.setWidth(305);
-        this.setHeight(300);
         this.show();
     }
 
     private void buildGUI() {
 
         BorderPane root = new BorderPane();
-        Scene scene = new Scene(root,305, 300);
+        Scene scene = new Scene(root,400, 300);
         this.setScene(scene);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, t -> {
@@ -62,6 +61,10 @@ public class LoadProjectDialog extends Stage {
         grid.setVgap(10);
         grid.setPadding(new Insets(10, 0, 0, 10));
 
+        ColumnConstraints column1 = new ColumnConstraints(90);
+        ColumnConstraints column2 = new ColumnConstraints(230);
+
+        grid.getColumnConstraints().addAll(column1,column2);
 
         Text rootPathLabel = new Text();
         rootPathLabel.setText("Root Path");
