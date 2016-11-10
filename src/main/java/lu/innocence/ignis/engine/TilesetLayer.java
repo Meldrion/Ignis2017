@@ -61,4 +61,7 @@ public class TilesetLayer {
         }
     }
 
+    public void removeCell(int x, int y) {
+        this.matrix.get(x).set(y,null);
+    }
 }

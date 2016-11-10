@@ -1,5 +1,6 @@
 package lu.innocence.ignis.component;
 
+import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
@@ -28,30 +29,33 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     public static final int LAYER_3 = 0x6;
     public static final int LAYER_EVENT = 0x7;
 
-
-    int lastX = -1;
-    int lastY = -1;
-
+    private int lastX = -1;
+    private int lastY = -1;
     private Canvas frontCanvas;
     private Pane layerPane;
-
     private Map map;
     private int activeLayerId;
     private int activeToolId;
-
     private int tilesetX = 0;
     private int tilesetY = 0;
     private int tilesetWidth = 1;
     private int tilesetHeight = 1;
+    private List<GUIButtonsUpdate> guiButtonsUpdate;
 
-    private List<GUIButtonsUpdate> guiButtonsUpdate;;
-
-
+    /**
+     *
+     * @param width
+     * @param height
+     */
     public MapCanvas(int width,int height) {
         super(width,height);
         this.guiButtonsUpdate = new ArrayList<>();
     }
 
+    /**
+     *
+     * @param map
+     */
     public void setMap(Map map) {
         this.map = map;
 
@@ -72,6 +76,9 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         this.render();
     }
 
+    /**
+     *
+     */
     public void render() {
         GraphicsContext g = this.getGraphicsContext2D();
         g.clearRect(0,0,this.getWidth(),this.getHeight());
@@ -79,7 +86,11 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             this.map.renderMap(g);
     }
 
-
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void renderPartial(int x,int y) {
         if (this.map != null) {
             this.map.renderPartialMap(this.getGraphicsContext2D(), x, y);
@@ -93,20 +104,21 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     public void linkFrontCanvas(Canvas canvas) {
         this.frontCanvas = canvas;
 
-        this.frontCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, t ->
-                this.penAdd((int)t.getX()/32,(int)t.getY()/32));
-
-        this.frontCanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, t -> {
-
+        this.frontCanvas.addEventFilter(MouseEvent.MOUSE_PRESSED, t -> {
             int x = (int)t.getX()/32;
             int y = (int)t.getY()/32;
+            this.handleAction(x,y,MouseEvent.MOUSE_PRESSED);
+        });
 
+        this.frontCanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, t -> {
+            int x = (int)t.getX()/32;
+            int y = (int)t.getY()/32;
             if (x != lastX || y != lastY) {
-                this.penAdd(x,y);
+                this.handleAction(x,y,MouseEvent.MOUSE_DRAGGED);
+                this.renderCursor(x,y,false);
                 lastX = x;
                 lastY = y;
             }
-
         });
 
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_MOVED,t -> {
@@ -164,6 +176,31 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         });
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param mouseEvent
+     */
+    private void handleAction(int x, int y, EventType<MouseEvent> mouseEvent) {
+
+        if (mouseEvent == MouseEvent.MOUSE_PRESSED || mouseEvent == MouseEvent.MOUSE_DRAGGED) {
+            if (this.activeToolId == TOOL_PEN) {
+                this.penAdd(x, y);
+            } else if (this.activeToolId == TOOL_ERASE) {
+                this.erase(x, y);
+            }
+        }
+
+    }
+
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param clearOnly
+     */
     private void renderCursor(int x,int y,boolean clearOnly) {
 
         if (this.map != null) {
@@ -184,14 +221,27 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     }
 
+    /**
+     *
+     * @param pane
+     */
     public void linkLayerPane(Pane pane) {
         this.layerPane = pane;
     }
 
+    /**
+     *
+     * @param layerIndex
+     */
     public void setActiveLayerId(int layerIndex) {
         this.setActiveLayerId(layerIndex,false);
     }
 
+    /**
+     *
+     * @param layerIndex
+     * @param fireUpdate
+     */
     public void setActiveLayerId(int layerIndex,boolean fireUpdate) {
         if (this.map != null && layerIndex != this.activeLayerId) {
             this.activeLayerId = layerIndex;
@@ -202,25 +252,41 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         }
     }
 
+    /**
+     *
+     * @param listener
+     */
     public void addGUIButtonsListener(GUIButtonsUpdate listener) {
         if (!this.guiButtonsUpdate.contains(listener)) {
             this.guiButtonsUpdate.add(listener);
         }
     }
 
+    /**
+     *
+     */
     private void fireUpdateToolButtons() {
         for (GUIButtonsUpdate current : this.guiButtonsUpdate) {
             current.activeToolChanged(this.activeToolId);
         }
     }
 
+    /**
+     *
+     */
     private void fireUpdateLayerButtons() {
         for (GUIButtonsUpdate current : this.guiButtonsUpdate) {
             current.activeLayerChanged(this.activeLayerId);
         }
     }
 
-
+    /**
+     *
+     * @param startX
+     * @param startY
+     * @param width
+     * @param height
+     */
     @Override
     public void tilesetSelectionChanged(int startX, int startY, int width, int height) {
         this.tilesetX = startX;
@@ -229,16 +295,29 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         this.tilesetHeight = height;
     }
 
+    /**
+     *
+     * @param map
+     */
     @Override
     public void activeMapChanged(Map map) {
         this.setMap(map);
     }
 
+    /**
+     *
+     * @param activeTooldId
+     */
     public void setActiveToolId(int activeTooldId) {
         this.activeToolId = activeTooldId;
     }
 
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     private void penAdd(int x,int y) {
         if (this.map != null) {
             for (int i = 0; i < this.tilesetWidth; i++) {
@@ -249,6 +328,18 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                     this.renderPartial(x + i,y + j);
                 }
             }
+        }
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     */
+    private void erase(int x, int y) {
+        if (this.map != null) {
+            this.map.removeCell(this.activeLayerId,x,y);
+            this.renderPartial(x,y);
         }
     }
 }
