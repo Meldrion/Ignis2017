@@ -33,12 +33,13 @@ public class CreateProjectDialog extends Stage{
         this.buildGUI();
         this.initData();
         this.initOwner(parentStage);
+        this.sizeToScene();
         this.show();
     }
 
     private void buildGUI() {
         BorderPane root = new BorderPane();
-        Scene scene = new Scene(root,430, 270);
+        Scene scene = new Scene(root);
         this.setScene(scene);
 
 
@@ -49,6 +50,10 @@ public class CreateProjectDialog extends Stage{
         });
 
         GridPane grid = new GridPane();
+
+/*        GridPane.setHgrow(grid, Priority.ALWAYS);
+        GridPane.setVgrow(grid, Priority.ALWAYS);*/
+
         grid.setHgap(10);
         grid.setVgap(10);
 
@@ -56,7 +61,7 @@ public class CreateProjectDialog extends Stage{
         ColumnConstraints column2 = new ColumnConstraints(200);
 
         grid.getColumnConstraints().addAll(column1,column2);
-        grid.setPadding(new Insets(10, 0, 0, 10));
+        grid.setPadding(new Insets(15, 10, 0, 15));
 
         Text rootLabel = new Text("Project Root ");
         grid.add(rootLabel, 0, 0);

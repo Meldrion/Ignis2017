@@ -46,18 +46,19 @@ public class ImportDialog extends Stage {
     public ImportDialog(Stage parent, Project project) {
         this.project = project;
         this.initModality(Modality.APPLICATION_MODAL);
-        this.setTitle("Load Project Window");
+        this.setTitle("Import Manager Window");
         this.setResizable(false);
         this.buildGUI();
         this.initData();
         this.initOwner(parent);
+        this.sizeToScene();
         this.show();
     }
 
 
     private void buildGUI() {
         BorderPane root = new BorderPane();
-        Scene scene = new Scene(root,640, 350);
+        Scene scene = new Scene(root);
         this.setScene(scene);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, t -> {

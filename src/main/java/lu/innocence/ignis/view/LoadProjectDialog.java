@@ -40,13 +40,14 @@ public class LoadProjectDialog extends Stage {
         this.buildGUI();
         this.initData();
         this.initOwner(parent);
+        this.sizeToScene();
         this.show();
     }
 
     private void buildGUI() {
 
         BorderPane root = new BorderPane();
-        Scene scene = new Scene(root,400, 300);
+        Scene scene = new Scene(root);
         this.setScene(scene);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, t -> {
@@ -59,7 +60,7 @@ public class LoadProjectDialog extends Stage {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(10, 0, 0, 10));
+        grid.setPadding(new Insets(10, 10, 0, 10));
 
         ColumnConstraints column1 = new ColumnConstraints(90);
         ColumnConstraints column2 = new ColumnConstraints(230);
