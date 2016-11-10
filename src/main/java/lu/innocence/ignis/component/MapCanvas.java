@@ -195,7 +195,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             }
         }
 
-        if (this.activeLayerId == TOOL_BRUSH) {
+        if (this.activeToolId == TOOL_BRUSH) {
 
             if (mouseEvent == MouseEvent.MOUSE_PRESSED) {
                 this.mouseIsDown = true;
@@ -248,8 +248,6 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             } else {
 
                 if (this.activeToolId == MapCanvas.TOOL_BRUSH) {
-
-                    LOGGER.info("INSIDE ! ");
 
                     int selectionWidth = this.brushStartX - x;
                     int selectionHeight = this.brushStartY - y;
