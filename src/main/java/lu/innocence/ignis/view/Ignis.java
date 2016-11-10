@@ -162,16 +162,16 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
                 toggle.setSelected(true);
             } else {
                 if (newSelected == layer1Button) {
-                    this.mapCanvas.setActiveLayerId(0);
+                    this.mapCanvas.setActiveLayerId(MapCanvas.TOOL_PEN);
                 }
                 if (newSelected == layer2Button) {
-                    this.mapCanvas.setActiveLayerId(1);
+                    this.mapCanvas.setActiveLayerId(MapCanvas.TOOL_BRUSH);
                 }
                 if (newSelected == layer3Button) {
-                    this.mapCanvas.setActiveLayerId(2);
+                    this.mapCanvas.setActiveLayerId(MapCanvas.TOOL_FILL);
                 }
                 if (newSelected == layer4Button) {
-                    this.mapCanvas.setActiveLayerId(3);
+                    this.mapCanvas.setActiveLayerId(MapCanvas.TOOL_ERASE);
                 }
             }
         });

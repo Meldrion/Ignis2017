@@ -232,7 +232,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             int h = this.tilesetHeight * 32;
             GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
 
-            if (this.activeLayerId == TOOL_PEN || (this.activeToolId == MapCanvas.TOOL_BRUSH && !this.mouseIsDown)) {
+            if (this.activeToolId == TOOL_PEN || (this.activeToolId == MapCanvas.TOOL_BRUSH && !this.mouseIsDown)) {
+
                 g.clearRect(lastX * 32, lastY * 32, w, h);
 
                 if (!clearOnly) {
