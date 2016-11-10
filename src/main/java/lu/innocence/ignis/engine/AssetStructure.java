@@ -78,7 +78,7 @@ public class AssetStructure {
     }
 
     public static boolean isJSON(String category) {
-        return category != null && category.equalsIgnoreCase(JSON);
+        return category != null && (category.equalsIgnoreCase(JSON) || category.equalsIgnoreCase(MAP));
     }
 
     private static String capitalizeFirstLetter(String original) {
@@ -97,7 +97,7 @@ public class AssetStructure {
     }
 
     public String getPath(String assetName) {
-        return FilesystemHandler.concat(this.getAsset(),assetName);
+        return FilesystemHandler.concat(this.getAsset(),assetName != null ? assetName.toLowerCase() : "not valid");
     }
 
     public String getProjectJSON() {

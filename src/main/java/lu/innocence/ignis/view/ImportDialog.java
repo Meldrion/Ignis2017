@@ -17,8 +17,10 @@ import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.AssetStructure;
 import lu.innocence.ignis.engine.FilesystemHandler;
 import lu.innocence.ignis.engine.Project;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.List;
+import java.util.function.Predicate;
 
 
 /**
@@ -26,7 +28,7 @@ import java.util.List;
  */
 public class ImportDialog extends Stage {
 
-
+    private static final Logger LOGGER = LogManager.getLogger(ImportDialog.class);
     private static final Image imageIcon  =
             new Image("file:" + IgnisGlobals.loadFromResourceFolder("icons/thumbnail.png").getFile());
 
@@ -79,6 +81,9 @@ public class ImportDialog extends Stage {
         grid.getColumnConstraints().addAll(column1,column2,column3);
 
         this.categoriesListView = new ListView<>();
+        this.categoriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            this.initSelectedCategory(newValue);
+        });
         grid.add(this.categoriesListView,0,0);
 
         this.elementsListView = new ListView<>();
@@ -164,12 +169,26 @@ public class ImportDialog extends Stage {
 
         this.elementsListView.getItems().clear();
 
-        if (project != null) {
+        if (category != null && project != null) {
             String path = this.project.getAssetStructure().getPath(category);
-            FilesystemHandler.readFolderContent(path).stream().filter(file ->
-                    (AssetStructure.isAudio(category) && FilesystemHandler.isAudio(path)) ||
-                            AssetStructure.isImage(category) && FilesystemHandler.isImage(path)).forEach(file
-                    -> this.elementsListView.getItems().add(file));
+
+            LOGGER.info(path);
+
+            for (String file : FilesystemHandler.readSubFiles(path)) {
+
+                LOGGER.info(file);
+
+                boolean audio = AssetStructure.isAudio(category)
+                        && FilesystemHandler.isAudio(FilesystemHandler.concat(path,file));
+                boolean image = AssetStructure.isImage(category)
+                        && FilesystemHandler.isImage(FilesystemHandler.concat(path,file));
+                boolean json = AssetStructure.isJSON(category)
+                        && FilesystemHandler.isFile(FilesystemHandler.concat(path,file));
+
+                if (audio || image || json) {
+                    ImportDialog.this.elementsListView.getItems().add(file);
+                }
+            }
         }
     }
 

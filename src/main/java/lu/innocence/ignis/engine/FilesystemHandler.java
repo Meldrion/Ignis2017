@@ -84,7 +84,7 @@ public class FilesystemHandler {
         List<String> returnList = new ArrayList<>();
 
         for (String current : FilesystemHandler.readFolderContent(folder)) {
-            File f = new File(current);
+            File f = new File(FilesystemHandler.concat(folder,current));
             if (f.isFile() && !".".equals(current) && !"..".equals(current)) {
                 returnList.add(current);
             }
