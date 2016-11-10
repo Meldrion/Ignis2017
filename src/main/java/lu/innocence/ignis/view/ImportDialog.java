@@ -13,14 +13,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.AssetStructure;
 import lu.innocence.ignis.engine.FilesystemHandler;
 import lu.innocence.ignis.engine.Project;
+import lu.innocence.ignis.view.components.CustomListCell;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.function.Predicate;
 
 
 /**
@@ -29,18 +29,6 @@ import java.util.function.Predicate;
 public class ImportDialog extends Stage {
 
     private static final Logger LOGGER = LogManager.getLogger(ImportDialog.class);
-    private static final Image imageIcon  =
-            new Image("file:" + IgnisGlobals.loadFromResourceFolder("icons/thumbnail.png").getFile());
-
-    private static final Image audioIcon  =
-            new Image("file:" + IgnisGlobals.loadFromResourceFolder("icons/audio-x-generic-16.png").getFile());
-
-    private static final Image jsIcon  =
-            new Image("file:" + IgnisGlobals.loadFromResourceFolder("icons/jsIcon.png").getFile());
-
-    private static final Image jsonIcon  =
-            new Image("file:" + IgnisGlobals.loadFromResourceFolder("icons/jsonIcon.png").getFile());
-
     private Project project;
     private ListView<String> categoriesListView;
     private ListView<String> elementsListView;
@@ -56,7 +44,6 @@ public class ImportDialog extends Stage {
         this.sizeToScene();
         this.show();
     }
-
 
     private void buildGUI() {
         BorderPane root = new BorderPane();
@@ -81,44 +68,19 @@ public class ImportDialog extends Stage {
         grid.getColumnConstraints().addAll(column1,column2,column3);
 
         this.categoriesListView = new ListView<>();
-        this.categoriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            this.initSelectedCategory(newValue);
-        });
+        this.categoriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)
+                -> this.initSelectedCategory(newValue));
         grid.add(this.categoriesListView,0,0);
 
         this.elementsListView = new ListView<>();
         grid.add(elementsListView,1,0);
 
-        this.categoriesListView.setCellFactory(param -> new ListCell<String>() {
-            private ImageView imageView = new ImageView();
+        this.categoriesListView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
             @Override
-            public void updateItem(String name, boolean empty) {
-
-                super.updateItem(name, empty);
-
-                if (AssetStructure.isAudio(name)) {
-                    imageView.setImage(audioIcon);
-                }
-
-                if (AssetStructure.isImage(name)) {
-                    imageView.setImage(imageIcon);
-                }
-
-                if (AssetStructure.isScript(name)) {
-                    imageView.setImage(jsIcon);
-                }
-
-                if (AssetStructure.isJSON(name)) {
-                    imageView.setImage(jsonIcon);
-                }
-
-
-                setText(name);
-                setGraphic(imageView);
+            public ListCell<String> call(ListView<String> param) {
+                return new CustomListCell();
             }
-
         });
-
 
         VBox rightPanel = new VBox();
         rightPanel.setSpacing(10);
@@ -155,7 +117,6 @@ public class ImportDialog extends Stage {
 
         bottomBar.getChildren().addAll(cancelButton);
         root.setBottom(bottomBar);
-
     }
 
     private void initData() {
@@ -191,7 +152,5 @@ public class ImportDialog extends Stage {
             }
         }
     }
-
-
 
 }

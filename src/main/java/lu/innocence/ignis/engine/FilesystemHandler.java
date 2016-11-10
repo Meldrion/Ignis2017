@@ -144,10 +144,10 @@ public class FilesystemHandler {
     }
 
     /**
-     *
-     * @param json
-     * @param path
-     * @return
+     * Write an JSON Object to the Filesystem on a specific path
+     * @param json the JSON Object
+     * @param path the output path
+     * @return true if everything worked fine, and false if there has been an error
      */
     public static boolean writeJson(JSONObject json,String path) {
 

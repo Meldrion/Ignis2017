@@ -11,7 +11,6 @@ public class Project {
 
     private String rootFolder;
     private MapManager mapManager;
-    private FilesystemHandler filesystemHandler;
     private AssetStructure assetStructure;
 
     private String projectTitle;
@@ -22,7 +21,6 @@ public class Project {
      *
      */
     public Project() {
-        this.filesystemHandler = new FilesystemHandler();
         this.mapManager = new MapManager();
     }
 
