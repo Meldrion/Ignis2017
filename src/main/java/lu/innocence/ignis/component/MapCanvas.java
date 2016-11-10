@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.event.ActiveMapListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
@@ -107,10 +108,16 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     public void linkFrontCanvas(Canvas canvas) {
         this.frontCanvas = canvas;
 
-        this.frontCanvas.addEventFilter(MouseEvent.MOUSE_PRESSED, t -> {
+        this.frontCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, t -> {
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
             this.handleAction(x, y, MouseEvent.MOUSE_PRESSED);
+        });
+
+        this.frontCanvas.addEventFilter(MouseEvent.MOUSE_RELEASED,t -> {
+            int x = (int) t.getX() / 32;
+            int y = (int) t.getY() / 32;
+            this.handleAction(x, y, MouseEvent.MOUSE_RELEASED);
         });
 
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, t -> {
@@ -127,7 +134,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
             if (x != lastX || y != lastY) {
-                this.renderCursor(x, y, false);
+                this.renderCursor(x, y, false,false);
                 lastX = x;
                 lastY = y;
             }
@@ -137,7 +144,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
 
-            this.renderCursor(x, y, true);
+            this.renderCursor(x, y, true,false);
 
             lastX = x;
             lastY = y;
@@ -148,7 +155,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
-            this.renderCursor(x, y, false);
+            this.renderCursor(x, y, false,false);
             lastX = x;
             lastY = y;
 
@@ -188,10 +195,10 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         if (mouseEvent == MouseEvent.MOUSE_PRESSED || mouseEvent == MouseEvent.MOUSE_DRAGGED) {
             if (this.activeToolId == TOOL_PEN) {
                 this.penAdd(x, y);
-                this.renderCursor(x, y, false);
+                this.renderCursor(x, y, false,false);
             } else if (this.activeToolId == TOOL_ERASE) {
                 this.erase(x, y);
-                this.renderCursor(x, y, false);
+                this.renderCursor(x, y, false,false);
             }
         }
 
@@ -201,17 +208,18 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                 this.mouseIsDown = true;
                 this.brushStartX = x;
                 this.brushStartY = y;
-                this.renderCursor(x, y, false);
+                this.renderCursor(x, y, false,false);
             }
 
             if (mouseEvent == MouseEvent.MOUSE_DRAGGED) {
-                this.renderCursor(x, y, false);
+                this.renderCursor(x, y, false,false);
             }
 
             if (mouseEvent == MouseEvent.MOUSE_RELEASED) {
 
                 if (this.mouseIsDown) {
                     this.mouseIsDown = false;
+                    this.renderCursor(x, y, false,true);
                 }
 
             }
@@ -225,7 +233,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * @param y
      * @param clearOnly
      */
-    private void renderCursor(int x, int y, boolean clearOnly) {
+    private void renderCursor(int x, int y, boolean clearOnly,boolean mouseUpEvent) {
 
         if (this.map != null) {
             int w = this.tilesetWidth * 32;
@@ -234,7 +242,17 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
             if (this.activeToolId == TOOL_PEN || (this.activeToolId == MapCanvas.TOOL_BRUSH && !this.mouseIsDown)) {
 
-                g.clearRect(lastX * 32, lastY * 32, w, h);
+                if (mouseUpEvent && this.activeToolId == MapCanvas.TOOL_BRUSH) {
+
+                    int[] oldCoord = IgnisGlobals.fixCoords(this.brushStartX,this.brushStartY,this.lastX,this.lastY);
+                    int lastSelectionWidth = oldCoord[2] - oldCoord[0];
+                    int lastSelectionHeight =  oldCoord[3] - oldCoord[1];
+
+                    g.clearRect(oldCoord[0] * 32, oldCoord[1] * 32,
+                            lastSelectionWidth * 32, lastSelectionHeight * 32);
+                } else {
+                    g.clearRect(lastX * 32, lastY * 32, w, h);
+                }
 
                 if (!clearOnly) {
                     g.setGlobalAlpha(0.5);
@@ -249,15 +267,20 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
                 if (this.activeToolId == MapCanvas.TOOL_BRUSH) {
 
-                    int selectionWidth = this.brushStartX - x;
-                    int selectionHeight = this.brushStartY - y;
+                    int[] oldCoord = IgnisGlobals.fixCoords(this.brushStartX,this.brushStartY,this.lastX,this.lastY);
+                    int[] newCoord = IgnisGlobals.fixCoords(this.brushStartX,this.brushStartY,x,y);
 
-                    g.clearRect(this.brushStartX * 32, this.brushStartY * 32,
-                            selectionWidth * 32, selectionHeight * 32);
+                    int lastSelectionWidth = oldCoord[2] - oldCoord[0];
+                    int lastSelectionHeight =  oldCoord[3] - oldCoord[1];
+                    int selectionWidth =  newCoord[2] - newCoord[0];
+                    int selectionHeight = newCoord[3] - newCoord[1];
+
+                    g.clearRect(oldCoord[0] * 32, oldCoord[1] * 32,
+                            lastSelectionWidth * 32, lastSelectionHeight * 32);
 
                     g.setGlobalAlpha(0.5);
                     g.setFill(Color.RED);
-                    g.fillRect(this.brushStartX * 32, this.brushStartY * 32,
+                    g.fillRect(newCoord[0] * 32, newCoord[1] * 32,
                             selectionWidth * 32, selectionHeight * 32);
 
                     int tsX = 0;
@@ -266,7 +289,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                     for (int i = 0; i < selectionWidth; i++) {
                         for (int j = 0; j < selectionHeight; j++) {
 
-                            this.map.getTileset().drawTileTo(g, this.brushStartX + i, this.brushStartY + j,
+                            this.map.getTileset().drawTileTo(g, newCoord[0] + i, newCoord[1] + j,
                                     this.tilesetX + tsX, this.tilesetY + tsY);
                             tsY += 1;
 
