@@ -23,6 +23,8 @@ public class FilesystemHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(FilesystemHandler.class);
 
+    private FilesystemHandler() {}
+
     /**
      *
      * @param f1
@@ -149,23 +151,15 @@ public class FilesystemHandler {
      */
     public static boolean writeJson(JSONObject json,String path) {
 
-        FileWriter file = null;
-        try {
-            file = new FileWriter(path);
+        try ( FileWriter file = new FileWriter(path)) {
             file.write(json.toJSONString());
             file.flush();
             return true;
         } catch (IOException e) {
             LOGGER.error(e);
             return false;
-        } finally {
-            try {
-                if (file != null)
-                    file.close();
-            } catch (IOException e) {
-                LOGGER.error(e);
-            }
         }
+
     }
 
     /**
@@ -177,24 +171,14 @@ public class FilesystemHandler {
 
         JSONParser parser = new JSONParser();
         Object obj = null;
-        FileReader fReader = null;
 
-        try {
-            fReader = new FileReader(path);
+        try (FileReader fReader = new FileReader(path)) {
             obj = parser.parse(fReader);
             return (JSONObject) obj;
         } catch (IOException | ParseException e) {
             LOGGER.error(e);
             return null;
-        } finally {
-            try {
-                if (fReader!=null)
-                    fReader.close();
-            } catch (IOException e) {
-                LOGGER.error(e);
-            }
         }
-
     }
 
 }
