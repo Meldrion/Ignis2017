@@ -28,6 +28,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     public static final int LAYER_3 = 0x6;
     public static final int LAYER_EVENT = 0x7;
 
+
     int lastX = -1;
     int lastY = -1;
 
@@ -78,8 +79,11 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             this.map.renderMap(g);
     }
 
+
     public void renderPartial(int x,int y) {
-        this.map.renderPartialMap(this.getGraphicsContext2D(),x,y);
+        if (this.map != null) {
+            this.map.renderPartialMap(this.getGraphicsContext2D(), x, y);
+        }
     }
 
     /**
@@ -90,7 +94,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         this.frontCanvas = canvas;
 
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_CLICKED, t ->
-                this.renderPartial((int)t.getX()/32,(int)t.getY()/32));
+                this.penAdd((int)t.getX()/32,(int)t.getY()/32));
 
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, t -> {
 
@@ -98,7 +102,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             int y = (int)t.getY()/32;
 
             if (x != lastX || y != lastY) {
-                this.renderPartial(x, y);
+                this.penAdd(x,y);
                 lastX = x;
                 lastY = y;
             }
@@ -232,5 +236,19 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     public void setActiveToolId(int activeTooldId) {
         this.activeToolId = activeTooldId;
+    }
+
+
+    private void penAdd(int x,int y) {
+        if (this.map != null) {
+            for (int i = 0; i < this.tilesetWidth; i++) {
+                for (int j = 0; j < this.tilesetHeight; j++) {
+
+                    this.map.addCell(this.activeLayerId, x + i, y + j,
+                            this.tilesetX + i, this.tilesetY + j);
+                    this.renderPartial(x + i,y + j);
+                }
+            }
+        }
     }
 }

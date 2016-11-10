@@ -69,8 +69,17 @@ public class AssetStructure {
     }
 
     public static boolean isImage(String category) {
-        return category != null && !isAudio(category) &&
-                !category.equalsIgnoreCase(SCRIPT) && !category.equalsIgnoreCase(JSON);
+
+        if (category != null) {
+            boolean valid = !isAudio(category);
+            valid &= !category.equalsIgnoreCase(SCRIPT);
+            valid &= !category.equalsIgnoreCase(JSON);
+            valid &= !category.equalsIgnoreCase(MAP);
+
+            return valid;
+        } else {
+            return false;
+        }
     }
 
     public static boolean isScript(String category) {

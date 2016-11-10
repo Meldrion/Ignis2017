@@ -66,53 +66,51 @@ public class Map {
         }
     }
 
-    private void simulateLayerRender(GraphicsContext g, int index) {
+    public void renderMap(GraphicsContext g) {
 
-        if (this.activeLayerIndex == index && index != 0) {
-            g.setGlobalAlpha(0.5);
-            g.setFill(Color.BLACK);
-            g.fillRect(0, 0, width * 32, height * 32);
-            g.setGlobalAlpha(1.0);
-        } else {
-            if (this.activeLayerIndex < index) {
-                g.setGlobalAlpha(0.5);
+        if (this.tileset != null) {
+            for (int index = 0; index < this.layers.size(); index++) {
 
-            }
-        }
-
-        for (int i = 0; i < this.width; i++) {
-            for (int j = 0; j < this.height; j++) {
-
-                switch (index) {
-                    case 0:
-                        this.tileset.drawTileTo(g, i, j, 0, 0);
-                        break;
-                    case 1:
-                        this.tileset.drawTileTo(g, i, j, 0, 2);
-                        break;
-                    case 2:
-                        this.tileset.drawTileTo(g, i, j, 0, 3);
-                        break;
-                    default:
-                        break;
+                if (this.activeLayerIndex == index && index != 0) {
+                    g.setGlobalAlpha(0.5);
+                    g.setFill(Color.BLACK);
+                    g.fillRect(0, 0, width * 32, height * 32);
+                    g.setGlobalAlpha(1.0);
+                } else {
+                    if (this.activeLayerIndex < index) {
+                        g.setGlobalAlpha(0.5);
+                    }
                 }
 
+                this.layers.get(index).render(g,this.tileset);
+                g.setGlobalAlpha(1.0);
             }
         }
-
-        g.setGlobalAlpha(1.0);
-    }
-
-    public void renderMap(GraphicsContext g) {
-        simulateLayerRender(g, 0);
-        simulateLayerRender(g, 1);
-        simulateLayerRender(g, 2);
     }
 
     public void renderPartialMap(GraphicsContext g, int x, int y) {
         g.clearRect(x * 32, y * 32, 32, 32);
-        this.tileset.drawTileTo(g, x, y, 1, 1);
+
+        if (this.tileset != null) {
+            for (int index = 0; index < this.layers.size(); index++) {
+
+                if (this.activeLayerIndex == index && index != 0) {
+                    g.setGlobalAlpha(0.5);
+                    g.setFill(Color.BLACK);
+                    g.fillRect(x * 32, y * 32, 32, 32);
+                    g.setGlobalAlpha(1.0);
+                } else {
+                    if (this.activeLayerIndex < index) {
+                        g.setGlobalAlpha(0.5);
+                    }
+                }
+
+                this.layers.get(index).renderPartial(g,x,y,this.tileset);
+                g.setGlobalAlpha(1.0);
+            }
+        }
     }
+
 
     public void addCell(int layerIndex, int x, int y, int tsX, int tsY) {
         this.layers.get(layerIndex).addCell(x, y, tsX, tsY);
@@ -152,7 +150,7 @@ public class Map {
         Map foundMap = this.uniqueId.equals(uniqueId) ? this : null;
         while (foundMap == null && index < maxIndex) {
             foundMap = this.children.get(index).find(uniqueId);
-            index ++;
+            index++;
         }
         return foundMap;
 
@@ -164,10 +162,15 @@ public class Map {
 
     public void save() {
         JSONObject mapJSON = new JSONObject();
-        mapJSON.put("name",this.getName());
-        mapJSON.put("width",this.getWidth());
-        mapJSON.put("height",this.getHeight());
+        mapJSON.put("name", this.getName());
+        mapJSON.put("width", this.getWidth());
+        mapJSON.put("height", this.getHeight());
 
-        FilesystemHandler.writeJson(mapJSON,this.mapFilePath);
+        FilesystemHandler.writeJson(mapJSON, this.mapFilePath);
+    }
+
+
+    public void addTile(int layerId, int x, int y, int tsX, int tsY) {
+        this.layers.get(layerId).addCell(x, y, tsX, tsY);
     }
 }

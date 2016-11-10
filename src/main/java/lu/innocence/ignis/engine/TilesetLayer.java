@@ -42,12 +42,23 @@ public class TilesetLayer {
         this.matrix.get(x).set(y,new TilesetCell(x,y,tsX,tsY));
     }
 
-    public void render(GraphicsContext g) {
+    public void render(GraphicsContext g,Tileset tileset) {
 
+        for (int i = 0; i < this.width; i++) {
+            for (int j = 0; j < this.height; j++) {
+                TilesetCell cell = this.matrix.get(i).get(j);
+                if (cell != null) {
+                    tileset.drawTileTo(g,i,j,cell.tsX,cell.tsY);
+                }
+            }
+        }
     }
 
-    public void renderPartial(GraphicsContext g,int x, int y) {
-
+    public void renderPartial(GraphicsContext g,int x, int y,Tileset tileset) {
+        TilesetCell cell = this.matrix.get(x).get(y);
+        if (cell != null) {
+            tileset.drawTileTo(g,x,y,cell.tsX,cell.tsY);
+        }
     }
 
 }
