@@ -4,23 +4,21 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.AssetStructure;
 import lu.innocence.ignis.engine.FilesystemHandler;
 import lu.innocence.ignis.engine.Project;
 import lu.innocence.ignis.view.components.CustomListCell;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.File;
 
 
 /**
@@ -75,12 +73,7 @@ public class ImportDialog extends Stage {
         this.elementsListView = new ListView<>();
         grid.add(elementsListView,1,0);
 
-        this.categoriesListView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-            @Override
-            public ListCell<String> call(ListView<String> param) {
-                return new CustomListCell();
-            }
-        });
+        this.categoriesListView.setCellFactory(param -> new CustomListCell());
 
         VBox rightPanel = new VBox();
         rightPanel.setSpacing(10);
@@ -88,6 +81,19 @@ public class ImportDialog extends Stage {
         Button importButton = new Button();
         importButton.setText("Import");
         importButton.setPrefWidth(120);
+        importButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Import Resource...");
+            File file = fileChooser.showOpenDialog(this);
+            if (file != null) {
+
+                String cat = this.categoriesListView.getSelectionModel().getSelectedItem();
+                String dir = this.project.getAssetStructure().getPath(cat);
+                if (FilesystemHandler.copy(file.getAbsolutePath(),FilesystemHandler.concat(dir,file.getName()))) {
+                    this.initSelectedCategory(cat);
+                }
+            }
+        });
 
         Button deleteButton = new Button();
         deleteButton.setText("Delete");
@@ -133,11 +139,8 @@ public class ImportDialog extends Stage {
         if (category != null && project != null) {
             String path = this.project.getAssetStructure().getPath(category);
 
-            LOGGER.info(path);
 
             for (String file : FilesystemHandler.readSubFiles(path)) {
-
-                LOGGER.info(file);
 
                 boolean audio = AssetStructure.isAudio(category)
                         && FilesystemHandler.isAudio(FilesystemHandler.concat(path,file));

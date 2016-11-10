@@ -26,6 +26,7 @@ public class CustomListCell extends ListCell<String> {
 
     @Override
     public void updateItem(String name, boolean empty) {
+        super.updateItem(name,empty);
         updateCell(this, name);
     }
 

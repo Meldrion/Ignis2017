@@ -144,6 +144,29 @@ public class FilesystemHandler {
     }
 
     /**
+     * Copy input file to the new output folder
+     * @param source inputFile
+     * @param destination outputDestinationFile
+     * @return true if all worked well, false if there has been an error
+     */
+    public static boolean copy(String source,String destination) {
+
+        File sourceF = new File(source);
+        File destF = new File(destination);
+
+        try {
+            if (sourceF.isFile())
+                FileUtils.copyFile(sourceF, destF);
+            else
+                FileUtils.copyDirectory(sourceF, destF);
+            return true;
+        } catch (IOException e) {
+            LOGGER.error(e);
+            return false;
+        }
+    }
+
+    /**
      * Write an JSON Object to the Filesystem on a specific path
      * @param json the JSON Object
      * @param path the output path
