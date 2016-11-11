@@ -80,4 +80,7 @@ public class TilesetLayer {
         return layer;
     }
 
+    public void clearLayer() {
+        this.matrix.clear();
+    }
 }

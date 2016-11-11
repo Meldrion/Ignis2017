@@ -290,7 +290,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
             newMap.setDimension(50,50);
             newMap.setTileset(tileset);
 
-            newMap.save();
+            newMap.load();
 
             mapManager.addMap(newMap);
             mapManager.addMap(mapManager.createNewMap());
