@@ -220,6 +220,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                 if (this.mouseIsDown) {
                     this.mouseIsDown = false;
                     this.renderCursor(x, y, false,true);
+                    this.brushAdd(x,y);
                 }
 
             }
@@ -411,6 +412,39 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                             this.tilesetX + i, this.tilesetY + j);
                     this.renderPartial(x + i, y + j);
                 }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    private void brushAdd(int x,int y) {
+        int tsX = 0;
+        int tsY = 0;
+
+        int[] newCoord = IgnisGlobals.fixCoords(this.brushStartX,this.brushStartY,x,y);
+        int selectionWidth =  newCoord[2] - newCoord[0];
+        int selectionHeight = newCoord[3] - newCoord[1];
+
+        for (int i = 0; i < selectionWidth; i++) {
+            for (int j = 0; j < selectionHeight; j++) {
+
+                this.map.addCell(this.activeLayerId, newCoord[0] + i, newCoord[1] + j,
+                        this.tilesetX + tsX, this.tilesetY + tsY);
+                this.renderPartial(newCoord[0] + i, newCoord[1] + j);
+                tsY += 1;
+
+                if (tsY == this.tilesetHeight) {
+                    tsY = 0;
+                }
+            }
+
+            tsX += 1;
+            tsY = 0;
+
+            if (tsX == this.tilesetWidth) {
+                tsX = 0;
             }
         }
     }
