@@ -18,12 +18,20 @@ public class TilesetLayer {
     private final int cellSize = 32;
 
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setDimension(int x,int y) {
         this.width = x;
         this.height = y;
         this.buildMatrix();
     }
 
+    /**
+     *
+     */
     public void buildMatrix() {
 
         this.matrix = new ArrayList<>();
@@ -40,10 +48,22 @@ public class TilesetLayer {
 
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param tsX
+     * @param tsY
+     */
     public void addCell(int x,int y,int tsX,int tsY) {
         this.matrix.get(x).set(y,new TilesetCell(x,y,tsX,tsY));
     }
 
+    /**
+     *
+     * @param g
+     * @param tileset
+     */
     public void render(GraphicsContext g,Tileset tileset) {
 
         for (int i = 0; i < this.width; i++) {
@@ -56,6 +76,13 @@ public class TilesetLayer {
         }
     }
 
+    /**
+     *
+     * @param g
+     * @param x
+     * @param y
+     * @param tileset
+     */
     public void renderPartial(GraphicsContext g,int x, int y,Tileset tileset) {
         TilesetCell cell = this.matrix.get(x).get(y);
         if (cell != null) {
@@ -63,10 +90,19 @@ public class TilesetLayer {
         }
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void removeCell(int x, int y) {
         this.matrix.get(x).set(y,null);
     }
 
+    /**
+     *
+     * @return
+     */
     public JSONArray saveLayer() {
         JSONArray layer = new JSONArray();
         for (int i=0;i<this.matrix.size();i++) {
@@ -80,6 +116,9 @@ public class TilesetLayer {
         return layer;
     }
 
+    /**
+     *
+     */
     public void clearLayer() {
         this.matrix.clear();
     }
