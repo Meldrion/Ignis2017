@@ -273,6 +273,15 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
                     int lastSelectionWidth = oldCoord[2] - oldCoord[0];
                     int lastSelectionHeight =  oldCoord[3] - oldCoord[1];
+
+                    if (lastSelectionWidth < this.tilesetWidth) {
+                        lastSelectionWidth = this.tilesetWidth;
+                    }
+
+                    if (lastSelectionHeight < this.tilesetHeight) {
+                        lastSelectionHeight = this.tilesetHeight;
+                    }
+
                     int selectionWidth =  newCoord[2] - newCoord[0];
                     int selectionHeight = newCoord[3] - newCoord[1];
 
