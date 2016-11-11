@@ -170,6 +170,11 @@ public class Map {
         mapJSON.put("width", this.getWidth());
         mapJSON.put("height", this.getHeight());
 
+        for (TilesetLayer layer : this.layers) {
+            JSONObject layerJSON = layer.saveLayer();
+            mapJSON.put("layer",layerJSON);
+        }
+
         FilesystemHandler.writeJson(mapJSON, this.mapFilePath);
     }
 

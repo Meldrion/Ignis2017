@@ -1,6 +1,7 @@
 package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,4 +65,16 @@ public class TilesetLayer {
     public void removeCell(int x, int y) {
         this.matrix.get(x).set(y,null);
     }
+
+    public JSONObject saveLayer() {
+        JSONObject layer = new JSONObject();
+        for (int i=0;i<this.matrix.size();i++) {
+            for (int j=0;j<this.matrix.get(0).size();j++) {
+                TilesetCell cell = this.matrix.get(i).get(j);
+                layer.put("tile",cell);
+            }
+        }
+        return layer;
+    }
+
 }

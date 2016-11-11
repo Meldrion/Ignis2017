@@ -27,6 +27,9 @@ import lu.innocence.ignis.event.GUIButtonsUpdate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ *
+ */
 public class Ignis extends Application implements ActiveProjectListener , GUIButtonsUpdate{
 
     private static final Logger LOGGER = LogManager.getLogger(Ignis.class);
@@ -39,8 +42,17 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     private ToggleButton layer3Button;
     private ToggleButton layer4Button;
     private Project project;
+    private ToggleButton eraseToolButton;
+    private ToggleButton penToolButton;
+    private ToggleButton brushToolButton;
+    private ToggleButton fillToolButton;
 
 
+    /**
+     *
+     * @param topContainer
+     * @param mainStage
+     */
     private void buildMainMenu(VBox topContainer,Stage mainStage) {
         MenuBar menuBar = new MenuBar();
 
@@ -72,6 +84,11 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         menuBar.setUseSystemMenuBar(true);
     }
 
+    /**
+     *
+     * @param topContainer
+     * @param mainStage
+     */
     private void buildToolbar(VBox topContainer,Stage mainStage) {
         ToolBar toolBar = new ToolBar();  //Creates our tool-bar to hold the buttons.
         topContainer.getChildren().add(toolBar);
@@ -88,28 +105,32 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         Button saveProjectBtn = new Button();
         saveProjectBtn.setFocusTraversable(false);
         saveProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Actions-document-save-icon.png").getFile()));
-
+        saveProjectBtn.setOnAction(event -> {
+            if (this.project != null) {
+                this.project.saveProject();
+            }
+        });
 
         // Tools Button Group
         ToggleGroup toolsGroup = new ToggleGroup();
 
-        ToggleButton  penToolButton = new ToggleButton ();
+        this.penToolButton = new ToggleButton ();
         penToolButton.setFocusTraversable(false);
         penToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-line-2.png").getFile()));
         penToolButton.setToggleGroup(toolsGroup);
         penToolButton.setSelected(true);
 
-        ToggleButton  brushToolButton = new ToggleButton ();
+        this.brushToolButton = new ToggleButton ();
         brushToolButton.setFocusTraversable(false);
         brushToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-brush.png").getFile()));
         brushToolButton.setToggleGroup(toolsGroup);
 
-        ToggleButton  fillToolButton = new ToggleButton ();
+        this.fillToolButton = new ToggleButton ();
         fillToolButton.setFocusTraversable(false);
         fillToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-fill-2.png").getFile()));
         fillToolButton.setToggleGroup(toolsGroup);
 
-        ToggleButton  eraseToolButton = new ToggleButton ();
+        this.eraseToolButton = new ToggleButton ();
         eraseToolButton.setFocusTraversable(false);
         eraseToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-eraser-2.png").getFile()));
         eraseToolButton.setToggleGroup(toolsGroup);
@@ -197,6 +218,10 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
 
     }
 
+    /**
+     *
+     * @param primaryStage
+     */
     private void buildUserInterface(Stage primaryStage) {
 
         
@@ -245,6 +270,11 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
 
     }
 
+    /**
+     *
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -255,6 +285,10 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
 
     }
 
+    /**
+     *
+     * @param p
+     */
     @Override
     public void activeProjectChanged(Project p) {
 
@@ -304,19 +338,23 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         launch(args);
     }
 
+    /**
+     *
+     * @param layerIndex
+     */
     @Override
     public void activeLayerChanged(int layerIndex) {
         switch (layerIndex) {
-            case 0:
+            case MapCanvas.LAYER_1:
                 this.layer1Button.setSelected(true);
                 break;
-            case 1:
+            case MapCanvas.LAYER_2:
                 this.layer2Button.setSelected(true);
                 break;
-            case 2:
+            case MapCanvas.LAYER_3:
                 this.layer3Button.setSelected(true);
                 break;
-            case 3:
+            case MapCanvas.LAYER_EVENT:
                 this.layer4Button.setSelected(true);
                 break;
             default:
@@ -324,8 +362,27 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         }
     }
 
+    /**
+     *
+     * @param toolIndex
+     */
     @Override
     public void activeToolChanged(int toolIndex) {
-
+        switch (toolIndex) {
+            case MapCanvas.TOOL_PEN:
+                this.penToolButton.setSelected(true);
+                break;
+            case MapCanvas.TOOL_BRUSH:
+                this.brushToolButton.setSelected(true);
+                break;
+            case MapCanvas.TOOL_FILL:
+                this.fillToolButton.setSelected(true);
+                break;
+            case MapCanvas.TOOL_ERASE:
+                this.eraseToolButton.setSelected(true);
+                break;
+            default:
+                break;
+        }
     }
 }

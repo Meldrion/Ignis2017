@@ -1,6 +1,7 @@
 package lu.innocence.ignis.engine;
 
 import lu.innocence.ignis.event.ActiveMapListener;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,10 @@ public class MapManager {
         return map;
     }
 
+    public void saveAll() {
+        this.activeMap.save();
+    }
+
     public void saveMapFile(Map map) {
         map.save();
     }
@@ -87,6 +92,10 @@ public class MapManager {
 
     public List<Map> getChildren() {
         return this.root.getChildren();
+    }
+
+    public void saveMapTree() {
+        JSONObject mapTreeSave = new JSONObject();
     }
 
 }

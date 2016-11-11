@@ -51,9 +51,6 @@ public class CreateProjectDialog extends Stage{
 
         GridPane grid = new GridPane();
 
-/*        GridPane.setHgrow(grid, Priority.ALWAYS);
-        GridPane.setVgrow(grid, Priority.ALWAYS);*/
-
         grid.setHgap(10);
         grid.setVgap(10);
 
