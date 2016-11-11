@@ -55,13 +55,10 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
      */
     private void buildMainMenu(VBox topContainer,Stage mainStage) {
         MenuBar menuBar = new MenuBar();
-
         // Use system menu bar
         menuBar.setUseSystemMenuBar(true);
-
         topContainer.getChildren().add(menuBar);
         Menu fileMenu = new Menu("File");
-
         MenuItem newProject = new MenuItem("New Project...");
         newProject.setOnAction(e -> new CreateProjectDialog(mainStage));
         newProject.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
@@ -69,17 +66,14 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         MenuItem saveProject = new MenuItem("Save Project");
         MenuItem closeProject = new MenuItem("Close Project");
         MenuItem exit = new MenuItem("Exit");
-
         fileMenu.getItems().add(newProject);
         fileMenu.getItems().add(loadProject);
         fileMenu.getItems().add(saveProject);
         fileMenu.getItems().add(closeProject);
         fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(exit);
-
         Menu webMenu = new Menu("Edit");
         Menu sqlMenu = new Menu("SQL");
-
         menuBar.getMenus().addAll(fileMenu, webMenu, sqlMenu);
         menuBar.setUseSystemMenuBar(true);
     }
@@ -92,10 +86,8 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     private void buildToolbar(VBox topContainer,Stage mainStage) {
         ToolBar toolBar = new ToolBar();  //Creates our tool-bar to hold the buttons.
         topContainer.getChildren().add(toolBar);
-
         Button newProjectBtn = new Button();
         newProjectBtn.setFocusTraversable(false);
-
         newProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Document-Blank-icon-24.png").getFile()));
         newProjectBtn.setOnAction(e -> new CreateProjectDialog(mainStage));
         Button openProjectBtn = new Button();
@@ -110,31 +102,25 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
                 this.project.saveProject();
             }
         });
-
         // Tools Button Group
         ToggleGroup toolsGroup = new ToggleGroup();
-
         this.penToolButton = new ToggleButton ();
         penToolButton.setFocusTraversable(false);
         penToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-line-2.png").getFile()));
         penToolButton.setToggleGroup(toolsGroup);
         penToolButton.setSelected(true);
-
         this.brushToolButton = new ToggleButton ();
         brushToolButton.setFocusTraversable(false);
         brushToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-brush.png").getFile()));
         brushToolButton.setToggleGroup(toolsGroup);
-
         this.fillToolButton = new ToggleButton ();
         fillToolButton.setFocusTraversable(false);
         fillToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-fill-2.png").getFile()));
         fillToolButton.setToggleGroup(toolsGroup);
-
         this.eraseToolButton = new ToggleButton ();
         eraseToolButton.setFocusTraversable(false);
         eraseToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-eraser-2.png").getFile()));
         eraseToolButton.setToggleGroup(toolsGroup);
-
         toolsGroup.selectedToggleProperty().addListener((ov, toggle, newSelected) -> {
             if (newSelected == null) {
                 toggle.setSelected(true);
@@ -153,31 +139,25 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
                 }
             }
         });
-
         // Tools Button Group
         ToggleGroup layersGroup = new ToggleGroup();
-
         this.layer1Button = new ToggleButton ();
         this.layer1Button.setFocusTraversable(false);
         this.layer1Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_bottom_24.png").getFile()));
         this.layer1Button.setToggleGroup(layersGroup);
         this.layer1Button.setSelected(true);
-
         this.layer2Button = new ToggleButton ();
         this.layer2Button.setFocusTraversable(false);
         this.layer2Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_middle_24.png").getFile()));
         this.layer2Button.setToggleGroup(layersGroup);
-
         this.layer3Button = new ToggleButton ();
         this.layer3Button.setFocusTraversable(false);
         this.layer3Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
         this.layer3Button.setToggleGroup(layersGroup);
-
         this.layer4Button = new ToggleButton ();
         this.layer4Button.setFocusTraversable(false);
         this.layer4Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
         this.layer4Button.setToggleGroup(layersGroup);
-
         layersGroup.selectedToggleProperty().addListener((ov, toggle, newSelected) -> {
             if (newSelected == null) {
                 toggle.setSelected(true);
@@ -196,22 +176,18 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
                 }
             }
         });
-
         Button importManagerButton = new Button();
         importManagerButton.setFocusTraversable(false);
         importManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/import-icon-24.png").getFile()));
         importManagerButton.setOnAction(event -> {
             new ImportDialog(mainStage,this.project);
         });
-
         Button gameDBButton = new Button();
         gameDBButton.setFocusTraversable(false);
         gameDBButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/ignis24px.png").getFile()));
-
         Button audioManagerButton = new Button();
         audioManagerButton.setFocusTraversable(false);
         audioManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/audioManager22.png").getFile()));
-
         toolBar.getItems().addAll(newProjectBtn,openProjectBtn,saveProjectBtn,new Separator(),
                 penToolButton,brushToolButton,fillToolButton,eraseToolButton,new Separator(),
                 layer1Button,layer2Button,layer3Button,layer4Button,new Separator(),importManagerButton,gameDBButton,audioManagerButton);

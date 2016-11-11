@@ -2,6 +2,7 @@ package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -170,10 +171,13 @@ public class Map {
         mapJSON.put("width", this.getWidth());
         mapJSON.put("height", this.getHeight());
 
+        JSONArray layers = new JSONArray();
         for (TilesetLayer layer : this.layers) {
-            JSONObject layerJSON = layer.saveLayer();
-            mapJSON.put("layer",layerJSON);
+            JSONArray layerJSON = layer.saveLayer();
+            layers.add(layerJSON);
         }
+
+        mapJSON.put("layers",layers);
 
         FilesystemHandler.writeJson(mapJSON, this.mapFilePath);
     }

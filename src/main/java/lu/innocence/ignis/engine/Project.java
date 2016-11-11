@@ -90,6 +90,8 @@ public class Project {
     }
 
     public boolean saveProject() {
+
+        this.mapManager.saveAll();
         return true;
     }
 
