@@ -196,17 +196,20 @@ public class Map {
         this.height = (int)(long) mapData.get("height");
         this.setDimension(this.width,this.height);
         JSONArray layersJSON = (JSONArray) mapData.get("layers");
-        for (int layer = 0;layer < layersJSON.size();layer++) {
-            JSONArray layerData = (JSONArray) layersJSON.get(layer);
-            for (int i=0;i<layerData.size();i++) {
-                JSONObject tileData = (JSONObject) layerData.get(i);
-                int x = (int)(long)  tileData.get("x");
-                int y = (int)(long)  tileData.get("y");
-                int tsX = (int)(long)  tileData.get("tsX");
-                int tsY = (int)(long)  tileData.get("tsY");
-                this.layers.get(layer).addCell(x,y,tsX,tsY);
+        if (layersJSON != null) {
+            for (int layer = 0;layer < layersJSON.size();layer++) {
+                JSONArray layerData = (JSONArray) layersJSON.get(layer);
+                for (int i=0;i<layerData.size();i++) {
+                    JSONObject tileData = (JSONObject) layerData.get(i);
+                    int x = (int)(long)  tileData.get("x");
+                    int y = (int)(long)  tileData.get("y");
+                    int tsX = (int)(long)  tileData.get("tsX");
+                    int tsY = (int)(long)  tileData.get("tsY");
+                    this.layers.get(layer).addCell(x,y,tsX,tsY);
+                }
             }
         }
+
     }
 
     public void addTile(int layerId, int x, int y, int tsX, int tsY) {

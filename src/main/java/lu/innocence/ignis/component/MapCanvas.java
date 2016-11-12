@@ -87,7 +87,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      */
     public void render() {
         GraphicsContext g = this.getGraphicsContext2D();
-        g.clearRect(0, 0, this.getWidth(), this.getHeight());
+        ChessBGDrawer.drawChessBackground(g,this.getWidth(), this.getHeight(),32,32);
         if (this.map != null)
             this.map.renderMap(g);
     }
@@ -263,6 +263,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                             w, h, x * 32, y * 32, w, h);
                     g.setGlobalAlpha(1.0);
                 }
+
+
 
             } else {
 
@@ -468,4 +470,6 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             this.renderPartial(x, y);
         }
     }
+
+
 }

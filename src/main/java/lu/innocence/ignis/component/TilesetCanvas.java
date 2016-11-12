@@ -82,7 +82,7 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         g.clearRect(0,0,this.getWidth(),this.getHeight());
         if (this.linkedTileset != null) {
 
-            this.drawChessBackground(g);
+            ChessBGDrawer.drawChessBackground(g,this.getWidth(),this.getHeight(),32,32);
 
             g.drawImage(this.linkedTileset.getTilesetImage(),0,0);
 
@@ -97,20 +97,6 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         }
     }
 
-    private void drawChessBackground(GraphicsContext g) {
-        for (int i = 0; i < this.getWidth() / 16; i++) {
-            for (int j = 0; j < this.getHeight() / 16; j++) {
-
-                if ((i + j) % 2 == 0) {
-                    g.setFill(Color.WHITE);
-                } else {
-                    g.setFill(Color.LIGHTGRAY);
-                }
-
-                g.fillRect(i * 16, j * 16, 16, 16);
-            }
-        }
-    }
 
     public void setTileset(Tileset tileset) {
         if (tileset != null) {
