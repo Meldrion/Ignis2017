@@ -20,8 +20,8 @@ public class ChessBGDrawer {
         int tileWidthDiv = tileWidth / 2;
         int tileHeightDiv = tileHeight / 2;
 
-        for (int i = 0; i < tileWidth / 2; i++) {
-            for (int j = 0; j < tileHeight / 2; j++) {
+        for (int i = 0; i < tileWidthDiv; i++) {
+            for (int j = 0; j < tileHeightDiv; j++) {
 
                 if ((i + j) % 2 == 0) {
                     g.setFill(Color.WHITE);
@@ -29,7 +29,7 @@ public class ChessBGDrawer {
                     g.setFill(Color.LIGHTGRAY);
                 }
 
-                g.fillRect(i * 16, j * 16, 16, 16);
+                g.fillRect(i * tileWidthDiv, j * tileHeightDiv, tileWidthDiv, tileHeightDiv);
             }
         }
 
