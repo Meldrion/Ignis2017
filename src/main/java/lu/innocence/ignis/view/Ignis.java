@@ -46,6 +46,10 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     private ToggleButton penToolButton;
     private ToggleButton brushToolButton;
     private ToggleButton fillToolButton;
+    private Button importManagerButton;
+    private Button gameDBButton;
+    private Button audioManagerButton;
+    private Button saveProjectBtn;
 
 
     /**
@@ -94,10 +98,10 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         openProjectBtn.setOnAction(e -> new LoadProjectDialog(mainStage));
         openProjectBtn.setFocusTraversable(false);
         openProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Files-icon-24.png").getFile()));
-        Button saveProjectBtn = new Button();
-        saveProjectBtn.setFocusTraversable(false);
-        saveProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Actions-document-save-icon.png").getFile()));
-        saveProjectBtn.setOnAction(event -> {
+        this.saveProjectBtn = new Button();
+        this.saveProjectBtn.setFocusTraversable(false);
+        this.saveProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Actions-document-save-icon.png").getFile()));
+        this.saveProjectBtn.setOnAction(event -> {
             if (this.project != null) {
                 this.project.saveProject();
             }
@@ -176,18 +180,20 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
                 }
             }
         });
-        Button importManagerButton = new Button();
-        importManagerButton.setFocusTraversable(false);
-        importManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/import-icon-24.png").getFile()));
-        importManagerButton.setOnAction(event -> {
+        this.importManagerButton = new Button();
+        this.importManagerButton.setFocusTraversable(false);
+        this.importManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/import-icon-24.png").getFile()));
+        this.importManagerButton.setOnAction(event -> {
             new ImportDialog(mainStage,this.project);
         });
-        Button gameDBButton = new Button();
-        gameDBButton.setFocusTraversable(false);
-        gameDBButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/ignis24px.png").getFile()));
-        Button audioManagerButton = new Button();
-        audioManagerButton.setFocusTraversable(false);
-        audioManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/audioManager22.png").getFile()));
+
+        this.gameDBButton = new Button();
+        this.gameDBButton.setFocusTraversable(false);
+        this.gameDBButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/ignis24px.png").getFile()));
+
+        this.audioManagerButton = new Button();
+        this.audioManagerButton.setFocusTraversable(false);
+        this.audioManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/audioManager22.png").getFile()));
         toolBar.getItems().addAll(newProjectBtn,openProjectBtn,saveProjectBtn,new Separator(),
                 penToolButton,brushToolButton,fillToolButton,eraseToolButton,new Separator(),
                 layer1Button,layer2Button,layer3Button,layer4Button,new Separator(),importManagerButton,gameDBButton,audioManagerButton);
@@ -242,6 +248,8 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         leftSplitter.setDividerPosition(0,0.7);
 
         root.setLeft(leftSplitter);
+
+        this.userInterfaceChanges(null);
         primaryStage.show();
 
     }
@@ -289,33 +297,31 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
             tsManager.setTileset(tileset,0);
             tsManager.setTileset(cave,1);
 
-/*
-
-
-
-            Map newMap =  mapManager.createNewMap();
-            newMap.setName("First map");
-            newMap.setDimension(50,50);
-            newMap.setTileset(tileset);
-
-            newMap.load();
-
-            mapManager.addMap(newMap);
-            mapManager.addMap(mapManager.createNewMap());
-
-            Map caveLevel = mapManager.createNewMap();
-            caveLevel.setTileset(cave);
-            caveLevel.setDimension(30,30);
-            caveLevel.load();
-            newMap.addMap(caveLevel);
-
-            mapManager.addMap(mapManager.createNewMap());
-            mapManager.setActiveMap(newMap);
-
-            mapManager.saveMapTree();*/
             mapManager.loadMapTree();
             this.mapTree.buildFromMapManager(mapManager);
         }
+
+        this.userInterfaceChanges(p);
+
+    }
+
+    private void userInterfaceChanges(Project p) {
+
+        this.saveProjectBtn.setDisable(p == null);
+
+        this.penToolButton.setDisable(p == null);
+        this.brushToolButton.setDisable(p == null);
+        this.fillToolButton.setDisable(p == null);
+        this.eraseToolButton.setDisable(p == null);
+
+        this.layer1Button.setDisable(p == null);
+        this.layer2Button.setDisable(p == null);
+        this.layer3Button.setDisable(p == null);
+        this.layer4Button.setDisable(p == null);
+
+        this.importManagerButton.setDisable(p == null);
+        this.gameDBButton.setDisable(p == null);
+        this.audioManagerButton.setDisable(p == null);
 
     }
 

@@ -2,6 +2,8 @@ package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -13,6 +15,8 @@ import java.util.List;
  */
 public class Map {
 
+
+    private static Logger LOGGER = LogManager.getLogger(Map.class);
     private List<TilesetLayer> layers;
     private int width;
     private int height;
@@ -197,6 +201,7 @@ public class Map {
     public void load() {
 
         JSONObject mapData = FilesystemHandler.readJSON(this.mapFilePath);
+        LOGGER.info(this.getMapId());
         this.name = (String) mapData.get("name");
         this.width = (int)(long) mapData.get("width");
         this.height = (int)(long) mapData.get("height");
