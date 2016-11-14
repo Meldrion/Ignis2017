@@ -30,9 +30,9 @@ public class MapTree extends TreeView<String> {
 
     private void buildContextMenu() {
         ContextMenu mapTreeMenu = new ContextMenu();
-        MenuItem createMap = new Menu("Create Map...");
-        MenuItem editMap = new Menu("Edit Map...");
-        MenuItem copyMap = new Menu("Copy");
+        MenuItem createMap = new MenuItem("Create Map...");
+        MenuItem editMap = new MenuItem("Edit Map...");
+        MenuItem copyMap = new MenuItem("Copy");
 
         mapTreeMenu.getItems().addAll(createMap,new SeparatorMenuItem(),editMap,copyMap);
         this.setContextMenu(mapTreeMenu);
