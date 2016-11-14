@@ -1,6 +1,7 @@
 package lu.innocence.ignis.engine;
 
 import lu.innocence.ignis.event.ActiveMapListener;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class MapManager {
     private Map activeMap;
     private List<ActiveMapListener> mapListener;
     private String mapFolder;
+    private String jsonFolder;
+    private TilesetManager tilesetManager;
 
 
     public MapManager() {
@@ -30,6 +33,14 @@ public class MapManager {
 
     public String getMapFolder() {
         return this.mapFolder;
+    }
+
+    public void setJsonFolder(String folder) {
+        this.jsonFolder = folder;
+    }
+
+    public String getJsonFolder() {
+        return this.jsonFolder;
     }
 
     public void setActiveMap(Map activeMap) {
@@ -96,6 +107,78 @@ public class MapManager {
 
     public void saveMapTree() {
         JSONObject mapTreeSave = new JSONObject();
+        JSONArray maps = new JSONArray();
+
+        for (Map current : this.root.getChildren()) {
+            this.saveSubMapTree(current,maps);
+        }
+
+        mapTreeSave.put("maps",maps);
+
+        String fileName = FilesystemHandler.concat(this.jsonFolder,"maptree.json");
+        FilesystemHandler.writeJson(mapTreeSave,fileName);
+
+    }
+
+    public void loadMapTree() {
+        String fileName = FilesystemHandler.concat(this.jsonFolder,"maptree.json");
+        JSONObject maptree = FilesystemHandler.readJSON(fileName);
+        JSONArray maps = (JSONArray) maptree.get("maps");
+
+        for (int i=0;i<maps.size();i++) {
+            JSONObject currentMap = (JSONObject) maps.get(i);
+            readMap(currentMap,null);
+        }
+    }
+
+    public void readMap(JSONObject currentJSON,Map parent) {
+        Map map = new Map();
+        map.setUniqueId((String)currentJSON.get("id"));
+        map.setMapFilePath(FilesystemHandler.concat(this.mapFolder,map.getMapId()));
+        int idNum = this.extractMapIdNumber(map.getMapId());
+        this.idGenerator.setIdUsed(idNum,true);
+        map.load();
+        map.setTileset(this.tilesetManager.getTilesetAtIndex(map.getTilesetId()));
+
+        if (parent != null) {
+            parent.addMap(map);
+        } else {
+            this.root.addMap(map);
+        }
+
+        JSONArray subMaps = (JSONArray) currentJSON.get("submaps");
+        for (int i = 0;i<subMaps.size();i++) {
+            JSONObject jsonMap = (JSONObject) subMaps.get(i);
+            this.readMap(jsonMap,map);
+        }
+    }
+
+    public void saveSubMapTree(Map map,JSONArray mapTreeSave) {
+
+        JSONObject currentMap = new JSONObject();
+        currentMap.put("id",map.getMapId());
+        JSONArray subMaps = new JSONArray();
+
+        for (Map current : map.getChildren()) {
+            saveSubMapTree(current,subMaps);
+        }
+
+        currentMap.put("submaps",subMaps);
+        mapTreeSave.add(currentMap);
+
+    }
+
+    private int extractMapIdNumber(String input) {
+        if (input != null) {
+            int pos = input.indexOf(".json");
+            String numbers = input.substring("map".length(),pos);
+            return Integer.valueOf(numbers);
+        }
+        return -1;
+    }
+
+    public void setTilesetManager(TilesetManager tilesetManager) {
+        this.tilesetManager = tilesetManager;
     }
 
 }

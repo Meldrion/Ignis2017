@@ -12,6 +12,7 @@ public class Project {
     private String rootFolder;
     private MapManager mapManager;
     private AssetStructure assetStructure;
+    private TilesetManager tilesetManager;
 
     private String projectTitle;
     private String author;
@@ -22,6 +23,7 @@ public class Project {
      */
     public Project() {
         this.mapManager = new MapManager();
+        this.tilesetManager = new TilesetManager();
     }
 
 
@@ -56,7 +58,7 @@ public class Project {
             this.author = author;
             this.devCompany = devCompany;
 
-            this.mapManager.setMapFolder(this.assetStructure.getPath(AssetStructure.MAP));
+            this.init();
 
             allOk &= FilesystemHandler.writeJson(projectJSON,this.assetStructure.getProjectJSON());
             return allOk;
@@ -79,7 +81,7 @@ public class Project {
             this.author = (String) projectJSON.get("author");
             this.devCompany = (String) projectJSON.get("company");
 
-            this.mapManager.setMapFolder(this.assetStructure.getPath(AssetStructure.MAP));
+            this.init();
 
             return true;
 
@@ -87,6 +89,12 @@ public class Project {
             return false;
         }
 
+    }
+
+    private void init() {
+        this.mapManager.setMapFolder(this.assetStructure.getPath(AssetStructure.MAP));
+        this.mapManager.setJsonFolder(this.assetStructure.getPath(AssetStructure.JSON));
+        this.mapManager.setTilesetManager(this.tilesetManager);
     }
 
     public boolean saveProject() {
@@ -103,5 +111,9 @@ public class Project {
     public AssetStructure getAssetStructure() {
         return this.assetStructure;
     }
+
+    public TilesetManager getTilesetManager() {
+        return this.tilesetManager;
+    };
 
 }

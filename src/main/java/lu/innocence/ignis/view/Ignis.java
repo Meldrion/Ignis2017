@@ -278,12 +278,20 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
             mapManager.addActiveMapListener(tilesetCanvas);
             mapManager.addActiveMapListener(mapCanvas);
 
-
             Tileset tileset = new Tileset();
             tileset.loadImage("tileset.png");
 
             Tileset cave = new Tileset();
             cave.loadImage("cave.png");
+
+            TilesetManager tsManager = p.getTilesetManager();
+            tsManager.setTilesetMax(10);
+            tsManager.setTileset(tileset,0);
+            tsManager.setTileset(cave,1);
+
+/*
+
+
 
             Map newMap =  mapManager.createNewMap();
             newMap.setName("First map");
@@ -298,10 +306,14 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
             Map caveLevel = mapManager.createNewMap();
             caveLevel.setTileset(cave);
             caveLevel.setDimension(30,30);
+            caveLevel.load();
             newMap.addMap(caveLevel);
-            caveLevel.save();
+
             mapManager.addMap(mapManager.createNewMap());
             mapManager.setActiveMap(newMap);
+
+            mapManager.saveMapTree();*/
+            mapManager.loadMapTree();
             this.mapTree.buildFromMapManager(mapManager);
         }
 

@@ -23,6 +23,7 @@ public class Map {
     private String uniqueId;
     private String name;
     private String mapFilePath;
+    private int tilesetId;
 
 
     public Map() {
@@ -127,6 +128,11 @@ public class Map {
     }
 
     public void setTileset(Tileset tileset) {
+        if (tileset != null) {
+            this.tilesetId = tileset.getIndex();
+        } else {
+            this.tilesetId = -1;
+        }
         this.tileset = tileset;
     }
 
@@ -175,6 +181,7 @@ public class Map {
         mapJSON.put("name", this.getName());
         mapJSON.put("width", this.getWidth());
         mapJSON.put("height", this.getHeight());
+        mapJSON.put("tilesetIndex", this.getTilesetId());
 
         JSONArray layers = new JSONArray();
         for (TilesetLayer layer : this.layers) {
@@ -194,6 +201,7 @@ public class Map {
         this.width = (int)(long) mapData.get("width");
         this.height = (int)(long) mapData.get("height");
         this.setDimension(this.width,this.height);
+        this.tilesetId = (int)(long) mapData.get("tilesetIndex");
         JSONArray layersJSON = (JSONArray) mapData.get("layers");
         if (layersJSON != null) {
             for (int layer = 0;layer < layersJSON.size();layer++) {
@@ -214,5 +222,10 @@ public class Map {
     public void addTile(int layerId, int x, int y, int tsX, int tsY) {
         this.layers.get(layerId).addCell(x, y, tsX, tsY);
     }
+
+    public int getTilesetId() {
+        return this.tilesetId;
+    }
+
 
 }
