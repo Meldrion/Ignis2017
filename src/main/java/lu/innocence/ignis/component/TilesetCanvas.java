@@ -82,7 +82,7 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         g.clearRect(0,0,this.getWidth(),this.getHeight());
         if (this.linkedTileset != null) {
 
-            ChessBGDrawer.drawChessBackground(g,this.getWidth(),this.getHeight(),32,32);
+            ChessBGDrawer.drawChessBackground(g,this.getWidth() / 32,this.getHeight() / 32,32,32);
 
             g.drawImage(this.linkedTileset.getTilesetImage(),0,0);
 

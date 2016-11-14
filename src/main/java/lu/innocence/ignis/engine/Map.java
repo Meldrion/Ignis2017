@@ -96,7 +96,6 @@ public class Map {
     }
 
     public void renderPartialMap(GraphicsContext g, int x, int y) {
-        g.clearRect(x * 32 + 1, y * 32 + 1, 31, 31);
 
         if (this.tileset != null) {
             for (int index = 0; index < this.layers.size(); index++) {

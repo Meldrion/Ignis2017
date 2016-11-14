@@ -87,9 +87,10 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      */
     public void render() {
         GraphicsContext g = this.getGraphicsContext2D();
-        ChessBGDrawer.drawChessBackground(g,this.getWidth(), this.getHeight(),32,32);
-        if (this.map != null)
+        if (this.map != null) {
+            ChessBGDrawer.drawChessBackground(g, this.map.getWidth(), this.map.getHeight(), 32, 32);
             this.map.renderMap(g);
+        }
     }
 
     /**
@@ -98,7 +99,10 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      */
     public void renderPartial(int x, int y) {
         if (this.map != null) {
-            this.map.renderPartialMap(this.getGraphicsContext2D(), x, y);
+
+            GraphicsContext g = this.getGraphicsContext2D();
+            ChessBGDrawer.drawChessBackgroundSingle(g,x,y,32,32);
+            this.map.renderPartialMap(g, x, y);
         }
     }
 
