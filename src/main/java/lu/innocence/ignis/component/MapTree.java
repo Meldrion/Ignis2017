@@ -1,7 +1,6 @@
 package lu.innocence.ignis.component;
 
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.MapManager;
 
@@ -26,6 +25,17 @@ public class MapTree extends TreeView<String> {
             }
 
         });
+        this.buildContextMenu();
+    }
+
+    private void buildContextMenu() {
+        ContextMenu mapTreeMenu = new ContextMenu();
+        MenuItem createMap = new Menu("Create Map...");
+        MenuItem editMap = new Menu("Edit Map...");
+        MenuItem copyMap = new Menu("Copy");
+
+        mapTreeMenu.getItems().addAll(createMap,new SeparatorMenuItem(),editMap,copyMap);
+        this.setContextMenu(mapTreeMenu);
     }
 
     public void buildFromMapManager(MapManager mapManager) {
