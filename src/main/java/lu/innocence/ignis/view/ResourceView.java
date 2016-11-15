@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -50,14 +51,21 @@ public class ResourceView extends Stage {
         grid.setHgap(10);
         grid.setVgap(10);
 
+        ColumnConstraints column1 = new ColumnConstraints(200);
+        ColumnConstraints column2 = new ColumnConstraints(500);
+
+        grid.getColumnConstraints().addAll(column1,column2);
+
         this.resourceList = new ListView<>();
         this.resourceList.getSelectionModel().selectedItemProperty().
                 addListener((observable, oldValue, newValue) -> {});
         grid.add(this.resourceList,0,0);
 
         this.resourceCanvas = new ResourceCanvas();
+        this.resourceCanvas.render();
         grid.add(this.resourceCanvas,1,0);
 
+        root.setCenter(grid);
 
         // Box on the Bottom
         HBox bottomBar = new HBox();
