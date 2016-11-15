@@ -56,7 +56,7 @@ public class CreateMapDialog extends Stage {
         grid.add(textFieldMapName,1,0,3,1);
 
         Text labelMapWidth = new Text();
-        labelMapName.setText("Width: ");
+        labelMapWidth.setText("Width: ");
         grid.add(labelMapWidth,0,1);
 
         Spinner<Integer> widthSpinner = new Spinner<>();
@@ -65,13 +65,25 @@ public class CreateMapDialog extends Stage {
         grid.add(widthSpinner,1,1);
 
         Text labelMapHeight = new Text();
-        labelMapName.setText("Height: ");
+        labelMapHeight.setText("Height: ");
         grid.add(labelMapHeight,2,1);
 
         Spinner<Integer> heightSpinner = new Spinner<>();
         heightSpinner.setEditable(true);
         heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(15, 200));
         grid.add(heightSpinner,3,1);
+
+        Text labelTileset = new Text();
+        labelTileset.setText("Tileset: ");
+        grid.add(labelTileset,0,2);
+
+        TextField tilesetTextField = new TextField();
+        tilesetTextField.setEditable(false);
+        grid.add(tilesetTextField,1,2,2,1);
+
+        Button tilesetSearchButton = new Button();
+        tilesetSearchButton.setText("...");
+        grid.add(tilesetSearchButton,3,2);
 
         root.setCenter(grid);
 

@@ -36,7 +36,9 @@ public class MapTree extends TreeView<String> {
         ContextMenu mapTreeMenu = new ContextMenu();
         MenuItem createMap = new MenuItem("Create Map...");
         createMap.setOnAction(event -> {
-            new CreateMapDialog(this.parentStage);
+            if (this.getSelectionModel().getSelectedIndex() > -1) {
+                new CreateMapDialog(this.parentStage);
+            }
         });
         MenuItem editMap = new MenuItem("Edit Map...");
         MenuItem copyMap = new MenuItem("Copy");
