@@ -1,8 +1,10 @@
 package lu.innocence.ignis.component;
 
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.MapManager;
+import lu.innocence.ignis.view.CreateMapDialog;
 
 import java.util.List;
 
@@ -12,8 +14,10 @@ import java.util.List;
 public class MapTree extends TreeView<String> {
 
     private MapManager mapManager;
+    private Stage parentStage;
 
-    public MapTree() {
+    public MapTree(Stage parentStage) {
+        this.parentStage = parentStage;
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             MapTreeNode selectedItem = (MapTreeNode) newValue;
 
@@ -31,6 +35,9 @@ public class MapTree extends TreeView<String> {
     private void buildContextMenu() {
         ContextMenu mapTreeMenu = new ContextMenu();
         MenuItem createMap = new MenuItem("Create Map...");
+        createMap.setOnAction(event -> {
+            new CreateMapDialog(this.parentStage);
+        });
         MenuItem editMap = new MenuItem("Edit Map...");
         MenuItem copyMap = new MenuItem("Copy");
 

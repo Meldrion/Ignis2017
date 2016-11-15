@@ -1,10 +1,6 @@
 package lu.innocence.ignis.view;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -242,7 +238,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         leftSplitter.setOrientation(Orientation.VERTICAL);
         leftSplitter.getItems().add(tilesetScroller);
 
-        this.mapTree = new MapTree();
+        this.mapTree = new MapTree(primaryStage);
 
         leftSplitter.getItems().add(mapTree);
         leftSplitter.setDividerPosition(0,0.7);
