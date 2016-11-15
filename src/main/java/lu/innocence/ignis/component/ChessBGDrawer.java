@@ -9,8 +9,8 @@ import javafx.scene.paint.Color;
 public class ChessBGDrawer {
 
     public static void drawChessBackground(GraphicsContext g, int width, int height, int cellWidth, int cellHeight) {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i <= width; i++) {
+            for (int j = 0; j <= height; j++) {
                 drawChessBackgroundSingle(g, i, j, cellWidth, cellHeight);
             }
         }

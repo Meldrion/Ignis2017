@@ -116,7 +116,6 @@ public class ImportDialog extends Stage {
         bottomBar.setPadding(new Insets(15));
         bottomBar.setAlignment(Pos.CENTER);
 
-
         Button cancelButton = new Button();
         cancelButton.setText("Close");
         cancelButton.setOnAction(event -> this.close());

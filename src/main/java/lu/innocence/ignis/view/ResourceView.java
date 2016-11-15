@@ -32,6 +32,9 @@ public class ResourceView extends Stage {
         this.initOwner(parentStage);
         this.sizeToScene();
         this.show();
+
+        this.resourceCanvas.setHeight(this.resourceList.getHeight());
+        this.resourceCanvas.render();
     }
 
     private void buildGUI() {
@@ -62,9 +65,9 @@ public class ResourceView extends Stage {
         grid.add(this.resourceList,0,0);
 
         this.resourceCanvas = new ResourceCanvas();
-        this.resourceCanvas.render();
-        grid.add(this.resourceCanvas,1,0);
+        this.resourceCanvas.setWidth(column2.getPrefWidth());
 
+        grid.add(this.resourceCanvas,1,0);
         root.setCenter(grid);
 
         // Box on the Bottom
@@ -77,7 +80,7 @@ public class ResourceView extends Stage {
         Button acceptButton = new Button();
         acceptButton.setText("Ok");
         acceptButton.setOnAction(event -> {
-
+            this.resourceCanvas.render();
         });
 
         Button cancelButton = new Button();
