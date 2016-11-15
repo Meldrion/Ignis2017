@@ -301,7 +301,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
             tsManager.setTileset(cave,1);
 
             mapManager.loadMapTree();
-            this.mapTree.buildFromMapManager(mapManager);
+            this.mapTree.setProject(p);
         }
 
         this.userInterfaceChanges(p);

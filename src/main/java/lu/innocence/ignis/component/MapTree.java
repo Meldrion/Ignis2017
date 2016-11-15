@@ -4,6 +4,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.MapManager;
+import lu.innocence.ignis.engine.Project;
 import lu.innocence.ignis.view.CreateMapDialog;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class MapTree extends TreeView<String> {
 
-    private MapManager mapManager;
+    private Project project;
     private Stage parentStage;
 
     public MapTree(Stage parentStage) {
@@ -22,10 +23,10 @@ public class MapTree extends TreeView<String> {
             MapTreeNode selectedItem = (MapTreeNode) newValue;
 
             if (selectedItem != null) {
-                Map map = this.mapManager.find(selectedItem.getMapId());
-                this.mapManager.setActiveMap(map);
+                Map map = this.project.getMapManager().find(selectedItem.getMapId());
+                this.project.getMapManager().setActiveMap(map);
             } else {
-                this.mapManager.setActiveMap(null);
+                this.project.getMapManager().setActiveMap(null);
             }
 
         });
@@ -47,18 +48,25 @@ public class MapTree extends TreeView<String> {
         this.setContextMenu(mapTreeMenu);
     }
 
-    public void buildFromMapManager(MapManager mapManager) {
+    public void setProject(Project p) {
+        if (p != null) {
+            this.project = p;
+            this.buildFromMapManager(p.getMapManager());
+        } else {
+            this.project = null;
+        }
+    }
+
+    private void buildFromMapManager(MapManager mapManager) {
 
         MapTreeNode rootNode = new MapTreeNode("TEST");
         rootNode.setMapId("-1");
         this.setRoot(rootNode);
         buildFromNode(mapManager.getRoot(),rootNode);
         rootNode.setExpanded(true);
-
-        this.mapManager = mapManager;
     }
 
-    public void buildFromNode(Map map,TreeItem<String> node) {
+    private void buildFromNode(Map map,TreeItem<String> node) {
 
         List<Map> maps = map.getChildren();
         for (Map current : maps) {
@@ -67,6 +75,7 @@ public class MapTree extends TreeView<String> {
             node.getChildren().add(currentTreeNode);
             buildFromNode(current,currentTreeNode);
         }
+
     }
 
 }
