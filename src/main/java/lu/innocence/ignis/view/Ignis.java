@@ -228,6 +228,13 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
 
         this.tilesetCanvas = new TilesetCanvas();
         ScrollPane tilesetScroller = new ScrollPane();
+
+        tilesetScroller.heightProperty().addListener(observable -> {
+            this.tilesetCanvas.containerSizeChanged((int)tilesetScroller.getWidth(),
+                    (int)tilesetScroller.getHeight());
+        });
+
+        tilesetScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         tilesetScroller.setContent(tilesetCanvas);
         tilesetScroller.setPrefWidth(280);
 

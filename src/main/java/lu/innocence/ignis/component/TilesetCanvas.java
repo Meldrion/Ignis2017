@@ -28,12 +28,15 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
     private int mouseEndX;
     private int mouseEndY;
 
+    private int containerWidth;
+    private int containerHeight;
+
     private List<TilesetSelectionChanged> tilesetSelectionListener;
-
-
 
     public TilesetCanvas() {
 
+        this.containerWidth = 0;
+        this.containerHeight = 0;
         this.lastX = -1;
         this.lastY = -1;
         this.cellSize = 32;
@@ -103,12 +106,13 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
             this.setWidth(tileset.getTilesetImage().getWidth());
             this.setHeight(tileset.getTilesetImage().getHeight());
             this.linkedTileset =  tileset;
+            this.fitToContainer(this.containerWidth,this.containerHeight);
         } else {
             this.linkedTileset = null;
             this.setWidth(0);
             this.setHeight(0);
+            this.render();
         }
-        this.render();
     }
 
     public void addSelecitonListener(TilesetSelectionChanged listener) {
@@ -126,6 +130,31 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         for (TilesetSelectionChanged listener : this.tilesetSelectionListener) {
             listener.tilesetSelectionChanged(coords[0],coords[1],w,h);
         }
+    }
+
+    private void fitToContainer(int width,int height) {
+        if (this.linkedTileset != null) {
+
+            if (this.linkedTileset.getTilesetImage().getHeight() < height) {
+                this.setHeight(height);
+            } else {
+                this.setHeight(this.linkedTileset.getTilesetImage().getHeight());
+            }
+
+            if (this.linkedTileset.getTilesetImage().getWidth() < width) {
+                this.setWidth(width);
+            } else {
+                this.setWidth(this.linkedTileset.getTilesetImage().getWidth());
+            }
+        }
+
+        this.render();
+    }
+
+    public void containerSizeChanged(int width,int height) {
+        this.containerWidth = width;
+        this.containerHeight = height;
+        this.fitToContainer(width,height);
     }
 
     @Override
