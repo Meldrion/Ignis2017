@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lu.innocence.ignis.view.components.ResourceCanvas;
 
 /**
  * @author Fabien Steines
@@ -83,6 +84,9 @@ public class CreateMapDialog extends Stage {
 
         Button tilesetSearchButton = new Button();
         tilesetSearchButton.setText("...");
+        tilesetSearchButton.setOnAction(event -> {
+            new ResourceView(this);
+        });
         grid.add(tilesetSearchButton,3,2);
 
         root.setCenter(grid);
