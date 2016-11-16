@@ -12,17 +12,21 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lu.innocence.ignis.view.components.ResourceCanvas;
+import lu.innocence.ignis.engine.Project;
 
 /**
  * @author Fabien Steines
  */
 public class CreateMapDialog extends Stage {
 
-    public CreateMapDialog(Stage parentStage) {
+    private Project project;
+
+    public CreateMapDialog(Stage parentStage,Project project) {
+        this.project = project;
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Create Map...");
         this.setResizable(false);
@@ -79,15 +83,22 @@ public class CreateMapDialog extends Stage {
         grid.add(labelTileset,0,2);
 
         TextField tilesetTextField = new TextField();
+        tilesetTextField.setMaxWidth(Integer.MAX_VALUE);
         tilesetTextField.setEditable(false);
-        grid.add(tilesetTextField,1,2,2,1);
 
         Button tilesetSearchButton = new Button();
         tilesetSearchButton.setText("...");
         tilesetSearchButton.setOnAction(event -> {
-            new ResourceView(this);
+            ResourceView view = new ResourceView(this);
+            view.setTilesetManager(this.project.getTilesetManager());
         });
-        grid.add(tilesetSearchButton,3,2);
+
+        HBox lineEditWithButton = new HBox();
+        lineEditWithButton.setSpacing(10);
+        lineEditWithButton.getChildren().addAll(tilesetTextField,tilesetSearchButton);
+        lineEditWithButton.setMaxWidth(Integer.MAX_VALUE);
+        HBox.setHgrow(tilesetTextField, Priority.ALWAYS);
+        grid.add(lineEditWithButton,1,2,3,1);
 
         root.setCenter(grid);
 

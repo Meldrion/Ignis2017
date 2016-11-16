@@ -291,9 +291,11 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
 
             Tileset tileset = new Tileset();
             tileset.loadImage("tileset.png");
+            tileset.setName("Desert");
 
             Tileset cave = new Tileset();
             cave.loadImage("cave.png");
+            cave.setName("Dark Cave");
 
             TilesetManager tsManager = p.getTilesetManager();
             tsManager.setTilesetMax(10);

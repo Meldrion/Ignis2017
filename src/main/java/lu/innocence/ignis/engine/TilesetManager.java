@@ -33,4 +33,8 @@ public class TilesetManager {
         return index > -1 ? tilesetList.get(index) : null;
     }
 
+    public List<Tileset> getTilesetList() {
+        return this.tilesetList;
+    }
+
 }

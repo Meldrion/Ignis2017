@@ -11,6 +11,11 @@ public class Tileset {
     private Image tilesetImage;
     private int cellSize = 32;
     private int index;
+    private String name;
+
+    public Tileset() {
+        this.name = "";
+    }
 
     public void loadImage(String imagePath) {
         this.tilesetImage = new Image(String.format("file:%s",imagePath));
@@ -31,6 +36,14 @@ public class Tileset {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
 }

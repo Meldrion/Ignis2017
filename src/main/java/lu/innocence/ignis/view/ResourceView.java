@@ -13,6 +13,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lu.innocence.ignis.engine.Tileset;
+import lu.innocence.ignis.engine.TilesetManager;
 import lu.innocence.ignis.view.components.ResourceCanvas;
 
 /**
@@ -22,6 +24,8 @@ public class ResourceView extends Stage {
 
     private ListView<String> resourceList;
     private ResourceCanvas resourceCanvas;
+    private TilesetManager tsManager;
+
 
     public ResourceView(Stage parentStage) {
         this.initModality(Modality.APPLICATION_MODAL);
@@ -55,13 +59,24 @@ public class ResourceView extends Stage {
         grid.setVgap(10);
 
         ColumnConstraints column1 = new ColumnConstraints(200);
-        ColumnConstraints column2 = new ColumnConstraints(500);
+        ColumnConstraints column2 = new ColumnConstraints(300);
 
         grid.getColumnConstraints().addAll(column1,column2);
 
         this.resourceList = new ListView<>();
         this.resourceList.getSelectionModel().selectedItemProperty().
-                addListener((observable, oldValue, newValue) -> {});
+                addListener((observable, oldValue, newValue) -> {
+
+                    Tileset tileset = this.tsManager.getTilesetAtIndex
+                            (this.resourceList.getSelectionModel().getSelectedIndex());
+
+                    if (tileset != null) {
+                        this.resourceCanvas.setImage(tileset.getTilesetImage());
+                    } else {
+                        this.resourceCanvas.setImage(null);
+                    }
+
+                });
         grid.add(this.resourceList,0,0);
 
         this.resourceCanvas = new ResourceCanvas();
@@ -91,5 +106,16 @@ public class ResourceView extends Stage {
         root.setBottom(bottomBar);
 
     }
+
+    public void setTilesetManager(TilesetManager tsManager) {
+        this.tsManager = tsManager;
+
+        this.resourceList.getItems().clear();
+        for (int i=0;i<tsManager.getTilesetList().size();i++) {
+            Tileset tileset = tsManager.getTilesetAtIndex(i);
+            this.resourceList.getItems().add(String.format("%d: %s",i,tileset != null ? tileset.getName() : ""));
+        }
+    }
+
 
 }
