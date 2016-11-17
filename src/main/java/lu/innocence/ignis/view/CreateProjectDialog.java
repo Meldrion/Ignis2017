@@ -119,6 +119,16 @@ public class CreateProjectDialog extends Stage{
 
         Button confirmButton = new Button();
         confirmButton.setText("Create Project");
+        confirmButton.setOnAction(event -> {
+
+            if (ProjectManager.getInstance().createProject(rootPathTextField.getText(),folderNameTextField.getText(),
+                    titleTextField.getText(),author.getText(),company.getText())) {
+                this.close();
+            } else {
+
+            }
+
+        });
 
         Button cancelButton = new Button();
         cancelButton.setText("Cancel");

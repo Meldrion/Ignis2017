@@ -61,6 +61,8 @@ public class Project {
             this.init();
 
             allOk &= FilesystemHandler.writeJson(projectJSON,this.assetStructure.getProjectJSON());
+            this.mapManager.saveMapTree();
+
             return allOk;
 
         } else {
