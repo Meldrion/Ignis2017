@@ -38,7 +38,23 @@ public class MapTree extends TreeView<String> {
         MenuItem createMap = new MenuItem("Create Map...");
         createMap.setOnAction(event -> {
             if (this.getSelectionModel().getSelectedIndex() > -1) {
-                new CreateMapDialog(this.parentStage,this.project);
+                CreateMapDialog mapDialog = new CreateMapDialog(this.parentStage,this.project);
+                mapDialog.showAndWait();
+                if (mapDialog.isAccepted()) {
+                    Map newMap = mapDialog.createMap();
+
+                    TreeItem<String> currentSelected = this.getSelectionModel().getSelectedItem();
+                    if (currentSelected != null && currentSelected != this.getRoot()) {
+                        this.project.getMapManager().addMap(newMap,currentSelected.getValue());
+                    } else {
+                        this.project.getMapManager().addMap(newMap);
+                    }
+                    this.project.getMapManager().saveMapTree();
+
+                    MapTreeNode treeItem = new MapTreeNode(newMap.getName());
+                    treeItem.setMapId(newMap.getMapId());
+                    this.getSelectionModel().getSelectedItem().getChildren().add(treeItem);
+                }
             }
         });
         MenuItem editMap = new MenuItem("Edit Map...");

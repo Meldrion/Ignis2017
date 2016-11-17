@@ -16,6 +16,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.Project;
 import lu.innocence.ignis.view.resourceView.TilesetResourceView;
 import org.apache.logging.log4j.LogManager;
@@ -30,8 +31,14 @@ public class CreateMapDialog extends Stage {
     private Project project;
 
     private int selectedTilesetIndex;
+    private boolean accepted;
+
+    private Spinner<Integer> widthSpinner;
+    private Spinner<Integer> heightSpinner;
+    private TextField textFieldMapName;
 
     public CreateMapDialog(Stage parentStage,Project project) {
+        this.accepted = false;
         this.project = project;
         this.selectedTilesetIndex = -1;
         this.initModality(Modality.APPLICATION_MODAL);
@@ -41,7 +48,15 @@ public class CreateMapDialog extends Stage {
         this.initData();
         this.initOwner(parentStage);
         this.sizeToScene();
-        this.show();
+    }
+
+    public Map createMap() {
+        Map newMap = this.project.getMapManager().createNewMap();
+        newMap.setDimension(this.widthSpinner.getValue(),this.heightSpinner.getValue());
+        newMap.setName(this.textFieldMapName.getText());
+        newMap.setTileset(this.project.getTilesetManager().getTilesetAtIndex(selectedTilesetIndex));
+        newMap.save();
+        return newMap;
     }
 
     private void buildGUI() {
@@ -62,7 +77,7 @@ public class CreateMapDialog extends Stage {
 
         Text labelMapName = new Text();
         labelMapName.setText("Map Name: ");
-        TextField textFieldMapName = new TextField();
+        this.textFieldMapName = new TextField();
 
         grid.add(labelMapName,0,0);
         grid.add(textFieldMapName,1,0,3,1);
@@ -71,7 +86,7 @@ public class CreateMapDialog extends Stage {
         labelMapWidth.setText("Width: ");
         grid.add(labelMapWidth,0,1);
 
-        Spinner<Integer> widthSpinner = new Spinner<>();
+        widthSpinner = new Spinner<>();
         widthSpinner.setEditable(true);
         widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(20, 200));
         grid.add(widthSpinner,1,1);
@@ -80,7 +95,7 @@ public class CreateMapDialog extends Stage {
         labelMapHeight.setText("Height: ");
         grid.add(labelMapHeight,2,1);
 
-        Spinner<Integer> heightSpinner = new Spinner<>();
+        heightSpinner = new Spinner<>();
         heightSpinner.setEditable(true);
         heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(15, 200));
         grid.add(heightSpinner,3,1);
@@ -128,7 +143,8 @@ public class CreateMapDialog extends Stage {
         Button acceptButton = new Button();
         acceptButton.setText("Ok");
         acceptButton.setOnAction(event -> {
-
+            this.accepted = true;
+            this.close();
         });
 
         Button cancelButton = new Button();
@@ -143,4 +159,7 @@ public class CreateMapDialog extends Stage {
 
     }
 
+    public boolean isAccepted() {
+        return accepted;
+    }
 }
