@@ -38,29 +38,33 @@ public class MapTree extends TreeView<String> {
         MenuItem createMap = new MenuItem("Create Map...");
         createMap.setOnAction(event -> {
             if (this.getSelectionModel().getSelectedIndex() > -1) {
-                CreateMapDialog mapDialog = new CreateMapDialog(this.parentStage,this.project);
+                CreateMapDialog mapDialog = new CreateMapDialog(this.parentStage, this.project);
                 mapDialog.showAndWait();
                 if (mapDialog.isAccepted()) {
-                    Map newMap = mapDialog.createMap();
 
-                    TreeItem<String> currentSelected = this.getSelectionModel().getSelectedItem();
+                    Map newMap = mapDialog.createMap();
+                    MapTreeNode currentSelected = (MapTreeNode) this.getSelectionModel().getSelectedItem();
+
                     if (currentSelected != null && currentSelected != this.getRoot()) {
-                        this.project.getMapManager().addMap(newMap,currentSelected.getValue());
+                        this.project.getMapManager().addMap(newMap, currentSelected.getMapId());
                     } else {
                         this.project.getMapManager().addMap(newMap);
                     }
+
                     this.project.getMapManager().saveMapTree();
 
                     MapTreeNode treeItem = new MapTreeNode(newMap.getName());
                     treeItem.setMapId(newMap.getMapId());
                     this.getSelectionModel().getSelectedItem().getChildren().add(treeItem);
+                    if (currentSelected != null) currentSelected.setExpanded(true);
+
                 }
             }
         });
         MenuItem editMap = new MenuItem("Edit Map...");
         MenuItem copyMap = new MenuItem("Copy");
 
-        mapTreeMenu.getItems().addAll(createMap,new SeparatorMenuItem(),editMap,copyMap);
+        mapTreeMenu.getItems().addAll(createMap, new SeparatorMenuItem(), editMap, copyMap);
         this.setContextMenu(mapTreeMenu);
     }
 
@@ -78,18 +82,18 @@ public class MapTree extends TreeView<String> {
         MapTreeNode rootNode = new MapTreeNode("TEST");
         rootNode.setMapId("-1");
         this.setRoot(rootNode);
-        buildFromNode(mapManager.getRoot(),rootNode);
+        buildFromNode(mapManager.getRoot(), rootNode);
         rootNode.setExpanded(true);
     }
 
-    private void buildFromNode(Map map,TreeItem<String> node) {
+    private void buildFromNode(Map map, TreeItem<String> node) {
 
         List<Map> maps = map.getChildren();
         for (Map current : maps) {
             MapTreeNode currentTreeNode = new MapTreeNode(current.getName());
             currentTreeNode.setMapId(current.getMapId());
             node.getChildren().add(currentTreeNode);
-            buildFromNode(current,currentTreeNode);
+            buildFromNode(current, currentTreeNode);
         }
 
     }
