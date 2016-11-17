@@ -39,14 +39,16 @@ public class TilesetResourceView extends ResourceView {
      */
     @Override
     protected void resourceSelectionChanged(int index) {
-
-        Tileset tileset = this.tsManager.getTilesetAtIndex(index);
-
+        Tileset tileset = getSelected();
         if (tileset != null) {
             this.resourceCanvas.setImage(tileset.getTilesetImage());
         } else {
             this.resourceCanvas.setImage(null);
         }
+    }
 
+    public Tileset getSelected() {
+        int index = this.resourceList.getSelectionModel().getSelectedIndex();
+        return (index > -1 && this.tsManager != null) ? this.tsManager.getTilesetAtIndex(index) : null;
     }
 }

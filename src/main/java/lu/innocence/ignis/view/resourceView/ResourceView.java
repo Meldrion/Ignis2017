@@ -13,8 +13,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lu.innocence.ignis.engine.Tileset;
-import lu.innocence.ignis.engine.TilesetManager;
 import lu.innocence.ignis.view.components.ResourceCanvas;
 
 /**
@@ -24,22 +22,21 @@ public abstract class ResourceView extends Stage {
 
     protected ListView<String> resourceList;
     protected ResourceCanvas resourceCanvas;
+    protected boolean accepted;
+    protected boolean inNestedEventLoop;
 
     /**
      *
      * @param parentStage
      */
     public ResourceView(Stage parentStage) {
+        this.accepted = false;
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Choose..");
         this.setResizable(false);
         this.buildGUI();
         this.initOwner(parentStage);
         this.sizeToScene();
-        this.show();
-
-        this.resourceCanvas.setHeight(this.resourceList.getHeight());
-        this.resourceCanvas.render();
     }
 
     /**
@@ -90,7 +87,8 @@ public abstract class ResourceView extends Stage {
         Button acceptButton = new Button();
         acceptButton.setText("Ok");
         acceptButton.setOnAction(event -> {
-            this.resourceCanvas.render();
+            this.accepted = true;
+            this.close();
         });
 
         Button cancelButton = new Button();
@@ -100,6 +98,12 @@ public abstract class ResourceView extends Stage {
         bottomBar.getChildren().addAll(cancelButton,acceptButton);
         root.setBottom(bottomBar);
 
+
+        this.setOnShown(event -> {
+            this.resourceCanvas.setHeight(this.resourceList.getHeight());
+            this.resourceCanvas.render();
+        });
+
     }
 
     /**
@@ -107,5 +111,39 @@ public abstract class ResourceView extends Stage {
      * @param index
      */
     protected abstract void resourceSelectionChanged(int index);
+
+    /**
+     *
+     * @param index
+     */
+    public void setSelectedIndex(int index) {
+        if (index > -1) {
+            this.resourceList.getSelectionModel().select(index);
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getSelectedIndex() {
+        return this.resourceList.getSelectionModel().getSelectedIndex();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getSelectedString() {
+        return getSelectedIndex() > -1 ? this.resourceList.getSelectionModel().getSelectedItem() : null;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isAccepted() {
+        return this.accepted;
+    }
 
 }

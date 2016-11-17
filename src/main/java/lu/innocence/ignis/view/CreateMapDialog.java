@@ -17,18 +17,23 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.Project;
-import lu.innocence.ignis.view.resourceView.ResourceView;
 import lu.innocence.ignis.view.resourceView.TilesetResourceView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @author Fabien Steines
  */
 public class CreateMapDialog extends Stage {
 
+    private Logger LOGGER = LogManager.getLogger(CreateMapDialog.class);
     private Project project;
+
+    private int selectedTilesetIndex;
 
     public CreateMapDialog(Stage parentStage,Project project) {
         this.project = project;
+        this.selectedTilesetIndex = -1;
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Create Map...");
         this.setResizable(false);
@@ -91,8 +96,17 @@ public class CreateMapDialog extends Stage {
         Button tilesetSearchButton = new Button();
         tilesetSearchButton.setText("...");
         tilesetSearchButton.setOnAction(event -> {
+
             TilesetResourceView tsView = new TilesetResourceView(this);
             tsView.setTilesetManager(this.project.getTilesetManager());
+            tsView.setSelectedIndex(selectedTilesetIndex);
+            tsView.showAndWait();
+
+            if (tsView.isAccepted()) {
+                tilesetTextField.setText(tsView.getSelectedString());
+                this.selectedTilesetIndex = tsView.getSelectedIndex();
+            }
+
         });
 
         HBox lineEditWithButton = new HBox();
