@@ -51,11 +51,15 @@ public class CreateMapDialog extends Stage {
     }
 
     public Map createMap() {
+        int w = Integer.parseInt(this.widthSpinner.getEditor().getText());
+        int h = Integer.parseInt(this.heightSpinner.getEditor().getText());
+
         Map newMap = this.project.getMapManager().createNewMap();
-        newMap.setDimension(this.widthSpinner.getValue(),this.heightSpinner.getValue());
+        newMap.setDimension(w,h);
         newMap.setName(this.textFieldMapName.getText());
         newMap.setTileset(this.project.getTilesetManager().getTilesetAtIndex(selectedTilesetIndex));
         newMap.save();
+
         return newMap;
     }
 
