@@ -1,4 +1,4 @@
-package lu.innocence.ignis.view;
+package lu.innocence.ignis.view.resourceView;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,19 +20,20 @@ import lu.innocence.ignis.view.components.ResourceCanvas;
 /**
  * @author Fabien Steines
  */
-public class ResourceView extends Stage {
+public abstract class ResourceView extends Stage {
 
-    private ListView<String> resourceList;
-    private ResourceCanvas resourceCanvas;
-    private TilesetManager tsManager;
+    protected ListView<String> resourceList;
+    protected ResourceCanvas resourceCanvas;
 
-
+    /**
+     *
+     * @param parentStage
+     */
     public ResourceView(Stage parentStage) {
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Choose..");
         this.setResizable(false);
         this.buildGUI();
-        //this.initData();
         this.initOwner(parentStage);
         this.sizeToScene();
         this.show();
@@ -41,6 +42,9 @@ public class ResourceView extends Stage {
         this.resourceCanvas.render();
     }
 
+    /**
+     *
+     */
     private void buildGUI() {
 
         BorderPane root = new BorderPane();
@@ -66,16 +70,7 @@ public class ResourceView extends Stage {
         this.resourceList = new ListView<>();
         this.resourceList.getSelectionModel().selectedItemProperty().
                 addListener((observable, oldValue, newValue) -> {
-
-                    Tileset tileset = this.tsManager.getTilesetAtIndex
-                            (this.resourceList.getSelectionModel().getSelectedIndex());
-
-                    if (tileset != null) {
-                        this.resourceCanvas.setImage(tileset.getTilesetImage());
-                    } else {
-                        this.resourceCanvas.setImage(null);
-                    }
-
+                    this.resourceSelectionChanged(this.resourceList.getSelectionModel().getSelectedIndex());
                 });
         grid.add(this.resourceList,0,0);
 
@@ -107,15 +102,10 @@ public class ResourceView extends Stage {
 
     }
 
-    public void setTilesetManager(TilesetManager tsManager) {
-        this.tsManager = tsManager;
-
-        this.resourceList.getItems().clear();
-        for (int i=0;i<tsManager.getTilesetList().size();i++) {
-            Tileset tileset = tsManager.getTilesetAtIndex(i);
-            this.resourceList.getItems().add(String.format("%d: %s",i,tileset != null ? tileset.getName() : ""));
-        }
-    }
-
+    /**
+     *
+     * @param index
+     */
+    protected abstract void resourceSelectionChanged(int index);
 
 }

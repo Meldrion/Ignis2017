@@ -17,6 +17,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.Project;
+import lu.innocence.ignis.view.resourceView.ResourceView;
+import lu.innocence.ignis.view.resourceView.TilesetResourceView;
 
 /**
  * @author Fabien Steines
@@ -89,8 +91,8 @@ public class CreateMapDialog extends Stage {
         Button tilesetSearchButton = new Button();
         tilesetSearchButton.setText("...");
         tilesetSearchButton.setOnAction(event -> {
-            ResourceView view = new ResourceView(this);
-            view.setTilesetManager(this.project.getTilesetManager());
+            TilesetResourceView tsView = new TilesetResourceView(this);
+            tsView.setTilesetManager(this.project.getTilesetManager());
         });
 
         HBox lineEditWithButton = new HBox();
