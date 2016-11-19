@@ -185,6 +185,10 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
 
         this.gameDBButton = new Button();
         this.gameDBButton.setFocusTraversable(false);
+        this.gameDBButton.setOnAction(event -> {
+            GameDatabase gameDatabase = new GameDatabase(mainStage,this.project);
+            gameDatabase.showAndWait();
+        });
         this.gameDBButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/ignis24px.png").getFile()));
 
         this.audioManagerButton = new Button();
