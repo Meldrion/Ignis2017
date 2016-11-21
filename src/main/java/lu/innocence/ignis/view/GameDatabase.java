@@ -31,13 +31,13 @@ public class GameDatabase extends Stage {
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Game Database");
         this.setResizable(false);
-        this.buildGUI();
+        this.buildGUI(project);
         this.initData();
         this.initOwner(parentStage);
         this.sizeToScene();
     }
 
-    private void buildGUI() {
+    private void buildGUI(Project project) {
 
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
@@ -67,7 +67,7 @@ public class GameDatabase extends Stage {
 
         Tab tilesetTab =  new Tab();
         tilesetTab.setText("Tileset");
-        tilesetTabContent = new TilesetTab();
+        tilesetTabContent = new TilesetTab(project.getTilesetManager());
         tilesetTab.setContent(tilesetTabContent);
 
         mainTabber.getTabs().addAll(actorTab,classTab,itemTab,skillTab,tilesetTab);

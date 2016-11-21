@@ -2,6 +2,8 @@ package lu.innocence.ignis.view.gamedb;
 
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
+import lu.innocence.ignis.engine.Tileset;
+import lu.innocence.ignis.engine.TilesetManager;
 
 /**
  * Copyright by Fabien Steines
@@ -9,8 +11,23 @@ import javafx.scene.layout.BorderPane;
  */
 public class TilesetTab extends GameDBTab {
 
-    public TilesetTab() {
+    private TilesetManager tsManager;
+
+    public TilesetTab(TilesetManager tsManager) {
         super("Tileset List:");
+        this.tsManager = tsManager;
+        this.fromTilesetManager(tsManager);
+    }
+
+    private void fromTilesetManager(TilesetManager tsManager) {
+        this.contentList.getItems().clear();
+        int max = tsManager.getTilesetList().size();
+        for (int i=0;i<max;i++) {
+            Tileset ts = this.tsManager.getTilesetAtIndex(i);
+            if (ts != null) {
+                this.contentList.getItems().add(String.format("%s:%s",String.valueOf(i),ts.getName()));
+            }
+        }
     }
 
 }

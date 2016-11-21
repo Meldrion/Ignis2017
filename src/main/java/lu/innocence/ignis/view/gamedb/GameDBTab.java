@@ -13,6 +13,8 @@ import javafx.scene.text.Text;
  */
 public class GameDBTab extends BorderPane {
 
+    protected ListView<String> contentList;
+
     public GameDBTab(String categoryName) {
 
         VBox leftPanel = new VBox();
@@ -23,7 +25,7 @@ public class GameDBTab extends BorderPane {
         text.setText(categoryName);
         leftPanel.getChildren().add(text);
 
-        ListView<String> contentList = new ListView<>();
+        this.contentList = new ListView<>();
         leftPanel.getChildren().add(contentList);
 
         Button changeContentCount = new Button();
@@ -32,7 +34,7 @@ public class GameDBTab extends BorderPane {
         leftPanel.getChildren().add(changeContentCount);
 
         this.setLeft(leftPanel);
-
     }
+
 
 }
