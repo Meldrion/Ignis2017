@@ -10,7 +10,7 @@ import javafx.scene.layout.BorderPane;
 public class TilesetTab extends GameDBTab {
 
     public TilesetTab() {
-        super();
+        super("Tileset List:");
     }
 
 }

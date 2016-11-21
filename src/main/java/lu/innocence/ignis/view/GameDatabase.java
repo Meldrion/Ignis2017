@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.Project;
+import lu.innocence.ignis.view.gamedb.TilesetTab;
 
 /**
  * Copyright by Fabien Steines
@@ -20,6 +21,7 @@ import lu.innocence.ignis.engine.Project;
  */
 public class GameDatabase extends Stage {
 
+    private TilesetTab tilesetTabContent;
     private boolean accepted;
     private Project project;
 
@@ -65,6 +67,8 @@ public class GameDatabase extends Stage {
 
         Tab tilesetTab =  new Tab();
         tilesetTab.setText("Tileset");
+        tilesetTabContent = new TilesetTab();
+        tilesetTab.setContent(tilesetTabContent);
 
         mainTabber.getTabs().addAll(actorTab,classTab,itemTab,skillTab,tilesetTab);
 
