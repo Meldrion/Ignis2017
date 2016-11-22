@@ -89,22 +89,27 @@ public class TilesetTab extends GameDBTab {
 
         ToggleButton btnPassage = new ToggleButton();
         btnPassage.setText("Passage");
+        btnPassage.setPrefWidth(100);
         rightBox.getChildren().add(btnPassage);
 
         ToggleButton btnPriority = new ToggleButton();
         btnPriority.setText("Priority");
+        btnPriority.setPrefWidth(100);
         rightBox.getChildren().add(btnPriority);
 
         ToggleButton btnBush = new ToggleButton();
         btnBush.setText("Bush");
+        btnBush.setPrefWidth(100);
         rightBox.getChildren().add(btnBush);
 
         ToggleButton btnCounter = new ToggleButton();
         btnCounter.setText("Counter");
+        btnCounter.setPrefWidth(100);
         rightBox.getChildren().add(btnCounter);
 
         ToggleButton btnTerrainTag = new ToggleButton();
         btnTerrainTag.setText("Terain Tag");
+        btnTerrain.setPrefWidth(100);
         rightBox.getChildren().add(btnTerrainTag);
 
         centerHPanel.getChildren().add(tilesetScroller);
