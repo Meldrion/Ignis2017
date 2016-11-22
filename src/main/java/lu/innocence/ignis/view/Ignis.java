@@ -206,7 +206,6 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
      */
     private void buildUserInterface(Stage primaryStage) {
 
-        
         BorderPane root = new BorderPane();
         primaryStage.setTitle("Ignis");
         primaryStage.setScene(new Scene(root, 800, 600));

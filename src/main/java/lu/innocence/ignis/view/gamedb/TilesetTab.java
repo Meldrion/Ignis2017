@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import lu.innocence.ignis.component.TilesetManagerCanvas;
@@ -44,27 +45,31 @@ public class TilesetTab extends GameDBTab {
         topGrid.add(lblTilesetImage,0,1);
 
         HBox tilesetImageInputAndButtonLayout = new HBox();
+        tilesetImageInputAndButtonLayout.setSpacing(10);
         tilesetImageInputAndButtonLayout.setMaxWidth(Integer.MAX_VALUE);
         TextField edtTilesetImage = new TextField();
         edtTilesetImage.setMaxWidth(Integer.MAX_VALUE);
+        edtTilesetImage.setEditable(false);
 
         Button btnLookForTilesetImage = new Button();
         btnLookForTilesetImage.setText("...");
 
         tilesetImageInputAndButtonLayout.getChildren().addAll(edtTilesetImage,btnLookForTilesetImage);
         topGrid.add(tilesetImageInputAndButtonLayout,1,1);
-
-        GridPane.setHgrow(edtTilesetName, Priority.ALWAYS);
-        GridPane.setHgrow(tilesetImageInputAndButtonLayout, Priority.ALWAYS);
-
         centerBox.getChildren().add(topGrid);
 
+        HBox.setHgrow(edtTilesetImage, Priority.ALWAYS);
+        GridPane.setHgrow(edtTilesetName, Priority.ALWAYS);
+
+
         HBox centerHPanel = new HBox();
+        centerBox.setPadding(new Insets(10,10,10,10));
+        centerHPanel.setSpacing(10);
 
         // Terrain
         GridPane innerLeftPanel = new GridPane();
         Text lblTerrain = new Text();
-        lblTerrain.setText("Terrain 01:");
+        lblTerrain.setText("Terrain");
         innerLeftPanel.add(lblTerrain,0,0,2,1);
         TextField edtTerrain = new TextField();
         innerLeftPanel.add(edtTerrain,0,1);
@@ -78,8 +83,32 @@ public class TilesetTab extends GameDBTab {
         tilesetScroller.setPrefWidth(280);
         TilesetManagerCanvas tsManagerCanvas = new TilesetManagerCanvas();
         tilesetScroller.setContent(tsManagerCanvas);
-        centerHPanel.getChildren().add(tilesetScroller);
 
+        VBox rightBox = new VBox();
+        rightBox.setSpacing(10);
+
+        ToggleButton btnPassage = new ToggleButton();
+        btnPassage.setText("Passage");
+        rightBox.getChildren().add(btnPassage);
+
+        ToggleButton btnPriority = new ToggleButton();
+        btnPriority.setText("Priority");
+        rightBox.getChildren().add(btnPriority);
+
+        ToggleButton btnBush = new ToggleButton();
+        btnBush.setText("Bush");
+        rightBox.getChildren().add(btnBush);
+
+        ToggleButton btnCounter = new ToggleButton();
+        btnCounter.setText("Counter");
+        rightBox.getChildren().add(btnCounter);
+
+        ToggleButton btnTerrainTag = new ToggleButton();
+        btnTerrainTag.setText("Terain Tag");
+        rightBox.getChildren().add(btnTerrainTag);
+
+        centerHPanel.getChildren().add(tilesetScroller);
+        centerHPanel.getChildren().add(rightBox);
         centerBox.getChildren().add(centerHPanel);
 
         this.setCenter(centerBox);

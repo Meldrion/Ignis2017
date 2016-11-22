@@ -29,7 +29,7 @@ public class GameDBTab extends BorderPane {
         leftPanel.getChildren().add(contentList);
 
         Button changeContentCount = new Button();
-        changeContentCount.setText("Set Count");
+        changeContentCount.setText("Change Maximum");
         changeContentCount.setMaxWidth(Integer.MAX_VALUE);
         leftPanel.getChildren().add(changeContentCount);
 
