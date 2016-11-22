@@ -96,6 +96,10 @@ public class TilesetTab extends GameDBTab {
         TilesetManagerCanvas tsManagerCanvas = new TilesetManagerCanvas();
         tilesetScroller.setContent(tsManagerCanvas);
 
+
+        // TODO: This is just testing code
+        tsManagerCanvas.setTileset(tsManager.getTilesetAtIndex(0));
+
         VBox rightBox = new VBox();
         rightBox.setSpacing(10);
 

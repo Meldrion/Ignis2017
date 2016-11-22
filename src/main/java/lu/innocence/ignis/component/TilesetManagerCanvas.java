@@ -21,6 +21,7 @@ public class TilesetManagerCanvas extends Canvas {
 
         if (tileset != null) {
             Image image = tileset.getTilesetImage();
+            this.setWidth(image != null ? image.getWidth() : 0);
             this.setHeight(image != null ? image.getHeight() : 0);
         } else {
             this.setHeight(0);
