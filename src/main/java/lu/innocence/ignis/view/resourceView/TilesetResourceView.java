@@ -20,21 +20,19 @@ public class TilesetResourceView extends ResourceView {
     }
 
     /**
-     *
      * @param tsManager
      */
     public void setTilesetManager(TilesetManager tsManager) {
         this.tsManager = tsManager;
 
         this.resourceList.getItems().clear();
-        for (int i=0;i<tsManager.getTilesetList().size();i++) {
+        for (int i = 0; i < tsManager.getTilesetList().size(); i++) {
             Tileset tileset = tsManager.getTilesetAtIndex(i);
-            this.resourceList.getItems().add(String.format("%d: %s",i,tileset != null ? tileset.getName() : ""));
+            this.resourceList.getItems().add(String.format("%d: %s", i, tileset != null ? tileset.getName() : ""));
         }
     }
 
     /**
-     *
      * @param index
      */
     @Override

@@ -23,20 +23,19 @@ public class FilesystemHandler {
 
     private static final Logger LOGGER = LogManager.getLogger(FilesystemHandler.class);
 
-    private FilesystemHandler() {}
+    private FilesystemHandler() {
+    }
 
     /**
-     *
      * @param f1
      * @param f2
      * @return
      */
-    public static String concat(String f1,String f2) {
-        return String.format("%s/%s",f1,f2);
+    public static String concat(String f1, String f2) {
+        return String.format("%s/%s", f1, f2);
     }
 
     /**
-     *
      * @return
      */
     public static String getUserHomeDir() {
@@ -44,7 +43,6 @@ public class FilesystemHandler {
     }
 
     /**
-     *
      * @param folder
      * @return
      */
@@ -60,7 +58,6 @@ public class FilesystemHandler {
     }
 
     /**
-     *
      * @param folder
      * @return
      */
@@ -68,7 +65,7 @@ public class FilesystemHandler {
         List<String> returnList = new ArrayList<>();
 
         for (String current : FilesystemHandler.readFolderContent(folder)) {
-            File f = new File(FilesystemHandler.concat(folder,current));
+            File f = new File(FilesystemHandler.concat(folder, current));
             if (f.isDirectory() && !".".equals(current) && !"..".equals(current)) {
                 returnList.add(current);
             }
@@ -78,7 +75,6 @@ public class FilesystemHandler {
     }
 
     /**
-     *
      * @param folder
      * @return
      */
@@ -86,7 +82,7 @@ public class FilesystemHandler {
         List<String> returnList = new ArrayList<>();
 
         for (String current : FilesystemHandler.readFolderContent(folder)) {
-            File f = new File(FilesystemHandler.concat(folder,current));
+            File f = new File(FilesystemHandler.concat(folder, current));
             if (f.isFile() && !".".equals(current) && !"..".equals(current)) {
                 returnList.add(current);
             }
@@ -104,15 +100,15 @@ public class FilesystemHandler {
     }
 
     public static boolean isAudio(String path) {
-        String mimeType = new MimetypesFileTypeMap().getContentType( new File(path) );
+        String mimeType = new MimetypesFileTypeMap().getContentType(new File(path));
         // mimeType should now be something like "image/png"
-        return mimeType.substring(0,5).equalsIgnoreCase("audio");
+        return mimeType.substring(0, 5).equalsIgnoreCase("audio");
     }
 
     public static boolean isImage(String path) {
-        String mimeType = new MimetypesFileTypeMap().getContentType( new File(path) );
+        String mimeType = new MimetypesFileTypeMap().getContentType(new File(path));
         // mimeType should now be something like "image/png"
-        return mimeType.substring(0,5).equalsIgnoreCase("image");
+        return mimeType.substring(0, 5).equalsIgnoreCase("image");
     }
 
     public static boolean exists(String path) {
@@ -120,7 +116,6 @@ public class FilesystemHandler {
     }
 
     /**
-     *
      * @param path
      * @return
      */
@@ -129,7 +124,6 @@ public class FilesystemHandler {
     }
 
     /**
-     *
      * @param path
      * @return
      */
@@ -145,11 +139,12 @@ public class FilesystemHandler {
 
     /**
      * Copy input file to the new output folder
-     * @param source inputFile
+     *
+     * @param source      inputFile
      * @param destination outputDestinationFile
      * @return true if all worked well, false if there has been an error
      */
-    public static boolean copy(String source,String destination) {
+    public static boolean copy(String source, String destination) {
 
         File sourceF = new File(source);
         File destF = new File(destination);
@@ -168,13 +163,14 @@ public class FilesystemHandler {
 
     /**
      * Write an JSON Object to the Filesystem on a specific path
+     *
      * @param json the JSON Object
      * @param path the output path
      * @return true if everything worked fine, and false if there has been an error
      */
-    public static boolean writeJson(JSONObject json,String path) {
+    public static boolean writeJson(JSONObject json, String path) {
 
-        try ( FileWriter file = new FileWriter(path)) {
+        try (FileWriter file = new FileWriter(path)) {
             file.write(json.toJSONString());
             file.flush();
             return true;
@@ -186,7 +182,6 @@ public class FilesystemHandler {
     }
 
     /**
-     *
      * @param path
      * @return
      */

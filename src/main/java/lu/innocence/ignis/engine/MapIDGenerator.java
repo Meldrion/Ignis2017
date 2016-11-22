@@ -5,17 +5,17 @@ package lu.innocence.ignis.engine;
  */
 public class MapIDGenerator {
 
-    private boolean[] usedIds;
     private static final int MAX_ID_COUNTER = 99999;
+    private boolean[] usedIds;
 
     public MapIDGenerator() {
         usedIds = new boolean[MAX_ID_COUNTER];
-        for (int i=0;i<MAX_ID_COUNTER;i++) {
+        for (int i = 0; i < MAX_ID_COUNTER; i++) {
             usedIds[i] = false;
         }
     }
 
-    public void setIdUsed(int id,boolean taken) {
+    public void setIdUsed(int id, boolean taken) {
         this.usedIds[id] = taken;
     }
 
@@ -29,11 +29,11 @@ public class MapIDGenerator {
 
         int zeroCount = String.valueOf(MAX_ID_COUNTER).length() - String.valueOf(id).length();
         String zeros = "";
-        for (int i=0;i<zeroCount;i++) {
+        for (int i = 0; i < zeroCount; i++) {
             zeros += "0";
         }
 
-        return String.format("map%s%d", zeros,id);
+        return String.format("map%s%d", zeros, id);
 
     }
 
@@ -44,7 +44,7 @@ public class MapIDGenerator {
 
         while (!foundId && counter < MAX_ID_COUNTER) {
             if (!this.usedIds[counter]) {
-                this.setIdUsed(counter,true);
+                this.setIdUsed(counter, true);
                 foundId = true;
             } else {
                 counter++;

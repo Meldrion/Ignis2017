@@ -12,25 +12,25 @@ import lu.innocence.ignis.engine.AssetStructure;
 public class CustomListCell extends ListCell<String> {
 
     private static final String FILE_PREF = "file:";
-    private static final Image imageIcon  =
+    private static final Image imageIcon =
             new Image(FILE_PREF + IgnisGlobals.loadFromResourceFolder("icons/thumbnail.png").getFile());
 
-    private static final Image audioIcon  =
+    private static final Image audioIcon =
             new Image(FILE_PREF + IgnisGlobals.loadFromResourceFolder("icons/audio-x-generic-16.png").getFile());
 
-    private static final Image jsIcon  =
+    private static final Image jsIcon =
             new Image(FILE_PREF + IgnisGlobals.loadFromResourceFolder("icons/jsIcon.png").getFile());
 
-    private static final Image jsonIcon  =
+    private static final Image jsonIcon =
             new Image(FILE_PREF + IgnisGlobals.loadFromResourceFolder("icons/jsonIcon.png").getFile());
 
     @Override
     public void updateItem(String name, boolean empty) {
-        super.updateItem(name,empty);
+        super.updateItem(name, empty);
         updateCell(this, name);
     }
 
-    private void updateCell(ListCell<String> cell,String name) {
+    private void updateCell(ListCell<String> cell, String name) {
         final ImageView imageView = new ImageView();
         if (AssetStructure.isAudio(name)) {
             imageView.setImage(audioIcon);

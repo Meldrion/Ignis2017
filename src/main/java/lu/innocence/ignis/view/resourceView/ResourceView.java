@@ -26,7 +26,6 @@ public abstract class ResourceView extends Stage {
     protected boolean inNestedEventLoop;
 
     /**
-     *
      * @param parentStage
      */
     public ResourceView(Stage parentStage) {
@@ -49,32 +48,32 @@ public abstract class ResourceView extends Stage {
         this.setScene(scene);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, t -> {
-            if(t.getCode()== KeyCode.ESCAPE) {
+            if (t.getCode() == KeyCode.ESCAPE) {
                 this.close();
             }
         });
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10,10,0,10));
+        grid.setPadding(new Insets(10, 10, 0, 10));
         grid.setHgap(10);
         grid.setVgap(10);
 
         ColumnConstraints column1 = new ColumnConstraints(200);
         ColumnConstraints column2 = new ColumnConstraints(300);
 
-        grid.getColumnConstraints().addAll(column1,column2);
+        grid.getColumnConstraints().addAll(column1, column2);
 
         this.resourceList = new ListView<>();
         this.resourceList.getSelectionModel().selectedItemProperty().
                 addListener((observable, oldValue, newValue) -> {
                     this.resourceSelectionChanged(this.resourceList.getSelectionModel().getSelectedIndex());
                 });
-        grid.add(this.resourceList,0,0);
+        grid.add(this.resourceList, 0, 0);
 
         this.resourceCanvas = new ResourceCanvas();
         this.resourceCanvas.setWidth(column2.getPrefWidth());
 
-        grid.add(this.resourceCanvas,1,0);
+        grid.add(this.resourceCanvas, 1, 0);
         root.setCenter(grid);
 
         // Box on the Bottom
@@ -95,7 +94,7 @@ public abstract class ResourceView extends Stage {
         cancelButton.setText("Cancel");
         cancelButton.setOnAction(event -> this.close());
 
-        bottomBar.getChildren().addAll(cancelButton,acceptButton);
+        bottomBar.getChildren().addAll(cancelButton, acceptButton);
         root.setBottom(bottomBar);
 
 
@@ -107,13 +106,18 @@ public abstract class ResourceView extends Stage {
     }
 
     /**
-     *
      * @param index
      */
     protected abstract void resourceSelectionChanged(int index);
 
     /**
-     *
+     * @return
+     */
+    public int getSelectedIndex() {
+        return this.resourceList.getSelectionModel().getSelectedIndex();
+    }
+
+    /**
      * @param index
      */
     public void setSelectedIndex(int index) {
@@ -123,15 +127,6 @@ public abstract class ResourceView extends Stage {
     }
 
     /**
-     *
-     * @return
-     */
-    public int getSelectedIndex() {
-        return this.resourceList.getSelectionModel().getSelectedIndex();
-    }
-
-    /**
-     *
      * @return
      */
     public String getSelectedString() {
@@ -139,7 +134,6 @@ public abstract class ResourceView extends Stage {
     }
 
     /**
-     *
      * @return
      */
     public boolean isAccepted() {

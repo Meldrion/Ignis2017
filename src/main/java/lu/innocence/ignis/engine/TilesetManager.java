@@ -17,16 +17,16 @@ public class TilesetManager {
     public void setTilesetMax(int maxCount) {
 
         this.tilesetList.clear(); // dummy for now
-        for (int i=0;i<maxCount;i++) {
+        for (int i = 0; i < maxCount; i++) {
             this.tilesetList.add(null);
         }
     }
 
-    public void setTileset(Tileset tileset,int index) {
+    public void setTileset(Tileset tileset, int index) {
         if (tileset != null) {
             tileset.setIndex(index);
         }
-        this.tilesetList.set(index,tileset);
+        this.tilesetList.set(index, tileset);
     }
 
     public Tileset getTilesetAtIndex(int index) {

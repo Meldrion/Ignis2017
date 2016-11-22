@@ -94,7 +94,7 @@ public class Map {
                     }
                 }
 
-                this.layers.get(index).render(g,this.tileset);
+                this.layers.get(index).render(g, this.tileset);
                 g.setGlobalAlpha(1.0);
             }
         }
@@ -116,7 +116,7 @@ public class Map {
                     }
                 }
 
-                this.layers.get(index).renderPartial(g,x,y,this.tileset);
+                this.layers.get(index).renderPartial(g, x, y, this.tileset);
                 g.setGlobalAlpha(1.0);
             }
         }
@@ -127,8 +127,12 @@ public class Map {
         this.layers.get(layerIndex).addCell(x, y, tsX, tsY);
     }
 
-    public void removeCell(int layerIndex,int x,int y) {
-        this.layers.get(layerIndex).removeCell(x,y);
+    public void removeCell(int layerIndex, int x, int y) {
+        this.layers.get(layerIndex).removeCell(x, y);
+    }
+
+    public Tileset getTileset() {
+        return this.tileset;
     }
 
     public void setTileset(Tileset tileset) {
@@ -138,10 +142,6 @@ public class Map {
             this.tilesetId = -1;
         }
         this.tileset = tileset;
-    }
-
-    public Tileset getTileset() {
-        return this.tileset;
     }
 
     public int getWidth() {
@@ -193,7 +193,7 @@ public class Map {
             layers.add(layerJSON);
         }
 
-        mapJSON.put("layers",layers);
+        mapJSON.put("layers", layers);
 
         FilesystemHandler.writeJson(mapJSON, this.mapFilePath);
     }
@@ -203,21 +203,21 @@ public class Map {
         JSONObject mapData = FilesystemHandler.readJSON(this.mapFilePath);
         LOGGER.info(this.getMapId());
         this.name = (String) mapData.get("name");
-        this.width = (int)(long) mapData.get("width");
-        this.height = (int)(long) mapData.get("height");
-        this.setDimension(this.width,this.height);
-        this.tilesetId = (int)(long) mapData.get("tilesetIndex");
+        this.width = (int) (long) mapData.get("width");
+        this.height = (int) (long) mapData.get("height");
+        this.setDimension(this.width, this.height);
+        this.tilesetId = (int) (long) mapData.get("tilesetIndex");
         JSONArray layersJSON = (JSONArray) mapData.get("layers");
         if (layersJSON != null) {
-            for (int layer = 0;layer < layersJSON.size();layer++) {
+            for (int layer = 0; layer < layersJSON.size(); layer++) {
                 JSONArray layerData = (JSONArray) layersJSON.get(layer);
-                for (int i=0;i<layerData.size();i++) {
+                for (int i = 0; i < layerData.size(); i++) {
                     JSONObject tileData = (JSONObject) layerData.get(i);
-                    int x = (int)(long)  tileData.get("x");
-                    int y = (int)(long)  tileData.get("y");
-                    int tsX = (int)(long)  tileData.get("tsX");
-                    int tsY = (int)(long)  tileData.get("tsY");
-                    this.layers.get(layer).addCell(x,y,tsX,tsY);
+                    int x = (int) (long) tileData.get("x");
+                    int y = (int) (long) tileData.get("y");
+                    int tsX = (int) (long) tileData.get("tsX");
+                    int tsY = (int) (long) tileData.get("tsY");
+                    this.layers.get(layer).addCell(x, y, tsX, tsY);
                 }
             }
         }

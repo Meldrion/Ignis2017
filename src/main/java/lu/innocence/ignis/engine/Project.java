@@ -28,7 +28,6 @@ public class Project {
 
 
     /**
-     *
      * @param rootPath
      * @param projectName
      * @param projectTitle
@@ -36,15 +35,15 @@ public class Project {
      * @param devCompany
      * @return
      */
-    public boolean create(String rootPath,String projectName,String projectTitle,String author,String devCompany) {
+    public boolean create(String rootPath, String projectName, String projectTitle, String author, String devCompany) {
 
-        this.rootFolder = FilesystemHandler.concat(rootPath,projectName);
+        this.rootFolder = FilesystemHandler.concat(rootPath, projectName);
 
         if (FilesystemHandler.createFolder(this.rootFolder)) {
             JSONObject projectJSON = new JSONObject();
-            projectJSON.put("title",projectTitle);
-            projectJSON.put("author",author);
-            projectJSON.put("company",devCompany);
+            projectJSON.put("title", projectTitle);
+            projectJSON.put("author", author);
+            projectJSON.put("company", devCompany);
 
             this.assetStructure = new AssetStructure(this.rootFolder);
             boolean allOk = FilesystemHandler.createFolder(this.assetStructure.getAsset());
@@ -60,7 +59,7 @@ public class Project {
 
             this.init();
 
-            allOk &= FilesystemHandler.writeJson(projectJSON,this.assetStructure.getProjectJSON());
+            allOk &= FilesystemHandler.writeJson(projectJSON, this.assetStructure.getProjectJSON());
             this.mapManager.saveMapTree();
 
             return allOk;
@@ -116,6 +115,8 @@ public class Project {
 
     public TilesetManager getTilesetManager() {
         return this.tilesetManager;
-    };
+    }
+
+    ;
 
 }

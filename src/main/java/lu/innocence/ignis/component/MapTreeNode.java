@@ -13,12 +13,12 @@ public class MapTreeNode extends TreeItem<String> {
         super(title);
     }
 
-    public void setMapId(String mapId) {
-        this.mapId = mapId;
-    }
-
     public String getMapId() {
         return this.mapId;
+    }
+
+    public void setMapId(String mapId) {
+        this.mapId = mapId;
     }
 
 }

@@ -27,20 +27,20 @@ public class MapManager {
         this.mapListener = new ArrayList<>();
     }
 
-    public void setMapFolder(String folder) {
-        this.mapFolder = folder;
-    }
-
     public String getMapFolder() {
         return this.mapFolder;
     }
 
-    public void setJsonFolder(String folder) {
-        this.jsonFolder = folder;
+    public void setMapFolder(String folder) {
+        this.mapFolder = folder;
     }
 
     public String getJsonFolder() {
         return this.jsonFolder;
+    }
+
+    public void setJsonFolder(String folder) {
+        this.jsonFolder = folder;
     }
 
     public void setActiveMap(Map activeMap) {
@@ -55,9 +55,9 @@ public class MapManager {
     }
 
     private void fireUpdate() {
-       for (ActiveMapListener listener : this.mapListener) {
-           listener.activeMapChanged(this.activeMap);
-       }
+        for (ActiveMapListener listener : this.mapListener) {
+            listener.activeMapChanged(this.activeMap);
+        }
     }
 
     private String generateMapId() {
@@ -65,10 +65,10 @@ public class MapManager {
     }
 
     public void addMap(Map map) {
-        this.addMap(map,null);
+        this.addMap(map, null);
     }
 
-    public void addMap(Map map,String parentId) {
+    public void addMap(Map map, String parentId) {
         if (parentId == null) {
             this.root.addMap(map);
         } else {
@@ -80,8 +80,8 @@ public class MapManager {
 
     public Map createNewMap() {
         Map map = new Map();
-        map.setUniqueId(String.format("%s.json",this.generateMapId()));
-        map.setMapFilePath(FilesystemHandler.concat(this.mapFolder,map.getMapId()));
+        map.setUniqueId(String.format("%s.json", this.generateMapId()));
+        map.setMapFilePath(FilesystemHandler.concat(this.mapFolder, map.getMapId()));
         return map;
     }
 
@@ -110,33 +110,33 @@ public class MapManager {
         JSONArray maps = new JSONArray();
 
         for (Map current : this.root.getChildren()) {
-            this.saveSubMapTree(current,maps);
+            this.saveSubMapTree(current, maps);
         }
 
-        mapTreeSave.put("maps",maps);
+        mapTreeSave.put("maps", maps);
 
-        String fileName = FilesystemHandler.concat(this.jsonFolder,"maptree.json");
-        FilesystemHandler.writeJson(mapTreeSave,fileName);
+        String fileName = FilesystemHandler.concat(this.jsonFolder, "maptree.json");
+        FilesystemHandler.writeJson(mapTreeSave, fileName);
 
     }
 
     public void loadMapTree() {
-        String fileName = FilesystemHandler.concat(this.jsonFolder,"maptree.json");
+        String fileName = FilesystemHandler.concat(this.jsonFolder, "maptree.json");
         JSONObject maptree = FilesystemHandler.readJSON(fileName);
         JSONArray maps = (JSONArray) maptree.get("maps");
 
-        for (int i=0;i<maps.size();i++) {
+        for (int i = 0; i < maps.size(); i++) {
             JSONObject currentMap = (JSONObject) maps.get(i);
-            readMap(currentMap,null);
+            readMap(currentMap, null);
         }
     }
 
-    public void readMap(JSONObject currentJSON,Map parent) {
+    public void readMap(JSONObject currentJSON, Map parent) {
         Map map = new Map();
-        map.setUniqueId((String)currentJSON.get("id"));
-        map.setMapFilePath(FilesystemHandler.concat(this.mapFolder,map.getMapId()));
+        map.setUniqueId((String) currentJSON.get("id"));
+        map.setMapFilePath(FilesystemHandler.concat(this.mapFolder, map.getMapId()));
         int idNum = this.extractMapIdNumber(map.getMapId());
-        this.idGenerator.setIdUsed(idNum,true);
+        this.idGenerator.setIdUsed(idNum, true);
         map.load();
         map.setTileset(this.tilesetManager.getTilesetAtIndex(map.getTilesetId()));
 
@@ -147,23 +147,23 @@ public class MapManager {
         }
 
         JSONArray subMaps = (JSONArray) currentJSON.get("submaps");
-        for (int i = 0;i<subMaps.size();i++) {
+        for (int i = 0; i < subMaps.size(); i++) {
             JSONObject jsonMap = (JSONObject) subMaps.get(i);
-            this.readMap(jsonMap,map);
+            this.readMap(jsonMap, map);
         }
     }
 
-    public void saveSubMapTree(Map map,JSONArray mapTreeSave) {
+    public void saveSubMapTree(Map map, JSONArray mapTreeSave) {
 
         JSONObject currentMap = new JSONObject();
-        currentMap.put("id",map.getMapId());
+        currentMap.put("id", map.getMapId());
         JSONArray subMaps = new JSONArray();
 
         for (Map current : map.getChildren()) {
-            saveSubMapTree(current,subMaps);
+            saveSubMapTree(current, subMaps);
         }
 
-        currentMap.put("submaps",subMaps);
+        currentMap.put("submaps", subMaps);
         mapTreeSave.add(currentMap);
 
     }
@@ -171,7 +171,7 @@ public class MapManager {
     private int extractMapIdNumber(String input) {
         if (input != null) {
             int pos = input.indexOf(".json");
-            String numbers = input.substring("map".length(),pos);
+            String numbers = input.substring("map".length(), pos);
             return Integer.valueOf(numbers);
         }
         return -1;

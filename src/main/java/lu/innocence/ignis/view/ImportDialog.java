@@ -49,13 +49,13 @@ public class ImportDialog extends Stage {
         this.setScene(scene);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, t -> {
-            if(t.getCode()== KeyCode.ESCAPE) {
+            if (t.getCode() == KeyCode.ESCAPE) {
                 this.close();
             }
         });
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10,10,0,10));
+        grid.setPadding(new Insets(10, 10, 0, 10));
         grid.setHgap(10);
         grid.setVgap(10);
 
@@ -63,15 +63,15 @@ public class ImportDialog extends Stage {
         ColumnConstraints column2 = new ColumnConstraints(300);
         ColumnConstraints column3 = new ColumnConstraints(100);
 
-        grid.getColumnConstraints().addAll(column1,column2,column3);
+        grid.getColumnConstraints().addAll(column1, column2, column3);
 
         this.categoriesListView = new ListView<>();
         this.categoriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)
                 -> this.initSelectedCategory(newValue));
-        grid.add(this.categoriesListView,0,0);
+        grid.add(this.categoriesListView, 0, 0);
 
         this.elementsListView = new ListView<>();
-        grid.add(elementsListView,1,0);
+        grid.add(elementsListView, 1, 0);
 
         this.categoriesListView.setCellFactory(param -> new CustomListCell());
 
@@ -89,7 +89,7 @@ public class ImportDialog extends Stage {
 
                 String cat = this.categoriesListView.getSelectionModel().getSelectedItem();
                 String dir = this.project.getAssetStructure().getPath(cat);
-                if (FilesystemHandler.copy(file.getAbsolutePath(),FilesystemHandler.concat(dir,file.getName()))) {
+                if (FilesystemHandler.copy(file.getAbsolutePath(), FilesystemHandler.concat(dir, file.getName()))) {
                     this.initSelectedCategory(cat);
                 }
             }
@@ -103,9 +103,9 @@ public class ImportDialog extends Stage {
         previewButton.setText("Preview");
         previewButton.setPrefWidth(120);
 
-        rightPanel.getChildren().addAll(importButton,previewButton,deleteButton);
+        rightPanel.getChildren().addAll(importButton, previewButton, deleteButton);
 
-        grid.add(rightPanel,2,0);
+        grid.add(rightPanel, 2, 0);
 
         root.setCenter(grid);
 
@@ -142,11 +142,11 @@ public class ImportDialog extends Stage {
             for (String file : FilesystemHandler.readSubFiles(path)) {
 
                 boolean audio = AssetStructure.isAudio(category)
-                        && FilesystemHandler.isAudio(FilesystemHandler.concat(path,file));
+                        && FilesystemHandler.isAudio(FilesystemHandler.concat(path, file));
                 boolean image = AssetStructure.isImage(category)
-                        && FilesystemHandler.isImage(FilesystemHandler.concat(path,file));
+                        && FilesystemHandler.isImage(FilesystemHandler.concat(path, file));
                 boolean json = AssetStructure.isJSON(category)
-                        && FilesystemHandler.isFile(FilesystemHandler.concat(path,file));
+                        && FilesystemHandler.isFile(FilesystemHandler.concat(path, file));
 
                 if (audio || image || json) {
                     ImportDialog.this.elementsListView.getItems().add(file);

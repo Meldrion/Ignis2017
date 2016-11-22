@@ -13,14 +13,12 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.FilesystemHandler;
 import lu.innocence.ignis.engine.ProjectManager;
 
-import java.io.File;
 import java.util.List;
 
 
@@ -51,7 +49,7 @@ public class LoadProjectDialog extends Stage {
         this.setScene(scene);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, t -> {
-            if(t.getCode()== KeyCode.ESCAPE) {
+            if (t.getCode() == KeyCode.ESCAPE) {
                 this.close();
             }
         });
@@ -65,15 +63,15 @@ public class LoadProjectDialog extends Stage {
         ColumnConstraints column1 = new ColumnConstraints(90);
         ColumnConstraints column2 = new ColumnConstraints(230);
 
-        grid.getColumnConstraints().addAll(column1,column2);
+        grid.getColumnConstraints().addAll(column1, column2);
 
         Text rootPathLabel = new Text();
         rootPathLabel.setText("Root Path");
-        grid.add(rootPathLabel,0,0);
+        grid.add(rootPathLabel, 0, 0);
 
         this.rootPathTextField = new TextField();
         this.rootPathTextField.setEditable(false);
-        grid.add(this.rootPathTextField,1,0);
+        grid.add(this.rootPathTextField, 1, 0);
 
         Button button = new Button();
         button.setText("...");
@@ -84,14 +82,14 @@ public class LoadProjectDialog extends Stage {
             }
         });
 
-        grid.add(button,2,0);
+        grid.add(button, 2, 0);
 
         Text projectsLabel = new Text();
         projectsLabel.setText("Projects in this path: ");
-        grid.add(projectsLabel,0,1,3,1);
+        grid.add(projectsLabel, 0, 1, 3, 1);
 
         this.projectsList = new ListView<>();
-        grid.add(projectsList,0,2,3,1);
+        grid.add(projectsList, 0, 2, 3, 1);
 
 
         Button deleteButton = new Button();
@@ -100,12 +98,12 @@ public class LoadProjectDialog extends Stage {
         deleteButton.setOnAction(event -> {
             if (this.projectsList.getSelectionModel().getSelectedIndex() > -1) {
                 String selected = this.projectsList.getSelectionModel().getSelectedItem();
-                String path = FilesystemHandler.concat(ProjectManager.getInstance().getRootFolder(),selected);
+                String path = FilesystemHandler.concat(ProjectManager.getInstance().getRootFolder(), selected);
                 ProjectManager.getInstance().deleteProject(path);
                 this.buildProjectList();
             }
         });
-        grid.add(deleteButton,0,3,3,1);
+        grid.add(deleteButton, 0, 3, 3, 1);
 
         root.setCenter(grid);
 
@@ -132,7 +130,7 @@ public class LoadProjectDialog extends Stage {
         cancelButton.setText("Cancel");
         cancelButton.setOnAction(event -> this.close());
 
-        bottomBar.getChildren().addAll(confirmButton,cancelButton);
+        bottomBar.getChildren().addAll(confirmButton, cancelButton);
 
         root.setBottom(bottomBar);
 

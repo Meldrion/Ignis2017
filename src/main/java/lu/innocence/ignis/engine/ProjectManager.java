@@ -26,11 +26,15 @@ public class ProjectManager {
     }
 
     public static ProjectManager getInstance() {
-        if (ProjectManager.instance == null ) {
+        if (ProjectManager.instance == null) {
             ProjectManager.instance = new ProjectManager();
         }
 
         return ProjectManager.instance;
+    }
+
+    public Project getProject() {
+        return this.currentProject;
     }
 
     public void setProject(Project project) {
@@ -38,16 +42,11 @@ public class ProjectManager {
         this.fireUpdate();
     }
 
-    public Project getProject() {
-        return this.currentProject;
-    }
-
-
-    public boolean createProject(String rootPath,String projectName,
-                                 String projectTitle,String devName,
+    public boolean createProject(String rootPath, String projectName,
+                                 String projectTitle, String devName,
                                  String devCompany) {
         Project project = new Project();
-        boolean worked = project.create(rootPath,projectName,projectTitle,devName,devCompany);
+        boolean worked = project.create(rootPath, projectName, projectTitle, devName, devCompany);
         this.setProject(project);
         return worked;
     }
@@ -64,11 +63,11 @@ public class ProjectManager {
 
     public void init() {
 
-        this.rootFolder = FilesystemHandler.concat(FilesystemHandler.getUserHomeDir(),"ignis");
+        this.rootFolder = FilesystemHandler.concat(FilesystemHandler.getUserHomeDir(), "ignis");
 
         // Hidden Folder for config files
         FilesystemHandler.createFolder(
-                FilesystemHandler.concat(FilesystemHandler.getUserHomeDir(),".ignis"));
+                FilesystemHandler.concat(FilesystemHandler.getUserHomeDir(), ".ignis"));
 
         // Project Folder
         FilesystemHandler.createFolder(this.rootFolder);
@@ -96,7 +95,7 @@ public class ProjectManager {
 
     private boolean isValidProject(String folder) {
         if (FilesystemHandler.isFolder(folder)) {
-            String pJSONPath = FilesystemHandler.concat(folder,"project.json");
+            String pJSONPath = FilesystemHandler.concat(folder, "project.json");
             return FilesystemHandler.isFile(pJSONPath);
         }
         return false;

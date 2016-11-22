@@ -129,7 +129,7 @@ public class TilesetTab extends GameDBTab {
         centerBox.getChildren().add(centerHPanel);
 
         centerBox.setMaxHeight(Integer.MAX_VALUE);
-        VBox.setVgrow(centerHPanel,Priority.ALWAYS);
+        VBox.setVgrow(centerHPanel, Priority.ALWAYS);
 
         this.setCenter(centerBox);
     }

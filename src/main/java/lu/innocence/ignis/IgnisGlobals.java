@@ -12,7 +12,7 @@ import java.net.URL;
  */
 public class IgnisGlobals {
 
-    public static int[] fixCoords(int startX,int startY, int endX,int endY) {
+    public static int[] fixCoords(int startX, int startY, int endX, int endY) {
         int swap;
 
         if (endX < startX) {
@@ -33,7 +33,7 @@ public class IgnisGlobals {
             endY += 1;
         }
 
-        int[] returnArray = {startX,startY,endX,endY};
+        int[] returnArray = {startX, startY, endX, endY};
         return returnArray;
     }
 

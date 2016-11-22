@@ -26,7 +26,7 @@ import org.apache.logging.log4j.Logger;
 /**
  *
  */
-public class Ignis extends Application implements ActiveProjectListener , GUIButtonsUpdate{
+public class Ignis extends Application implements ActiveProjectListener, GUIButtonsUpdate {
 
     private static final Logger LOGGER = LogManager.getLogger(Ignis.class);
     private MapCanvas mapCanvas;
@@ -47,13 +47,17 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     private Button audioManagerButton;
     private Button saveProjectBtn;
 
+    // RunConfig Linux
+    // -Dprism.verbose=true -Dprism.forceGPU=true
+    public static void main(String args[]) {
+        launch(args);
+    }
 
     /**
-     *
      * @param topContainer
      * @param mainStage
      */
-    private void buildMainMenu(VBox topContainer,Stage mainStage) {
+    private void buildMainMenu(VBox topContainer, Stage mainStage) {
         MenuBar menuBar = new MenuBar();
         // Use system menu bar
         menuBar.setUseSystemMenuBar(true);
@@ -79,11 +83,10 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     }
 
     /**
-     *
      * @param topContainer
      * @param mainStage
      */
-    private void buildToolbar(VBox topContainer,Stage mainStage) {
+    private void buildToolbar(VBox topContainer, Stage mainStage) {
         ToolBar toolBar = new ToolBar();  //Creates our tool-bar to hold the buttons.
         topContainer.getChildren().add(toolBar);
         Button newProjectBtn = new Button();
@@ -104,20 +107,20 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         });
         // Tools Button Group
         ToggleGroup toolsGroup = new ToggleGroup();
-        this.penToolButton = new ToggleButton ();
+        this.penToolButton = new ToggleButton();
         penToolButton.setFocusTraversable(false);
         penToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-line-2.png").getFile()));
         penToolButton.setToggleGroup(toolsGroup);
         penToolButton.setSelected(true);
-        this.brushToolButton = new ToggleButton ();
+        this.brushToolButton = new ToggleButton();
         brushToolButton.setFocusTraversable(false);
         brushToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-brush.png").getFile()));
         brushToolButton.setToggleGroup(toolsGroup);
-        this.fillToolButton = new ToggleButton ();
+        this.fillToolButton = new ToggleButton();
         fillToolButton.setFocusTraversable(false);
         fillToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-fill-2.png").getFile()));
         fillToolButton.setToggleGroup(toolsGroup);
-        this.eraseToolButton = new ToggleButton ();
+        this.eraseToolButton = new ToggleButton();
         eraseToolButton.setFocusTraversable(false);
         eraseToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-eraser-2.png").getFile()));
         eraseToolButton.setToggleGroup(toolsGroup);
@@ -141,20 +144,20 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         });
         // Tools Button Group
         ToggleGroup layersGroup = new ToggleGroup();
-        this.layer1Button = new ToggleButton ();
+        this.layer1Button = new ToggleButton();
         this.layer1Button.setFocusTraversable(false);
         this.layer1Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_bottom_24.png").getFile()));
         this.layer1Button.setToggleGroup(layersGroup);
         this.layer1Button.setSelected(true);
-        this.layer2Button = new ToggleButton ();
+        this.layer2Button = new ToggleButton();
         this.layer2Button.setFocusTraversable(false);
         this.layer2Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_middle_24.png").getFile()));
         this.layer2Button.setToggleGroup(layersGroup);
-        this.layer3Button = new ToggleButton ();
+        this.layer3Button = new ToggleButton();
         this.layer3Button.setFocusTraversable(false);
         this.layer3Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
         this.layer3Button.setToggleGroup(layersGroup);
-        this.layer4Button = new ToggleButton ();
+        this.layer4Button = new ToggleButton();
         this.layer4Button.setFocusTraversable(false);
         this.layer4Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
         this.layer4Button.setToggleGroup(layersGroup);
@@ -180,13 +183,13 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         this.importManagerButton.setFocusTraversable(false);
         this.importManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/import-icon-24.png").getFile()));
         this.importManagerButton.setOnAction(event -> {
-            new ImportDialog(mainStage,this.project);
+            new ImportDialog(mainStage, this.project);
         });
 
         this.gameDBButton = new Button();
         this.gameDBButton.setFocusTraversable(false);
         this.gameDBButton.setOnAction(event -> {
-            GameDatabase gameDatabase = new GameDatabase(mainStage,this.project);
+            GameDatabase gameDatabase = new GameDatabase(mainStage, this.project);
             gameDatabase.showAndWait();
         });
         this.gameDBButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/ignis24px.png").getFile()));
@@ -194,14 +197,13 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         this.audioManagerButton = new Button();
         this.audioManagerButton.setFocusTraversable(false);
         this.audioManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/audioManager22.png").getFile()));
-        toolBar.getItems().addAll(newProjectBtn,openProjectBtn,saveProjectBtn,new Separator(),
-                penToolButton,brushToolButton,fillToolButton,eraseToolButton,new Separator(),
-                layer1Button,layer2Button,layer3Button,layer4Button,new Separator(),importManagerButton,gameDBButton,audioManagerButton);
+        toolBar.getItems().addAll(newProjectBtn, openProjectBtn, saveProjectBtn, new Separator(),
+                penToolButton, brushToolButton, fillToolButton, eraseToolButton, new Separator(),
+                layer1Button, layer2Button, layer3Button, layer4Button, new Separator(), importManagerButton, gameDBButton, audioManagerButton);
 
     }
 
     /**
-     *
      * @param primaryStage
      */
     private void buildUserInterface(Stage primaryStage) {
@@ -213,19 +215,19 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         VBox topContainer = new VBox();
         root.setTop(topContainer);
 
-        buildMainMenu(topContainer,primaryStage);
-        buildToolbar(topContainer,primaryStage);
+        buildMainMenu(topContainer, primaryStage);
+        buildToolbar(topContainer, primaryStage);
 
-        this.mapCanvas = new MapCanvas(640,480);
-        Canvas uiLayer = new Canvas(640,480);
+        this.mapCanvas = new MapCanvas(640, 480);
+        Canvas uiLayer = new Canvas(640, 480);
         mapCanvas.linkFrontCanvas(uiLayer);
-        Pane pane = new Pane(mapCanvas,uiLayer);
+        Pane pane = new Pane(mapCanvas, uiLayer);
         mapCanvas.linkLayerPane(pane);
         mapCanvas.setMap(null);
         mapCanvas.addGUIButtonsListener(this);
 
         ScrollPane s1 = new ScrollPane();
-        s1.setPrefSize(640  , 480);
+        s1.setPrefSize(640, 480);
         s1.setContent(pane);
         root.setCenter(s1);
 
@@ -233,8 +235,8 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         ScrollPane tilesetScroller = new ScrollPane();
 
         tilesetScroller.heightProperty().addListener(observable -> {
-            this.tilesetCanvas.containerSizeChanged((int)tilesetScroller.getWidth(),
-                    (int)tilesetScroller.getHeight());
+            this.tilesetCanvas.containerSizeChanged((int) tilesetScroller.getWidth(),
+                    (int) tilesetScroller.getHeight());
         });
 
         tilesetScroller.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -251,7 +253,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
         this.mapTree = new MapTree(primaryStage);
 
         leftSplitter.getItems().add(mapTree);
-        leftSplitter.setDividerPosition(0,0.7);
+        leftSplitter.setDividerPosition(0, 0.7);
 
         root.setLeft(leftSplitter);
 
@@ -261,12 +263,11 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     }
 
     /**
-     *
      * @param primaryStage
      * @throws Exception
      */
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
 
         ProjectManager.getInstance().init();
         ProjectManager.getInstance().addActiveProjectListener(this);
@@ -276,7 +277,6 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     }
 
     /**
-     *
      * @param p
      */
     @Override
@@ -302,8 +302,8 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
 
             TilesetManager tsManager = p.getTilesetManager();
             tsManager.setTilesetMax(10);
-            tsManager.setTileset(tileset,0);
-            tsManager.setTileset(cave,1);
+            tsManager.setTileset(tileset, 0);
+            tsManager.setTileset(cave, 1);
 
             mapManager.loadMapTree();
             this.mapTree.setProject(p);
@@ -333,15 +333,7 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
 
     }
 
-
-    // RunConfig Linux
-    // -Dprism.verbose=true -Dprism.forceGPU=true
-    public static void main(String args[]) {
-        launch(args);
-    }
-
     /**
-     *
      * @param layerIndex
      */
     @Override
@@ -365,7 +357,6 @@ public class Ignis extends Application implements ActiveProjectListener , GUIBut
     }
 
     /**
-     *
      * @param toolIndex
      */
     @Override

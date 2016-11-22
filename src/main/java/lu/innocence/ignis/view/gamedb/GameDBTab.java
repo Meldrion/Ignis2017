@@ -19,7 +19,7 @@ public class GameDBTab extends BorderPane {
 
         VBox leftPanel = new VBox();
         leftPanel.setSpacing(10);
-        leftPanel.setPadding(new Insets(10,10,10,10));
+        leftPanel.setPadding(new Insets(10, 10, 10, 10));
 
         Text text = new Text();
         text.setText(categoryName);

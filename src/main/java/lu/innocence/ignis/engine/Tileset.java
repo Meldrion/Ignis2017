@@ -18,12 +18,12 @@ public class Tileset {
     }
 
     public void loadImage(String imagePath) {
-        this.tilesetImage = new Image(String.format("file:%s",imagePath));
+        this.tilesetImage = new Image(String.format("file:%s", imagePath));
     }
 
-    public void drawTileTo(GraphicsContext g,int x, int y, int tsX, int tsY) {
-        g.drawImage(this.tilesetImage,tsX * cellSize,tsY * cellSize,cellSize,cellSize,
-                   x * cellSize,y * cellSize,cellSize,cellSize);
+    public void drawTileTo(GraphicsContext g, int x, int y, int tsX, int tsY) {
+        g.drawImage(this.tilesetImage, tsX * cellSize, tsY * cellSize, cellSize, cellSize,
+                x * cellSize, y * cellSize, cellSize, cellSize);
     }
 
     public Image getTilesetImage() {
@@ -38,12 +38,12 @@ public class Tileset {
         this.index = index;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

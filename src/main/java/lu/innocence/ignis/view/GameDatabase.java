@@ -25,7 +25,7 @@ public class GameDatabase extends Stage {
     private boolean accepted;
     private Project project;
 
-    public GameDatabase(Stage parentStage,Project project) {
+    public GameDatabase(Stage parentStage, Project project) {
         this.accepted = false;
         this.project = project;
         this.initModality(Modality.APPLICATION_MODAL);
@@ -44,7 +44,7 @@ public class GameDatabase extends Stage {
         this.setScene(scene);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, t -> {
-            if(t.getCode()== KeyCode.ESCAPE) {
+            if (t.getCode() == KeyCode.ESCAPE) {
                 this.close();
             }
         });
@@ -65,12 +65,12 @@ public class GameDatabase extends Stage {
         Tab itemTab = new Tab();
         itemTab.setText("Items");
 
-        Tab tilesetTab =  new Tab();
+        Tab tilesetTab = new Tab();
         tilesetTab.setText("Tileset");
         tilesetTabContent = new TilesetTab(project.getTilesetManager());
         tilesetTab.setContent(tilesetTabContent);
 
-        mainTabber.getTabs().addAll(actorTab,classTab,itemTab,skillTab,tilesetTab);
+        mainTabber.getTabs().addAll(actorTab, classTab, itemTab, skillTab, tilesetTab);
 
         root.setCenter(mainTabber);
 
@@ -92,7 +92,7 @@ public class GameDatabase extends Stage {
         cancelButton.setText("Cancel");
         cancelButton.setOnAction(event -> this.close());
 
-        bottomBar.getChildren().addAll(cancelButton,acceptButton);
+        bottomBar.getChildren().addAll(cancelButton, acceptButton);
         root.setBottom(bottomBar);
     }
 

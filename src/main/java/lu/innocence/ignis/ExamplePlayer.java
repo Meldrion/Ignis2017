@@ -38,19 +38,22 @@ package lu.innocence.ignis;
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.jcraft.jogg.*;
-import com.jcraft.jorbis.*;
-import java.io.InputStream;
+import com.jcraft.jogg.Packet;
+import com.jcraft.jogg.Page;
+import com.jcraft.jogg.StreamState;
+import com.jcraft.jogg.SyncState;
+import com.jcraft.jorbis.Block;
+import com.jcraft.jorbis.Comment;
+import com.jcraft.jorbis.DspState;
+import com.jcraft.jorbis.Info;
+
+import javax.sound.sampled.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownServiceException;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
 
 /**
  * The <code>ExamplePlayer</code> thread class will simply download and play
@@ -59,18 +62,9 @@ import javax.sound.sampled.SourceDataLine;
  * @author Jon Kristensen
  * @version 1.0
  */
-public class ExamplePlayer extends Thread
-{
+public class ExamplePlayer extends Thread {
     // If you wish to debug this source, please set the variable below to true.
     private final boolean debugMode = true;
-
-    /*
-     * URLConnection and InputStream objects so that we can open a connection to
-     * the media file.
-     */
-    private URLConnection urlConnection = null;
-    private InputStream inputStream = null;
-
     /*
      * We need a buffer, it's size, a count to know how many bytes we have readJSON
      * and an index to keep track of where we are. This is standard networking
@@ -80,7 +74,6 @@ public class ExamplePlayer extends Thread
     int bufferSize = 2048;
     int count = 0;
     int index = 0;
-
     /*
      * JOgg and JOrbis require fields for the converted buffer. This is a buffer
      * that is modified in regards to the number of audio channels. Naturally,
@@ -88,7 +81,12 @@ public class ExamplePlayer extends Thread
      */
     byte[] convertedBuffer;
     int convertedBufferSize;
-
+    /*
+     * URLConnection and InputStream objects so that we can open a connection to
+     * the media file.
+     */
+    private URLConnection urlConnection = null;
+    private InputStream inputStream = null;
     // The source data line onto which data can be written.
     private SourceDataLine outputLine = null;
 
@@ -111,14 +109,22 @@ public class ExamplePlayer extends Thread
     private Info jorbisInfo = new Info();
 
     /**
+     * The constructor; will configure the <code>InputStream</code>.
+     *
+     * @param pUrl the URL to be opened
+     */
+    ExamplePlayer(String pUrl) {
+        configureInputStream(getUrl(pUrl));
+    }
+
+    /**
      * The programs <code>main()</code> method. Will readJSON the first
      * command-line argument and use it as URL, after which it will start the
      * thread.
      *
      * @param args command-line arguments
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         // Set the URL as the first argument, if any.
         // String url = args.length > 0 ? url = args[0] : null;
         String url = "file:///C:/Users/Fabien/Development/Java/JavaFX_Test/templeLevel.ogg";
@@ -127,26 +133,13 @@ public class ExamplePlayer extends Thread
          * If the url variable is set, start the thread. If not, give an error
          * and die.
          */
-        if(url != null)
-        {
+        if (url != null) {
             ExamplePlayer examplePlayer = new ExamplePlayer(url);
             examplePlayer.start();
-        }
-        else
-        {
+        } else {
             System.err.println("Please provide an argument with the file to "
                     + "play.");
         }
-    }
-
-    /**
-     * The constructor; will configure the <code>InputStream</code>.
-     *
-     * @param pUrl the URL to be opened
-     */
-    ExamplePlayer(String pUrl)
-    {
-        configureInputStream(getUrl(pUrl));
     }
 
     /**
@@ -155,16 +148,12 @@ public class ExamplePlayer extends Thread
      * @param pUrl the URL to be opened
      * @return the URL object
      */
-    public URL getUrl(String pUrl)
-    {
+    public URL getUrl(String pUrl) {
         URL url = null;
 
-        try
-        {
+        try {
             url = new URL(pUrl);
-        }
-        catch(MalformedURLException exception)
-        {
+        } catch (MalformedURLException exception) {
             System.err.println("Malformed \"url\" parameter: \"" + pUrl + "\"");
         }
 
@@ -177,32 +166,22 @@ public class ExamplePlayer extends Thread
      *
      * @param pUrl the url to the media file
      */
-    private void configureInputStream(URL pUrl)
-    {
+    private void configureInputStream(URL pUrl) {
         // Try to open a connection to the URL.
-        try
-        {
+        try {
             urlConnection = pUrl.openConnection();
-        }
-        catch(UnknownServiceException exception)
-        {
+        } catch (UnknownServiceException exception) {
             System.err.println("The protocol does not support input.");
-        }
-        catch(IOException exception)
-        {
+        } catch (IOException exception) {
             System.err.println("An I/O error occoured while trying create the "
                     + "URL connection.");
         }
 
         // If we have a connection, try to create an input stream.
-        if(urlConnection != null)
-        {
-            try
-            {
+        if (urlConnection != null) {
+            try {
                 inputStream = urlConnection.getInputStream();
-            }
-            catch(IOException exception)
-            {
+            } catch (IOException exception) {
                 System.err
                         .println("An I/O error occoured while trying to get an "
                                 + "input stream from the URL.");
@@ -217,11 +196,9 @@ public class ExamplePlayer extends Thread
      * JOgg JOrbis libraries, readJSON the header, initialize the sound system, readJSON
      * the body of the stream and clean up.
      */
-    public void run()
-    {
+    public void run() {
         // Check that we got an InputStream.
-        if(inputStream == null)
-        {
+        if (inputStream == null) {
             System.err.println("We don't have an input stream and therefor "
                     + "cannot continue.");
             return;
@@ -234,10 +211,8 @@ public class ExamplePlayer extends Thread
          * If we can readJSON the header, we try to inialize the sound system. If we
          * could initialize the sound system, we try to readJSON the body.
          */
-        if(readHeader())
-        {
-            if(initializeSound())
-            {
+        if (readHeader()) {
+            if (initializeSound()) {
                 readBody();
             }
         }
@@ -251,8 +226,7 @@ public class ExamplePlayer extends Thread
      * object. After that, we prepare the <code>SyncState</code> buffer. Then
      * we "initialize" our buffer, taking the data in <code>SyncState</code>.
      */
-    private void initializeJOrbis()
-    {
+    private void initializeJOrbis() {
         debugOutput("Initializing JOrbis.");
 
         // Initialize SyncState
@@ -276,8 +250,7 @@ public class ExamplePlayer extends Thread
      *
      * @return true if the header was successfully readJSON, false otherwise
      */
-    private boolean readHeader()
-    {
+    private boolean readHeader() {
         debugOutput("Starting to readJSON the header.");
 
         /*
@@ -299,15 +272,11 @@ public class ExamplePlayer extends Thread
          * <code>switch</code> statement which does what it's supposed to do in
          * regards to the current packet.
          */
-        while(needMoreData)
-        {
+        while (needMoreData) {
             // Read from the InputStream.
-            try
-            {
+            try {
                 count = inputStream.read(buffer, index, bufferSize);
-            }
-            catch(IOException exception)
-            {
+            } catch (IOException exception) {
                 System.err.println("Could not readJSON from the input stream.");
                 System.err.println(exception);
             }
@@ -321,25 +290,20 @@ public class ExamplePlayer extends Thread
              * things. For packet two and three, the procedure is the same: we
              * take out a page, and then we take out the packet.
              */
-            switch(packet)
-            {
+            switch (packet) {
                 // The first packet.
-                case 1:
-                {
+                case 1: {
                     // We take out a page.
-                    switch(joggSyncState.pageout(joggPage))
-                    {
+                    switch (joggSyncState.pageout(joggPage)) {
                         // If there is a hole in the data, we must exit.
-                        case -1:
-                        {
+                        case -1: {
                             System.err.println("There is a hole in the first "
                                     + "packet data.");
                             return false;
                         }
 
                         // If we need more data, we break to get it.
-                        case 0:
-                        {
+                        case 0: {
                             break;
                         }
 
@@ -351,8 +315,7 @@ public class ExamplePlayer extends Thread
                          * doesn't contain any errors, that the packet doesn't
                          * contain any errors and that it's Vorbis data.
                          */
-                        case 1:
-                        {
+                        case 1: {
                             // Initializes and resets StreamState.
                             joggStreamState.init(joggPage.serialno());
                             joggStreamState.reset();
@@ -362,8 +325,7 @@ public class ExamplePlayer extends Thread
                             jorbisComment.init();
 
                             // Check the page (serial number and stuff).
-                            if(joggStreamState.pagein(joggPage) == -1)
-                            {
+                            if (joggStreamState.pagein(joggPage) == -1) {
                                 System.err.println("We got an error while "
                                         + "reading the first header page.");
                                 return false;
@@ -373,8 +335,7 @@ public class ExamplePlayer extends Thread
                              * Try to extract a packet. All other return values
                              * than "1" indicates there's something wrong.
                              */
-                            if(joggStreamState.packetout(joggPacket) != 1)
-                            {
+                            if (joggStreamState.packetout(joggPacket) != 1) {
                                 System.err.println("We got an error while "
                                         + "reading the first header packet.");
                                 return false;
@@ -386,9 +347,8 @@ public class ExamplePlayer extends Thread
                              * among other things. If this fails, it's not
                              * Vorbis data.
                              */
-                            if(jorbisInfo.synthesis_headerin(jorbisComment,
-                                    joggPacket) < 0)
-                            {
+                            if (jorbisInfo.synthesis_headerin(jorbisComment,
+                                    joggPacket) < 0) {
                                 System.err.println("We got an error while "
                                         + "interpreting the first packet. "
                                         + "Apparantly, it's not Vorbis data.");
@@ -406,92 +366,83 @@ public class ExamplePlayer extends Thread
                      * the second packet. We don't want to readJSON from the input
                      * stream again if it's not necessary.
                      */
-                    if(packet == 1) break;
+                    if (packet == 1) break;
                 }
 
                 // The code for the second and third packets follow.
-                case 2:    case 3:
-            {
-                // Try to get a new page again.
-                switch(joggSyncState.pageout(joggPage))
-                {
-                    // If there is a hole in the data, we must exit.
-                    case -1:
-                    {
-                        System.err.println("There is a hole in the second "
-                                + "or third packet data.");
-                        return false;
-                    }
+                case 2:
+                case 3: {
+                    // Try to get a new page again.
+                    switch (joggSyncState.pageout(joggPage)) {
+                        // If there is a hole in the data, we must exit.
+                        case -1: {
+                            System.err.println("There is a hole in the second "
+                                    + "or third packet data.");
+                            return false;
+                        }
 
-                    // If we need more data, we break to get it.
-                    case 0:
-                    {
-                        break;
-                    }
+                        // If we need more data, we break to get it.
+                        case 0: {
+                            break;
+                        }
 
                         /*
                          * Here is where we take the page, extract a packet and
                          * and (if everything goes well) give the information to
                          * the Info and Comment objects like we did above.
                          */
-                    case 1:
-                    {
-                        // Share the page with the StreamState object.
-                        joggStreamState.pagein(joggPage);
+                        case 1: {
+                            // Share the page with the StreamState object.
+                            joggStreamState.pagein(joggPage);
 
                             /*
                              * Just like the switch(...packetout...) lines
                              * above.
                              */
-                        switch(joggStreamState.packetout(joggPacket))
-                        {
-                            // If there is a hole in the data, we must exit.
-                            case -1:
-                            {
-                                System.err
-                                        .println("There is a hole in the first"
-                                                + "packet data.");
-                                return false;
-                            }
+                            switch (joggStreamState.packetout(joggPacket)) {
+                                // If there is a hole in the data, we must exit.
+                                case -1: {
+                                    System.err
+                                            .println("There is a hole in the first"
+                                                    + "packet data.");
+                                    return false;
+                                }
 
-                            // If we need more data, we break to get it.
-                            case 0:
-                            {
-                                break;
-                            }
+                                // If we need more data, we break to get it.
+                                case 0: {
+                                    break;
+                                }
 
-                            // We got a packet, let's process it.
-                            case 1:
-                            {
+                                // We got a packet, let's process it.
+                                case 1: {
                                     /*
                                      * Like above, we give the packet to the
                                      * Info and Comment objects.
                                      */
-                                jorbisInfo.synthesis_headerin(
-                                        jorbisComment, joggPacket);
+                                    jorbisInfo.synthesis_headerin(
+                                            jorbisComment, joggPacket);
 
-                                // Increment packet.
-                                packet++;
+                                    // Increment packet.
+                                    packet++;
 
-                                if(packet == 4)
-                                {
+                                    if (packet == 4) {
                                         /*
                                          * There is no fourth packet, so we will
                                          * just end the loop here.
                                          */
-                                    needMoreData = false;
+                                        needMoreData = false;
+                                    }
+
+                                    break;
                                 }
-
-                                break;
                             }
+
+                            break;
                         }
-
-                        break;
                     }
-                }
 
-                break;
-            }
+                    break;
+                }
             }
 
             // We get the new index and an updated buffer.
@@ -502,8 +453,7 @@ public class ExamplePlayer extends Thread
              * If we need more data but can't get it, the stream doesn't contain
              * enough information.
              */
-            if(count == 0 && needMoreData)
-            {
+            if (count == 0 && needMoreData) {
                 System.err.println("Not enough header data was supplied.");
                 return false;
             }
@@ -521,10 +471,9 @@ public class ExamplePlayer extends Thread
      * source data line.
      *
      * @return true if the sound system was successfully started, false
-     *         otherwise
+     * otherwise
      */
-    private boolean initializeSound()
-    {
+    private boolean initializeSound() {
         debugOutput("Initializing the sound system.");
 
         // This buffer is used by the decoding method.
@@ -548,8 +497,7 @@ public class ExamplePlayer extends Thread
                 audioFormat, AudioSystem.NOT_SPECIFIED);
 
         // Check if the line is supported.
-        if(!AudioSystem.isLineSupported(datalineInfo))
-        {
+        if (!AudioSystem.isLineSupported(datalineInfo)) {
             System.err.println("Audio output line is not supported.");
             return false;
         }
@@ -558,26 +506,19 @@ public class ExamplePlayer extends Thread
          * Everything seems to be alright. Let's try to open a line with the
          * specified format and start the source data line.
          */
-        try
-        {
+        try {
             outputLine = (SourceDataLine) AudioSystem.getLine(datalineInfo);
             outputLine.open(audioFormat);
-        }
-        catch(LineUnavailableException exception)
-        {
+        } catch (LineUnavailableException exception) {
             System.out.println("The audio output line could not be opened due "
                     + "to resource restrictions.");
             System.err.println(exception);
             return false;
-        }
-        catch(IllegalStateException exception)
-        {
+        } catch (IllegalStateException exception) {
             System.out.println("The audio output line is already open.");
             System.err.println(exception);
             return false;
-        }
-        catch(SecurityException exception)
-        {
+        } catch (SecurityException exception) {
             System.out.println("The audio output line could not be opened due "
                     + "to security restrictions.");
             System.err.println(exception);
@@ -603,8 +544,7 @@ public class ExamplePlayer extends Thread
      * This method reads the entire stream body. Whenever it extracts a packet,
      * it will decode it by calling <code>decodeCurrentPacket()</code>.
      */
-    private void readBody()
-    {
+    private void readBody() {
         debugOutput("Reading the body.");
 
         /*
@@ -613,50 +553,41 @@ public class ExamplePlayer extends Thread
          */
         boolean needMoreData = true;
 
-        while(needMoreData)
-        {
-            switch(joggSyncState.pageout(joggPage))
-            {
+        while (needMoreData) {
+            switch (joggSyncState.pageout(joggPage)) {
                 // If there is a hole in the data, we just proceed.
-                case -1:
-                {
+                case -1: {
                     debugOutput("There is a hole in the data. We proceed.");
                 }
 
                 // If we need more data, we break to get it.
-                case 0:
-                {
+                case 0: {
                     break;
                 }
 
                 // If we have successfully checked out a page, we continue.
-                case 1:
-                {
+                case 1: {
                     // Give the page to the StreamState object.
                     joggStreamState.pagein(joggPage);
 
                     // If granulepos() returns "0", we don't need more data.
-                    if(joggPage.granulepos() == 0)
-                    {
+                    if (joggPage.granulepos() == 0) {
                         needMoreData = false;
                         break;
                     }
 
                     // Here is where we process the packets.
-                    processPackets: while(true)
-                    {
-                        switch(joggStreamState.packetout(joggPacket))
-                        {
+                    processPackets:
+                    while (true) {
+                        switch (joggStreamState.packetout(joggPacket)) {
                             // Is it a hole in the data?
-                            case -1:
-                            {
+                            case -1: {
                                 debugOutput("There is a hole in the data, we "
                                         + "continue though.");
                             }
 
                             // If we need more data, we break to get it.
-                            case 0:
-                            {
+                            case 0: {
                                 break processPackets;
                             }
 
@@ -664,8 +595,7 @@ public class ExamplePlayer extends Thread
                              * If we have the data we need, we decode the
                              * packet.
                              */
-                            case 1:
-                            {
+                            case 1: {
                                 decodeCurrentPacket();
                             }
                         }
@@ -675,24 +605,20 @@ public class ExamplePlayer extends Thread
                      * If the page is the end-of-stream, we don't need more
                      * data.
                      */
-                    if(joggPage.eos() != 0) needMoreData = false;
+                    if (joggPage.eos() != 0) needMoreData = false;
                 }
             }
 
             // If we need more data
-            if(needMoreData)
-            {
+            if (needMoreData) {
                 // We get the new index and an updated buffer.
                 index = joggSyncState.buffer(bufferSize);
                 buffer = joggSyncState.data;
 
                 // Read from the InputStream.
-                try
-                {
+                try {
                     count = inputStream.read(buffer, index, bufferSize);
-                }
-                catch(Exception e)
-                {
+                } catch (Exception e) {
                     System.err.println(e);
                     return;
                 }
@@ -701,7 +627,7 @@ public class ExamplePlayer extends Thread
                 joggSyncState.wrote(count);
 
                 // There's no more data in the stream.
-                if(count == 0) needMoreData = false;
+                if (count == 0) needMoreData = false;
             }
         }
         debugOutput("Done reading the body.");
@@ -711,8 +637,7 @@ public class ExamplePlayer extends Thread
      * A clean-up method, called when everything is finished. Clears the
      * JOgg/JOrbis objects and closes the <code>InputStream</code>.
      */
-    private void cleanUp()
-    {
+    private void cleanUp() {
         debugOutput("Cleaning up.");
 
         // Clear the necessary JOgg/JOrbis objects.
@@ -723,27 +648,22 @@ public class ExamplePlayer extends Thread
         joggSyncState.clear();
 
         // Closes the stream.
-        try
-        {
-            if(inputStream != null) inputStream.close();
-        }
-        catch(Exception e)
-        {
+        try {
+            if (inputStream != null) inputStream.close();
+        } catch (Exception e) {
         }
 
         debugOutput("Done cleaning up.");
     }
 
     /**
-     *  Decodes the current packet and sends it to the audio output line.
+     * Decodes the current packet and sends it to the audio output line.
      */
-    private void decodeCurrentPacket()
-    {
+    private void decodeCurrentPacket() {
         int samples;
 
         // Check that the packet is a audio data packet etc.
-        if(jorbisBlock.synthesis(joggPacket) == 0)
-        {
+        if (jorbisBlock.synthesis(joggPacket) == 0) {
             // Give the block to the DspState object.
             jorbisDspState.synthesis_blockin(jorbisBlock);
         }
@@ -755,27 +675,21 @@ public class ExamplePlayer extends Thread
          * Get the PCM information and count the samples. And while these
          * samples are more than zero...
          */
-        while((samples = jorbisDspState.synthesis_pcmout(pcmInfo, pcmIndex))
-                > 0)
-        {
+        while ((samples = jorbisDspState.synthesis_pcmout(pcmInfo, pcmIndex))
+                > 0) {
             // We need to know for how many samples we are going to process.
-            if(samples < convertedBufferSize)
-            {
+            if (samples < convertedBufferSize) {
                 range = samples;
-            }
-            else
-            {
+            } else {
                 range = convertedBufferSize;
             }
 
             // For each channel...
-            for(int i = 0; i < jorbisInfo.channels; i++)
-            {
+            for (int i = 0; i < jorbisInfo.channels; i++) {
                 int sampleIndex = i * 2;
 
                 // For every sample in our range...
-                for(int j = 0; j < range; j++)
-                {
+                for (int j = 0; j < range; j++) {
                     /*
                      * Get the PCM value for the channel at the correct
                      * position.
@@ -786,12 +700,10 @@ public class ExamplePlayer extends Thread
                      * We make sure our value doesn't exceed or falls below
                      * +-32767.
                      */
-                    if(value > 32767)
-                    {
+                    if (value > 32767) {
                         value = 32767;
                     }
-                    if(value < -32768)
-                    {
+                    if (value < -32768) {
                         value = -32768;
                     }
 
@@ -799,7 +711,7 @@ public class ExamplePlayer extends Thread
                      * It the value is less than zero, we bitwise-or it with
                      * 32768 (which is 1000000000000000 = 10^15).
                      */
-                    if(value < 0) value = value | 32768;
+                    if (value < 0) value = value | 32768;
 
                     /*
                      * Take our value and split it into two, one with the last
@@ -831,8 +743,7 @@ public class ExamplePlayer extends Thread
      *
      * @param output the debug output information
      */
-    private void debugOutput(String output)
-    {
-        if(debugMode) System.out.println("Debug: " + output);
+    private void debugOutput(String output) {
+        if (debugMode) System.out.println("Debug: " + output);
     }
 }

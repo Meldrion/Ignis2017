@@ -37,7 +37,7 @@ public class CreateMapDialog extends Stage {
     private Spinner<Integer> heightSpinner;
     private TextField textFieldMapName;
 
-    public CreateMapDialog(Stage parentStage,Project project) {
+    public CreateMapDialog(Stage parentStage, Project project) {
         this.accepted = false;
         this.project = project;
         this.selectedTilesetIndex = -1;
@@ -55,7 +55,7 @@ public class CreateMapDialog extends Stage {
         int h = Integer.parseInt(this.heightSpinner.getEditor().getText());
 
         Map newMap = this.project.getMapManager().createNewMap();
-        newMap.setDimension(w,h);
+        newMap.setDimension(w, h);
         newMap.setName(this.textFieldMapName.getText());
         newMap.setTileset(this.project.getTilesetManager().getTilesetAtIndex(selectedTilesetIndex));
         newMap.save();
@@ -69,13 +69,13 @@ public class CreateMapDialog extends Stage {
         this.setScene(scene);
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, t -> {
-            if(t.getCode()== KeyCode.ESCAPE) {
+            if (t.getCode() == KeyCode.ESCAPE) {
                 this.close();
             }
         });
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10,10,0,10));
+        grid.setPadding(new Insets(10, 10, 0, 10));
         grid.setHgap(10);
         grid.setVgap(10);
 
@@ -83,30 +83,30 @@ public class CreateMapDialog extends Stage {
         labelMapName.setText("Map Name: ");
         this.textFieldMapName = new TextField();
 
-        grid.add(labelMapName,0,0);
-        grid.add(textFieldMapName,1,0,3,1);
+        grid.add(labelMapName, 0, 0);
+        grid.add(textFieldMapName, 1, 0, 3, 1);
 
         Text labelMapWidth = new Text();
         labelMapWidth.setText("Width: ");
-        grid.add(labelMapWidth,0,1);
+        grid.add(labelMapWidth, 0, 1);
 
         widthSpinner = new Spinner<>();
         widthSpinner.setEditable(true);
         widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(20, 200));
-        grid.add(widthSpinner,1,1);
+        grid.add(widthSpinner, 1, 1);
 
         Text labelMapHeight = new Text();
         labelMapHeight.setText("Height: ");
-        grid.add(labelMapHeight,2,1);
+        grid.add(labelMapHeight, 2, 1);
 
         heightSpinner = new Spinner<>();
         heightSpinner.setEditable(true);
         heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(15, 200));
-        grid.add(heightSpinner,3,1);
+        grid.add(heightSpinner, 3, 1);
 
         Text labelTileset = new Text();
         labelTileset.setText("Tileset: ");
-        grid.add(labelTileset,0,2);
+        grid.add(labelTileset, 0, 2);
 
         TextField tilesetTextField = new TextField();
         tilesetTextField.setMaxWidth(Integer.MAX_VALUE);
@@ -130,10 +130,10 @@ public class CreateMapDialog extends Stage {
 
         HBox lineEditWithButton = new HBox();
         lineEditWithButton.setSpacing(10);
-        lineEditWithButton.getChildren().addAll(tilesetTextField,tilesetSearchButton);
+        lineEditWithButton.getChildren().addAll(tilesetTextField, tilesetSearchButton);
         lineEditWithButton.setMaxWidth(Integer.MAX_VALUE);
         HBox.setHgrow(tilesetTextField, Priority.ALWAYS);
-        grid.add(lineEditWithButton,1,2,3,1);
+        grid.add(lineEditWithButton, 1, 2, 3, 1);
 
         root.setCenter(grid);
 
@@ -155,7 +155,7 @@ public class CreateMapDialog extends Stage {
         cancelButton.setText("Cancel");
         cancelButton.setOnAction(event -> this.close());
 
-        bottomBar.getChildren().addAll(cancelButton,acceptButton);
+        bottomBar.getChildren().addAll(cancelButton, acceptButton);
         root.setBottom(bottomBar);
     }
 

@@ -15,7 +15,7 @@ public class AssetStructure {
     public static final String BATTLESPRITE = "battlesprite";
     public static final String CHARACTER = "character";
     public static final String JSON = "json";
-    public static final String OVERLAY  = "overlay";
+    public static final String OVERLAY = "overlay";
     public static final String MAP = "map";
     public static final String GAMEOVER = "gameover";
     public static final String SCENEBACKGROUND = "scenebackground";
@@ -27,6 +27,10 @@ public class AssetStructure {
     public static final String UI = "ui";
 
     private String rootPath;
+
+    public AssetStructure(String rootPath) {
+        this.rootPath = rootPath;
+    }
 
     public static List<String> getAssetFolderNames() {
 
@@ -55,8 +59,8 @@ public class AssetStructure {
 
         List<String> assetNames = getAssetFolderNames();
 
-        for (int i=0;i<assetNames.size();i++) {
-            assetNames.set(i,capitalizeFirstLetter(assetNames.get(i)));
+        for (int i = 0; i < assetNames.size(); i++) {
+            assetNames.set(i, capitalizeFirstLetter(assetNames.get(i)));
         }
 
         return assetNames;
@@ -64,7 +68,7 @@ public class AssetStructure {
 
     public static boolean isAudio(String category) {
         return category != null &&
-                ( category.equalsIgnoreCase(BACKGROUNDMUSIC)
+                (category.equalsIgnoreCase(BACKGROUNDMUSIC)
                         || category.equalsIgnoreCase(SOUNDEFFECT));
     }
 
@@ -97,20 +101,16 @@ public class AssetStructure {
         return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
-    public AssetStructure(String rootPath) {
-        this.rootPath = rootPath;
-    }
-
     public String getAsset() {
-        return FilesystemHandler.concat(this.rootPath,AssetStructure.ASSET);
+        return FilesystemHandler.concat(this.rootPath, AssetStructure.ASSET);
     }
 
     public String getPath(String assetName) {
-        return FilesystemHandler.concat(this.getAsset(),assetName != null ? assetName.toLowerCase() : "not valid");
+        return FilesystemHandler.concat(this.getAsset(), assetName != null ? assetName.toLowerCase() : "not valid");
     }
 
     public String getProjectJSON() {
-            return FilesystemHandler.concat(this.rootPath,"project.json");
+        return FilesystemHandler.concat(this.rootPath, "project.json");
     }
 
 

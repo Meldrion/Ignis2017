@@ -5,10 +5,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import lu.innocence.ignis.IgnisGlobals;
+import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.Tileset;
 import lu.innocence.ignis.event.ActiveMapListener;
 import lu.innocence.ignis.event.TilesetSelectionChanged;
-import lu.innocence.ignis.engine.Map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +45,8 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
 
         this.addEventHandler(MouseEvent.MOUSE_PRESSED, t -> {
 
-            int x = (int)t.getX()/32;
-            int y = (int)t.getY()/32;
+            int x = (int) t.getX() / 32;
+            int y = (int) t.getY() / 32;
 
             this.mouseStartX = x;
             this.mouseStartY = y;
@@ -60,8 +60,8 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
 
         this.addEventHandler(MouseEvent.MOUSE_DRAGGED, t -> {
 
-            int x = (int)t.getX()/32;
-            int y = (int)t.getY()/32;
+            int x = (int) t.getX() / 32;
+            int y = (int) t.getY() / 32;
 
             if (x != lastX || y != lastY) {
                 this.render();
@@ -75,26 +75,26 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
             }
         });
 
-        this.addEventHandler(MouseEvent.MOUSE_RELEASED,t -> {
+        this.addEventHandler(MouseEvent.MOUSE_RELEASED, t -> {
             fireUpdate();
         });
     }
 
     public void render() {
         GraphicsContext g = this.getGraphicsContext2D();
-        g.clearRect(0,0,this.getWidth(),this.getHeight());
+        g.clearRect(0, 0, this.getWidth(), this.getHeight());
         if (this.linkedTileset != null) {
 
-            ChessBGDrawer.drawChessBackground(g,(int)this.getWidth() / 32,(int)this.getHeight() / 32,32,32);
+            ChessBGDrawer.drawChessBackground(g, (int) this.getWidth() / 32, (int) this.getHeight() / 32, 32, 32);
 
-            g.drawImage(this.linkedTileset.getTilesetImage(),0,0);
+            g.drawImage(this.linkedTileset.getTilesetImage(), 0, 0);
 
-            int[] coords = IgnisGlobals.fixCoords(this.mouseStartX,this.mouseStartY,this.mouseEndX,this.mouseEndY);
+            int[] coords = IgnisGlobals.fixCoords(this.mouseStartX, this.mouseStartY, this.mouseEndX, this.mouseEndY);
 
             g.setFill(Color.RED);
             g.setGlobalAlpha(0.5);
-            g.fillRect(coords[0] * this.cellSize,coords[1]  * this.cellSize,
-                    (coords[2] - coords[0])  * this.cellSize,(coords[3] - coords[1]) * this.cellSize);
+            g.fillRect(coords[0] * this.cellSize, coords[1] * this.cellSize,
+                    (coords[2] - coords[0]) * this.cellSize, (coords[3] - coords[1]) * this.cellSize);
             g.setGlobalAlpha(1);
 
         }
@@ -105,8 +105,8 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         if (tileset != null) {
             this.setWidth(tileset.getTilesetImage().getWidth());
             this.setHeight(tileset.getTilesetImage().getHeight());
-            this.linkedTileset =  tileset;
-            this.fitToContainer(this.containerWidth,this.containerHeight);
+            this.linkedTileset = tileset;
+            this.fitToContainer(this.containerWidth, this.containerHeight);
         } else {
             this.linkedTileset = null;
             this.setWidth(0);
@@ -123,16 +123,16 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
 
     private void fireUpdate() {
 
-        int[] coords = IgnisGlobals.fixCoords(this.mouseStartX,this.mouseStartY,this.mouseEndX,this.mouseEndY);
+        int[] coords = IgnisGlobals.fixCoords(this.mouseStartX, this.mouseStartY, this.mouseEndX, this.mouseEndY);
         int w = coords[2] - coords[0];
         int h = coords[3] - coords[1];
 
         for (TilesetSelectionChanged listener : this.tilesetSelectionListener) {
-            listener.tilesetSelectionChanged(coords[0],coords[1],w,h);
+            listener.tilesetSelectionChanged(coords[0], coords[1], w, h);
         }
     }
 
-    private void fitToContainer(int width,int height) {
+    private void fitToContainer(int width, int height) {
         if (this.linkedTileset != null) {
 
             if (this.linkedTileset.getTilesetImage().getHeight() < height) {
@@ -151,10 +151,10 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         this.render();
     }
 
-    public void containerSizeChanged(int width,int height) {
+    public void containerSizeChanged(int width, int height) {
         this.containerWidth = width;
         this.containerHeight = height;
-        this.fitToContainer(width,height);
+        this.fitToContainer(width, height);
     }
 
     @Override

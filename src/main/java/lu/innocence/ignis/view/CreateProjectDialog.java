@@ -1,6 +1,5 @@
 package lu.innocence.ignis.view;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -8,20 +7,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.ProjectManager;
 
-import java.io.File;
-
 /**
  * @author Fabien Steines
  */
-public class CreateProjectDialog extends Stage{
+public class CreateProjectDialog extends Stage {
 
     private TextField rootPathTextField;
 
@@ -44,7 +43,7 @@ public class CreateProjectDialog extends Stage{
 
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, t -> {
-            if(t.getCode()== KeyCode.ESCAPE) {
+            if (t.getCode() == KeyCode.ESCAPE) {
                 this.close();
             }
         });
@@ -57,7 +56,7 @@ public class CreateProjectDialog extends Stage{
         ColumnConstraints column1 = new ColumnConstraints(150);
         ColumnConstraints column2 = new ColumnConstraints(200);
 
-        grid.getColumnConstraints().addAll(column1,column2);
+        grid.getColumnConstraints().addAll(column1, column2);
         grid.setPadding(new Insets(15, 10, 0, 15));
 
         Text rootLabel = new Text("Project Root ");
@@ -65,7 +64,7 @@ public class CreateProjectDialog extends Stage{
 
         this.rootPathTextField = new TextField();
         this.rootPathTextField.setEditable(false);
-        grid.add(this.rootPathTextField,1,0);
+        grid.add(this.rootPathTextField, 1, 0);
 
         Button lookUpButton = new Button();
         lookUpButton.setText("...");
@@ -74,13 +73,13 @@ public class CreateProjectDialog extends Stage{
             this.rootPathTextField.setText(ProjectManager.getInstance().getRootFolder());
         });
 
-        grid.add(lookUpButton,2,0);
+        grid.add(lookUpButton, 2, 0);
 
         Text folderNameLabel = new Text("Project Folder Name ");
         grid.add(folderNameLabel, 0, 1);
 
         TextField folderNameTextField = new TextField();
-        grid.add(folderNameTextField,1,1);
+        grid.add(folderNameTextField, 1, 1);
 
         GridPane.setColumnSpan(folderNameTextField, 2);
 
@@ -88,7 +87,7 @@ public class CreateProjectDialog extends Stage{
         grid.add(titleLabel, 0, 2);
 
         TextField titleTextField = new TextField();
-        grid.add(titleTextField,1,2);
+        grid.add(titleTextField, 1, 2);
 
         GridPane.setColumnSpan(titleTextField, 2);
 
@@ -96,7 +95,7 @@ public class CreateProjectDialog extends Stage{
         grid.add(author, 0, 3);
 
         TextField authorTextField = new TextField();
-        grid.add(authorTextField,1,3);
+        grid.add(authorTextField, 1, 3);
 
         GridPane.setColumnSpan(authorTextField, 2);
 
@@ -104,7 +103,7 @@ public class CreateProjectDialog extends Stage{
         grid.add(company, 0, 4);
 
         TextField companyTextField = new TextField();
-        grid.add(companyTextField,1,4);
+        grid.add(companyTextField, 1, 4);
 
         GridPane.setColumnSpan(companyTextField, 2);
 
@@ -121,8 +120,8 @@ public class CreateProjectDialog extends Stage{
         confirmButton.setText("Create Project");
         confirmButton.setOnAction(event -> {
 
-            if (ProjectManager.getInstance().createProject(rootPathTextField.getText(),folderNameTextField.getText(),
-                    titleTextField.getText(),author.getText(),company.getText())) {
+            if (ProjectManager.getInstance().createProject(rootPathTextField.getText(), folderNameTextField.getText(),
+                    titleTextField.getText(), author.getText(), company.getText())) {
                 this.close();
             } else {
 
@@ -134,7 +133,7 @@ public class CreateProjectDialog extends Stage{
         cancelButton.setText("Cancel");
         cancelButton.setOnAction(event -> this.close());
 
-        bottomBar.getChildren().addAll(confirmButton,cancelButton);
+        bottomBar.getChildren().addAll(confirmButton, cancelButton);
 
         root.setBottom(bottomBar);
     }
