@@ -30,7 +30,7 @@ public class TilesetTab extends GameDBTab {
         GridPane topGrid = new GridPane();
         topGrid.setHgap(10);
         topGrid.setVgap(10);
-        topGrid.setPadding(new Insets(10,10,10,10));
+        topGrid.setPadding(new Insets(10,0,10,0));
         topGrid.setMaxWidth(Integer.MAX_VALUE);
 
         Text tilesetName = new Text();
@@ -109,7 +109,7 @@ public class TilesetTab extends GameDBTab {
 
         ToggleButton btnTerrainTag = new ToggleButton();
         btnTerrainTag.setText("Terain Tag");
-        btnTerrain.setPrefWidth(100);
+        btnTerrainTag.setPrefWidth(100);
         rightBox.getChildren().add(btnTerrainTag);
 
         centerHPanel.getChildren().add(tilesetScroller);
