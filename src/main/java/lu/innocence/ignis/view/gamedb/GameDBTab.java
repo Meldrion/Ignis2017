@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
  * Copyright by Fabien Steines
  * Innocence Studios 2016
  */
-public class GameDBTab extends BorderPane {
+public abstract class GameDBTab extends BorderPane {
 
     protected ListView<String> contentList;
 
@@ -26,6 +26,10 @@ public class GameDBTab extends BorderPane {
         leftPanel.getChildren().add(text);
 
         this.contentList = new ListView<>();
+        this.contentList.getSelectionModel().selectedItemProperty().
+                addListener((observable, oldValue, newValue) -> {
+                    this.selectionChanged(this.contentList.getSelectionModel().getSelectedIndex());
+                });
         leftPanel.getChildren().add(contentList);
 
         Button changeContentCount = new Button();
@@ -35,6 +39,8 @@ public class GameDBTab extends BorderPane {
 
         this.setLeft(leftPanel);
     }
+
+    public abstract void selectionChanged(int index);
 
 
 }

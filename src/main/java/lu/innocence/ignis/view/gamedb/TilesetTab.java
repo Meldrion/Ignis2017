@@ -20,6 +20,9 @@ import lu.innocence.ignis.engine.TilesetManager;
  */
 public class TilesetTab extends GameDBTab {
 
+    private final TilesetManagerCanvas tsManagerCanvas;
+    private final TextField edtTilesetImage;
+    private final TextField edtTilesetName;
     private TilesetManager tsManager;
 
     public TilesetTab(TilesetManager tsManager) {
@@ -38,9 +41,9 @@ public class TilesetTab extends GameDBTab {
         Text tilesetName = new Text();
         tilesetName.setText("Tileset Name:");
         topGrid.add(tilesetName, 0, 0);
-        TextField edtTilesetName = new TextField();
-        edtTilesetName.setMaxWidth(Integer.MAX_VALUE);
-        topGrid.add(edtTilesetName, 1, 0);
+        this.edtTilesetName = new TextField();
+        this.edtTilesetName.setMaxWidth(Integer.MAX_VALUE);
+        topGrid.add(this.edtTilesetName, 1, 0);
 
         Text lblTilesetImage = new Text();
         lblTilesetImage.setText("Tileset Image:");
@@ -49,9 +52,9 @@ public class TilesetTab extends GameDBTab {
         HBox tilesetImageInputAndButtonLayout = new HBox();
         tilesetImageInputAndButtonLayout.setSpacing(10);
         tilesetImageInputAndButtonLayout.setMaxWidth(Integer.MAX_VALUE);
-        TextField edtTilesetImage = new TextField();
-        edtTilesetImage.setMaxWidth(Integer.MAX_VALUE);
-        edtTilesetImage.setEditable(false);
+        this.edtTilesetImage = new TextField();
+        this.edtTilesetImage.setMaxWidth(Integer.MAX_VALUE);
+        this.edtTilesetImage.setEditable(false);
 
         Button btnLookForTilesetImage = new Button();
         btnLookForTilesetImage.setText("...");
@@ -93,12 +96,8 @@ public class TilesetTab extends GameDBTab {
         ScrollPane tilesetScroller = new ScrollPane();
         tilesetScroller.setPrefWidth(280);
         tilesetScroller.setMaxHeight(Integer.MAX_VALUE);
-        TilesetManagerCanvas tsManagerCanvas = new TilesetManagerCanvas();
+        this.tsManagerCanvas = new TilesetManagerCanvas();
         tilesetScroller.setContent(tsManagerCanvas);
-
-
-        // TODO: This is just testing code
-        tsManagerCanvas.setTileset(tsManager.getTilesetAtIndex(0));
 
         VBox rightBox = new VBox();
         rightBox.setSpacing(10);
@@ -136,6 +135,16 @@ public class TilesetTab extends GameDBTab {
         VBox.setVgrow(centerHPanel, Priority.ALWAYS);
 
         this.setCenter(centerBox);
+
+        this.visibleProperty().addListener((observable, oldValue, newValue) -> {
+
+        });
+    }
+
+    private void initTileset(Tileset tileset) {
+        tsManagerCanvas.setTileset(tileset);
+        this.edtTilesetName.setText(tileset.getName());
+        this.edtTilesetImage.setText(tileset.getImageName());
     }
 
     private void fromTilesetManager(TilesetManager tsManager) {
@@ -149,4 +158,10 @@ public class TilesetTab extends GameDBTab {
         }
     }
 
+    @Override
+    public void selectionChanged(int index) {
+        if (index > -1) {
+            this.initTileset(this.tsManager.getTilesetAtIndex(index));
+        }
+    }
 }

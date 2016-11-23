@@ -3,6 +3,8 @@ package lu.innocence.ignis.engine;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.io.File;
+
 /**
  * @author Fabien Steines
  */
@@ -12,12 +14,14 @@ public class Tileset {
     private int cellSize = 32;
     private int index;
     private String name;
+    private String imageName;
 
     public Tileset() {
         this.name = "";
     }
 
     public void loadImage(String imagePath) {
+        this.imageName = (new File(imagePath)).getName();
         this.tilesetImage = new Image(String.format("file:%s", imagePath));
     }
 
@@ -46,4 +50,7 @@ public class Tileset {
         this.name = name;
     }
 
+    public String getImageName() {
+        return imageName;
+    }
 }
