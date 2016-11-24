@@ -5,12 +5,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Separator;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.view.components.ResourceCanvas;
@@ -54,7 +52,7 @@ public abstract class ResourceView extends Stage {
         });
 
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 0, 10));
+        grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setHgap(10);
         grid.setVgap(10);
 
@@ -95,7 +93,9 @@ public abstract class ResourceView extends Stage {
         cancelButton.setOnAction(event -> this.close());
 
         bottomBar.getChildren().addAll(cancelButton, acceptButton);
-        root.setBottom(bottomBar);
+        VBox bottom = new VBox();
+        bottom.getChildren().addAll(new Separator(),bottomBar);
+        root.setBottom(bottom);
 
 
         this.setOnShown(event -> {

@@ -1,10 +1,7 @@
 package lu.innocence.ignis.view.gamedb;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -129,6 +126,7 @@ public class TilesetTab extends GameDBTab {
 
         centerHPanel.getChildren().add(tilesetScroller);
         centerHPanel.getChildren().add(rightBox);
+        centerBox.getChildren().add(new Separator());
         centerBox.getChildren().add(centerHPanel);
 
         centerBox.setMaxHeight(Integer.MAX_VALUE);

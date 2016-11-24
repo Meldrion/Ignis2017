@@ -4,12 +4,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.Project;
@@ -75,6 +77,8 @@ public class GameDatabase extends Stage {
         root.setCenter(mainTabber);
 
         // Box on the Bottom
+        VBox bottom = new VBox();
+
         HBox bottomBar = new HBox();
 
         bottomBar.setSpacing(10);
@@ -93,11 +97,13 @@ public class GameDatabase extends Stage {
         cancelButton.setOnAction(event -> this.close());
 
         bottomBar.getChildren().addAll(cancelButton, acceptButton);
-        root.setBottom(bottomBar);
+        root.setBottom(bottom);
 
         this.setOnShown(event -> {
             this.tilesetTabContent.init();
         });
+
+        bottom.getChildren().addAll(new Separator(),bottomBar);
     }
 
     private void initData() {
