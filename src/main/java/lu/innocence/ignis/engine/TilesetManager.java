@@ -18,7 +18,9 @@ public class TilesetManager {
 
         this.tilesetList.clear(); // dummy for now
         for (int i = 0; i < maxCount; i++) {
-            this.tilesetList.add(null);
+            Tileset ts = new Tileset();
+            ts.setIndex(i);
+            this.tilesetList.add(ts);
         }
     }
 

@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import lu.innocence.ignis.ZeroStringGenerator;
 import lu.innocence.ignis.component.TilesetManagerCanvas;
 import lu.innocence.ignis.engine.Tileset;
 import lu.innocence.ignis.engine.TilesetManager;
@@ -28,7 +29,6 @@ public class TilesetTab extends GameDBTab {
     public TilesetTab(TilesetManager tsManager) {
         super("Tileset List:");
         this.tsManager = tsManager;
-        this.fromTilesetManager(tsManager);
 
         VBox centerBox = new VBox();
 
@@ -136,9 +136,6 @@ public class TilesetTab extends GameDBTab {
 
         this.setCenter(centerBox);
 
-        this.visibleProperty().addListener((observable, oldValue, newValue) -> {
-
-        });
     }
 
     private void initTileset(Tileset tileset) {
@@ -147,21 +144,26 @@ public class TilesetTab extends GameDBTab {
         this.edtTilesetImage.setText(tileset.getImageName());
     }
 
-    private void fromTilesetManager(TilesetManager tsManager) {
+    @Override
+    public void selectionChanged(int index) {
+        if (index > -1) {
+            this.initTileset(this.tsManager.getTilesetAtIndex(index));
+        }
+    }
+
+    public void init() {
         this.contentList.getItems().clear();
         int max = tsManager.getTilesetList().size();
         for (int i = 0; i < max; i++) {
             Tileset ts = this.tsManager.getTilesetAtIndex(i);
             if (ts != null) {
-                this.contentList.getItems().add(String.format("%s:%s", String.valueOf(i), ts.getName()));
+                this.contentList.getItems().add(String.format("%s: %s",
+                        ZeroStringGenerator.addZeros(i,9999), ts.getName()));
             }
         }
-    }
 
-    @Override
-    public void selectionChanged(int index) {
-        if (index > -1) {
-            this.initTileset(this.tsManager.getTilesetAtIndex(index));
+        if (max > 0) {
+            this.contentList.getSelectionModel().selectFirst();
         }
     }
 }

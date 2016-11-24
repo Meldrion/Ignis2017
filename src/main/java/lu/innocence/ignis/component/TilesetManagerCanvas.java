@@ -17,16 +17,17 @@ public class TilesetManagerCanvas extends Canvas {
      * @param tileset
      */
     public void setTileset(Tileset tileset) {
-        this.tileset = tileset;
 
         if (tileset != null) {
             Image image = tileset.getTilesetImage();
             this.setWidth(image != null ? image.getWidth() : 0);
             this.setHeight(image != null ? image.getHeight() : 0);
         } else {
-            this.setHeight(0);
+            if (this.tileset != null)
+                this.setHeight(0);
         }
 
+        this.tileset = tileset;
         this.render();
     }
 
@@ -34,11 +35,15 @@ public class TilesetManagerCanvas extends Canvas {
      *
      */
     public void render() {
-        GraphicsContext g = this.getGraphicsContext2D();
-        ChessBGDrawer.drawChessBackground(g, (int) this.getWidth() / cellSize, (int) this.getHeight() / cellSize,
-                cellSize, cellSize);
-        if (this.tileset != null && this.tileset.getTilesetImage() != null) {
-            g.drawImage(this.tileset.getTilesetImage(), 0, 0);
+
+        if (this.getWidth() > 0 && this.getHeight() > 0) {
+            GraphicsContext g = this.getGraphicsContext2D();
+            ChessBGDrawer.drawChessBackground(g, (int) this.getWidth() / cellSize, (int) this.getHeight() / cellSize,
+                    cellSize, cellSize);
+
+            if (this.tileset != null && this.tileset.getTilesetImage() != null) {
+                g.drawImage(this.tileset.getTilesetImage(), 0, 0);
+            }
         }
     }
 

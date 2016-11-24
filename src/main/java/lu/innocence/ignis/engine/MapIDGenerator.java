@@ -1,5 +1,7 @@
 package lu.innocence.ignis.engine;
 
+import lu.innocence.ignis.ZeroStringGenerator;
+
 /**
  * @author Fabien Steines
  */
@@ -24,17 +26,8 @@ public class MapIDGenerator {
     }
 
     public String generateUniqueName() {
-
         int id = getId();
-
-        int zeroCount = String.valueOf(MAX_ID_COUNTER).length() - String.valueOf(id).length();
-        String zeros = "";
-        for (int i = 0; i < zeroCount; i++) {
-            zeros += "0";
-        }
-
-        return String.format("map%s%d", zeros, id);
-
+        return String.format("map%s%d", ZeroStringGenerator.addZeros(id,MAX_ID_COUNTER), id);
     }
 
     public int getId() {

@@ -18,6 +18,7 @@ public class Tileset {
 
     public Tileset() {
         this.name = "";
+        this.imageName = "";
     }
 
     public void loadImage(String imagePath) {

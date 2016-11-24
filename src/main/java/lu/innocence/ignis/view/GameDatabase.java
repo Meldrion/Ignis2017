@@ -94,6 +94,10 @@ public class GameDatabase extends Stage {
 
         bottomBar.getChildren().addAll(cancelButton, acceptButton);
         root.setBottom(bottomBar);
+
+        this.setOnShown(event -> {
+            this.tilesetTabContent.init();
+        });
     }
 
     private void initData() {
