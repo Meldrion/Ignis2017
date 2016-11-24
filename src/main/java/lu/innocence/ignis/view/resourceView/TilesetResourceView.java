@@ -2,6 +2,7 @@ package lu.innocence.ignis.view.resourceView;
 
 
 import javafx.stage.Stage;
+import lu.innocence.ignis.ZeroStringGenerator;
 import lu.innocence.ignis.engine.Tileset;
 import lu.innocence.ignis.engine.TilesetManager;
 
@@ -28,7 +29,9 @@ public class TilesetResourceView extends ResourceView {
         this.resourceList.getItems().clear();
         for (int i = 0; i < tsManager.getTilesetList().size(); i++) {
             Tileset tileset = tsManager.getTilesetAtIndex(i);
-            this.resourceList.getItems().add(String.format("%d: %s", i, tileset != null ? tileset.getName() : ""));
+            this.resourceList.getItems().add(String.format("%s: %s",
+                    ZeroStringGenerator.addZeros(i,TilesetManager.MAX_TILESET_COUNT),
+                    tileset != null ? tileset.getName() : ""));
         }
     }
 

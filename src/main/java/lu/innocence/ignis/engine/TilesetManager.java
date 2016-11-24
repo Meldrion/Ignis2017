@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class TilesetManager {
 
+    public static final int MAX_TILESET_COUNT = 9999;
     private List<Tileset> tilesetList;
 
     public TilesetManager() {
