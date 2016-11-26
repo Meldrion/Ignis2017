@@ -9,15 +9,12 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lu.innocence.ignis.engine.FilesystemHandler;
-import lu.innocence.ignis.engine.ProjectManager;
 
 
 /**
@@ -26,8 +23,10 @@ import lu.innocence.ignis.engine.ProjectManager;
 public class SetMaxCountDialiog extends Stage {
 
     private Spinner<Integer> spMaxCount;
+    private boolean accepted;
 
     public SetMaxCountDialiog(Stage parent) {
+        this.accepted = false;
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Load Project Window");
         this.setResizable(false);
@@ -59,13 +58,14 @@ public class SetMaxCountDialiog extends Stage {
 
         HBox bottomBar = new HBox();
         bottomBar.setSpacing(10);
-        bottomBar.setPadding(new Insets(15));
+        bottomBar.setPadding(new Insets(10,0,10,0));
         bottomBar.setAlignment(Pos.CENTER_RIGHT);
 
         Button confirmButton = new Button();
         confirmButton.setText("Ok");
         confirmButton.setOnAction(event -> {
-
+            this.accepted = true;
+            this.close();
         });
 
         Button cancelButton = new Button();
@@ -80,6 +80,18 @@ public class SetMaxCountDialiog extends Stage {
 
         root.add(bottom,0,1,2,1);
 
+    }
+
+    public boolean accepted() {
+        return this.accepted;
+    }
+
+    public int getMaxCount() {
+        return Integer.valueOf(this.spMaxCount.getEditor().getText());
+    }
+
+    public void setMaxCount(int max) {
+        this.spMaxCount.getValueFactory().setValue(max);
     }
 
 }

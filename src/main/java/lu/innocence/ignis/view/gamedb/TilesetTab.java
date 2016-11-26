@@ -150,6 +150,16 @@ public class TilesetTab extends GameDBTab {
         }
     }
 
+    @Override
+    public void maxCountChanged(int max) {
+
+    }
+
+    @Override
+    public int getMaxCount() {
+        return this.tsManager.getTilesetList().size();
+    }
+
     public void init() {
         this.contentList.getItems().clear();
         int max = tsManager.getTilesetList().size();

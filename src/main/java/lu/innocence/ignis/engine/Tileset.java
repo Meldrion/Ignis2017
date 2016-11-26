@@ -54,4 +54,12 @@ public class Tileset {
     public String getImageName() {
         return imageName;
     }
+
+    public int getCellWidth() {
+        return this.tilesetImage != null ? (int) this.tilesetImage.getWidth() / this.cellSize : 0;
+    }
+
+    public int getCellHeight() {
+        return this.tilesetImage != null ? (int) this.tilesetImage.getHeight() / this.cellSize : 0;
+    }
 }

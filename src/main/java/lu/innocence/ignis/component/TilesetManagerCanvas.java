@@ -43,6 +43,18 @@ public class TilesetManagerCanvas extends Canvas {
 
             if (this.tileset != null && this.tileset.getTilesetImage() != null) {
                 g.drawImage(this.tileset.getTilesetImage(), 0, 0);
+
+                int maxW = this.tileset.getCellWidth();
+                int maxH = this.tileset.getCellHeight();
+
+                for (int i = 0; i <= maxW; i++) {
+                    g.strokeLine(i * cellSize,0,i*cellSize,this.getHeight());
+                }
+
+                for (int i = 0; i <= maxH; i++) {
+                    g.strokeLine(0,i * cellSize,this.getWidth(),i*cellSize);
+                }
+
             }
         }
     }

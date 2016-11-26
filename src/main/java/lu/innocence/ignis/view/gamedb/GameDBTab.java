@@ -36,7 +36,11 @@ public abstract class GameDBTab extends BorderPane {
         Button changeContentCount = new Button();
         changeContentCount.setOnAction(event -> {
             SetMaxCountDialiog setMaxCountDialog = new SetMaxCountDialiog(parent);
+            setMaxCountDialog.setMaxCount(this.getMaxCount());
             setMaxCountDialog.showAndWait();
+            if (setMaxCountDialog.accepted()) {
+                this.maxCountChanged(setMaxCountDialog.getMaxCount());
+            }
         });
         changeContentCount.setText("Change Maximum");
         changeContentCount.setMaxWidth(Integer.MAX_VALUE);
@@ -46,6 +50,10 @@ public abstract class GameDBTab extends BorderPane {
     }
 
     public abstract void selectionChanged(int index);
+
+    public abstract void maxCountChanged(int max);
+
+    public abstract int getMaxCount();
 
 
 }
