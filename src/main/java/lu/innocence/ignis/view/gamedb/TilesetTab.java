@@ -152,7 +152,8 @@ public class TilesetTab extends GameDBTab {
 
     @Override
     public void maxCountChanged(int max) {
-
+        this.tsManager.setTilesetMax(max);
+        this.init();
     }
 
     @Override

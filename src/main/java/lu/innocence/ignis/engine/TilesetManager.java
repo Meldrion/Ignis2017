@@ -17,12 +17,20 @@ public class TilesetManager {
 
     public void setTilesetMax(int maxCount) {
 
-        this.tilesetList.clear(); // dummy for now
+        int cMax = tilesetList.size();
+        List<Tileset> tsListTMP = new ArrayList<>();
+
         for (int i = 0; i < maxCount; i++) {
-            Tileset ts = new Tileset();
-            ts.setIndex(i);
-            this.tilesetList.add(ts);
+            if (i < cMax) {
+                tsListTMP.add(tilesetList.get(i));
+            } else {
+                Tileset ts = new Tileset();
+                ts.setIndex(i);
+                tsListTMP.add(ts);
+            }
         }
+
+        this.tilesetList = tsListTMP;
     }
 
     public void setTileset(Tileset tileset, int index) {
