@@ -16,6 +16,8 @@ public class Tileset {
     private String name;
     private String imageName;
 
+    private boolean[][] collisionMatrix;
+
     public Tileset() {
         this.name = "";
         this.imageName = "";
@@ -23,12 +25,38 @@ public class Tileset {
 
     public void loadImage(String imagePath) {
         this.imageName = (new File(imagePath)).getName();
-        this.tilesetImage = new Image(String.format("file:%s", imagePath));
+        Image newTsImage = new Image(String.format("file:%s", imagePath));
+        initCollisionMatrix(newTsImage);
+        this.tilesetImage = newTsImage;
     }
 
     public void drawTileTo(GraphicsContext g, int x, int y, int tsX, int tsY) {
         g.drawImage(this.tilesetImage, tsX * cellSize, tsY * cellSize, cellSize, cellSize,
                 x * cellSize, y * cellSize, cellSize, cellSize);
+    }
+
+    private void initCollisionMatrix(Image newImage) {
+        boolean[][] tmpCollisionMatrix = new boolean[getCellWidth(newImage)][getCellHeight(newImage)];
+
+        for (int x = 0;x < tmpCollisionMatrix.length;x++) {
+            for (int y = 0;y < tmpCollisionMatrix[0].length;y++) {
+                if (this.collisionMatrix != null && inRange(x,y)) {
+                    tmpCollisionMatrix[x][y] = this.collisionMatrix[x][y];
+                } else {
+                    tmpCollisionMatrix[x][y] = false;
+                }
+            }
+        }
+
+        this.collisionMatrix = tmpCollisionMatrix;
+    }
+
+    public boolean collisionAt(int x,int y) {
+        return this.collisionMatrix[x][y];
+    }
+
+    private boolean inRange(int x,int y) {
+        return x < this.getCellWidth() && y < this.getCellHeight();
     }
 
     public Image getTilesetImage() {
@@ -56,10 +84,18 @@ public class Tileset {
     }
 
     public int getCellWidth() {
-        return this.tilesetImage != null ? (int) this.tilesetImage.getWidth() / this.cellSize : 0;
+        return this.getCellWidth(this.tilesetImage);
+    }
+
+    private int getCellWidth(Image tsImage) {
+        return tsImage != null ? (int) tsImage.getWidth() / this.cellSize : 0;
     }
 
     public int getCellHeight() {
-        return this.tilesetImage != null ? (int) this.tilesetImage.getHeight() / this.cellSize : 0;
+        return this.getCellHeight(this.tilesetImage);
+    }
+
+    public int getCellHeight(Image tsImage) {
+        return tsImage != null ? (int) tsImage.getHeight() / this.cellSize : 0;
     }
 }

@@ -1,5 +1,6 @@
 package lu.innocence.ignis;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.ProjectManager;
@@ -54,6 +55,14 @@ public class IgnisGlobals {
         }
 
         return false;
+    }
+
+    public static int getTextWidth(GraphicsContext g,String text) {
+        return (int) com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().computeStringWidth(text, g.getFont());
+    }
+
+    public static int getTextHeight(GraphicsContext g) {
+        return (int) com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().getFontMetrics(g.getFont()).getLineHeight();
     }
 
 

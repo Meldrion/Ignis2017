@@ -3,6 +3,7 @@ package lu.innocence.ignis.component;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Tileset;
 
 /**
@@ -12,6 +13,16 @@ public class TilesetManagerCanvas extends Canvas {
 
     private final int cellSize = 32;
     private Tileset tileset;
+    private int mode;
+
+    public static final int MODE_COLLISION = 0x0;
+
+    /**
+     *
+     */
+    public TilesetManagerCanvas() {
+        this.mode = MODE_COLLISION;
+    }
 
     /**
      * @param tileset
@@ -53,6 +64,27 @@ public class TilesetManagerCanvas extends Canvas {
 
                 for (int i = 0; i <= maxH; i++) {
                     g.strokeLine(0,i * cellSize,this.getWidth(),i*cellSize);
+                }
+
+                for (int i=0;i<maxW; i++) {
+                    for (int j=0;j<maxH; j++) {
+
+                        String text;
+
+                        if (this.tileset.collisionAt(i,j)) {
+                            text = "X";
+                        } else {
+                            text = "O";
+                        }
+
+                        int tw = IgnisGlobals.getTextWidth(g,text);
+                        int th = IgnisGlobals.getTextHeight(g);
+
+                        int xCenter = (this.cellSize - tw) / 2;
+                        int yCenter = (this.cellSize - th) / 2;
+
+                        g.fillText(text,i * cellSize + xCenter,j *cellSize - th + 3);
+                    }
                 }
 
             }
