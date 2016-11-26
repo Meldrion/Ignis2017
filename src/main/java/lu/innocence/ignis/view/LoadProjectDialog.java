@@ -150,6 +150,10 @@ public class LoadProjectDialog extends Stage {
             this.projectsList.getItems().add(current);
         }
 
+        if (projects.size() > 0) {
+            this.projectsList.getSelectionModel().selectFirst();
+        }
+
     }
 
 }

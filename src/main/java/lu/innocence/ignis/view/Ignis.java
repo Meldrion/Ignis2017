@@ -77,7 +77,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
         fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(exit);
         Menu webMenu = new Menu("Edit");
-        Menu sqlMenu = new Menu("SQL");
+        Menu sqlMenu = new Menu("View");
         menuBar.getMenus().addAll(fileMenu, webMenu, sqlMenu);
         menuBar.setUseSystemMenuBar(true);
     }

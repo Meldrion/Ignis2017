@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import lu.innocence.ignis.ZeroStringGenerator;
 import lu.innocence.ignis.component.TilesetManagerCanvas;
 import lu.innocence.ignis.engine.Tileset;
@@ -23,8 +24,8 @@ public class TilesetTab extends GameDBTab {
     private final TextField edtTilesetName;
     private TilesetManager tsManager;
 
-    public TilesetTab(TilesetManager tsManager) {
-        super("Tileset List:");
+    public TilesetTab(TilesetManager tsManager,Stage parent) {
+        super("Tileset List:",parent);
         this.tsManager = tsManager;
 
         VBox centerBox = new VBox();

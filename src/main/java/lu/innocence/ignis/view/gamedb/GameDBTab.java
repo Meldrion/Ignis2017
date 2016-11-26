@@ -6,6 +6,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 /**
  * Copyright by Fabien Steines
@@ -15,7 +16,7 @@ public abstract class GameDBTab extends BorderPane {
 
     protected ListView<String> contentList;
 
-    public GameDBTab(String categoryName) {
+    public GameDBTab(String categoryName,Stage parent) {
 
         VBox leftPanel = new VBox();
         leftPanel.setSpacing(10);
@@ -33,6 +34,10 @@ public abstract class GameDBTab extends BorderPane {
         leftPanel.getChildren().add(contentList);
 
         Button changeContentCount = new Button();
+        changeContentCount.setOnAction(event -> {
+            SetMaxCountDialiog setMaxCountDialog = new SetMaxCountDialiog(parent);
+            setMaxCountDialog.showAndWait();
+        });
         changeContentCount.setText("Change Maximum");
         changeContentCount.setMaxWidth(Integer.MAX_VALUE);
         leftPanel.getChildren().add(changeContentCount);
