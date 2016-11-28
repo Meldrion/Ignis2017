@@ -56,7 +56,10 @@ public class ImageView extends ResourceView {
         } else {
             return null;
         }
+    }
 
+    public String getSelectedName() {
+        return this.resourceList.getSelectionModel().getSelectedItem();
     }
 
 }

@@ -10,10 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import lu.innocence.ignis.ZeroStringGenerator;
 import lu.innocence.ignis.component.TilesetManagerCanvas;
-import lu.innocence.ignis.engine.AssetStructure;
-import lu.innocence.ignis.engine.Project;
-import lu.innocence.ignis.engine.Tileset;
-import lu.innocence.ignis.engine.TilesetManager;
+import lu.innocence.ignis.engine.*;
 import lu.innocence.ignis.view.resourceView.ImageView;
 
 /**
@@ -26,11 +23,14 @@ public class TilesetTab extends GameDBTab {
     private final TextField edtTilesetImage;
     private final TextField edtTilesetName;
     private TilesetManager tsManager;
+    private Tileset tileset;
 
     public TilesetTab(Project project, Stage parent) {
         super("Tileset List:",parent);
         this.tsManager = project.getTilesetManager();
         VBox centerBox = new VBox();
+
+        this.tsManagerCanvas = new TilesetManagerCanvas();
 
         GridPane topGrid = new GridPane();
         topGrid.setHgap(10);
@@ -62,6 +62,13 @@ public class TilesetTab extends GameDBTab {
             ImageView imageView = new ImageView(parent);
             imageView.setAssetManager(project.getAssetStructure(), AssetStructure.TILESET);
             imageView.showAndWait();
+            if (imageView.isAccepted()) {
+                this.edtTilesetImage.setText(imageView.getSelectedName());
+                String path = FilesystemHandler.concat(project.getAssetStructure().getPath(AssetStructure.TILESET),
+                        imageView.getSelectedName());
+                this.tileset.loadImage(path);
+                this.tsManagerCanvas.render();
+            }
         });
 
         tilesetImageInputAndButtonLayout.getChildren().addAll(edtTilesetImage, btnLookForTilesetImage);
@@ -101,7 +108,7 @@ public class TilesetTab extends GameDBTab {
         ScrollPane tilesetScroller = new ScrollPane();
         tilesetScroller.setPrefWidth(280);
         tilesetScroller.setMaxHeight(Integer.MAX_VALUE);
-        this.tsManagerCanvas = new TilesetManagerCanvas();
+
         tilesetScroller.setContent(tsManagerCanvas);
 
         VBox rightBox = new VBox();
@@ -148,6 +155,7 @@ public class TilesetTab extends GameDBTab {
         tsManagerCanvas.setTileset(tileset);
         this.edtTilesetName.setText(tileset.getName());
         this.edtTilesetImage.setText(tileset.getImageName());
+        this.tileset = tileset;
     }
 
     @Override
