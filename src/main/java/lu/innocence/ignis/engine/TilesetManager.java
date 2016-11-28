@@ -14,6 +14,7 @@ public class TilesetManager {
     public static final int MAX_TILESET_COUNT = 9999;
     private List<Tileset> tilesetList;
     private String jsonFolder;
+    private static final String TILETREEFILE = "tiletree.json";
 
     public TilesetManager() {
         this.tilesetList = new ArrayList<>();
@@ -89,11 +90,21 @@ public class TilesetManager {
         }
 
         tilesetListJSON.put("tilesets", tilesets);
-        FilesystemHandler.writeJson(tilesetListJSON, FilesystemHandler.concat(this.jsonFolder,"tilesettree.json"));
+        FilesystemHandler.writeJson(tilesetListJSON, FilesystemHandler.concat(this.jsonFolder,TILETREEFILE));
     }
 
     public void load() {
+        JSONObject tilesetListJSON = FilesystemHandler.readJSON(FilesystemHandler.concat(this.jsonFolder,TILETREEFILE));
+        JSONArray tilesetList = (JSONArray) tilesetListJSON.get("tilesets");
 
+        this.setTilesetMax(tilesetList.size());
+        for (int i=0;i<tilesetList.size();i++) {
+            JSONObject tileset = (JSONObject) tilesetList.get(i);
+            Tileset current = this.tilesetList.get(i);
+            current.setIndex(i);
+            current.setName((String)tileset.get("name"));
+            current.loadImage((String)tileset.get("image"));
+        }
     }
 
 }

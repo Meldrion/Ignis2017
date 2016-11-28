@@ -84,6 +84,9 @@ public class Project {
 
             this.init();
 
+            tilesetManager.load();
+            mapManager.loadMapTree();
+
             return true;
 
         } else {
