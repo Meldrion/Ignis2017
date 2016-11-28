@@ -58,6 +58,7 @@ public class Project {
             this.devCompany = devCompany;
 
             this.init();
+            this.tilesetManager.save();
 
             allOk &= FilesystemHandler.writeJson(projectJSON, this.assetStructure.getProjectJSON());
             this.mapManager.saveMapTree();
