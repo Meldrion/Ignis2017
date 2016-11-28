@@ -50,7 +50,7 @@ public class TilesetManagerCanvas extends Canvas {
         if (tileset != null) {
             Image image = tileset.getTilesetImage();
             this.setWidth(image != null ? image.getWidth() : 0);
-            this.setHeight(image != null ? image.getHeight() : 0);
+            this.setHeight(image != null ? image.getHeight() + cellSize : 0);
         } else {
             if (this.tileset != null)
                 this.setHeight(0);
@@ -71,7 +71,7 @@ public class TilesetManagerCanvas extends Canvas {
                     cellSize, cellSize);
 
             if (this.tileset != null && this.tileset.getTilesetImage() != null) {
-                g.drawImage(this.tileset.getTilesetImage(), 0, 0);
+                g.drawImage(this.tileset.getTilesetImage(), 0, cellSize);
 
                 int maxW = this.tileset.getCellWidth();
                 int maxH = this.tileset.getCellHeight();

@@ -17,10 +17,12 @@ public class Tileset {
     private String imageName;
 
     private boolean[][] collisionMatrix;
+    private Terrain[] terrainCells;
 
     public Tileset() {
         this.name = "";
         this.imageName = "";
+        terrainCells = new Terrain[8];
     }
 
     public void loadImage(String imagePath) {
@@ -33,6 +35,10 @@ public class Tileset {
     public void drawTileTo(GraphicsContext g, int x, int y, int tsX, int tsY) {
         g.drawImage(this.tilesetImage, tsX * cellSize, tsY * cellSize, cellSize, cellSize,
                 x * cellSize, y * cellSize, cellSize, cellSize);
+    }
+
+    public boolean isTilesetCell(int y) {
+        return 0 < y;
     }
 
     private void initCollisionMatrix(Image newImage) {
@@ -91,6 +97,10 @@ public class Tileset {
         return imageName;
     }
 
+    public int getCellSize() {
+        return this.cellSize;
+    }
+
     public int getCellWidth() {
         return this.getCellWidth(this.tilesetImage);
     }
@@ -104,6 +114,14 @@ public class Tileset {
     }
 
     public int getCellHeight(Image tsImage) {
-        return tsImage != null ? (int) tsImage.getHeight() / this.cellSize : 0;
+        return tsImage != null ? (int) tsImage.getHeight() / this.cellSize + 1: 0;
+    }
+
+    public void setTerrain(int index,Terrain terrain) {
+        this.terrainCells[index] = terrain;
+    }
+
+    public Terrain getTerrain(int index) {
+        return this.terrainCells[index];
     }
 }

@@ -80,7 +80,12 @@ public class TilesetLayer {
     public void renderPartial(GraphicsContext g, int x, int y, Tileset tileset) {
         TilesetCell cell = this.matrix.get(x).get(y);
         if (cell != null) {
-            tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY);
+            if (tileset.isTilesetCell(y)) {
+                // Tileset
+                tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY);
+            } else {
+                // Terrain
+            }
         }
     }
 

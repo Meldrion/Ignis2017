@@ -260,11 +260,29 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                 }
 
                 if (!clearOnly) {
+
                     g.setGlobalAlpha(0.5);
                     g.setFill(Color.RED);
                     g.fillRect(x * 32, y * 32, w, h);
-                    g.drawImage(this.map.getTileset().getTilesetImage(), this.tilesetX * 32, this.tilesetY * 32,
-                            w, h, x * 32, y * 32, w, h);
+
+                    // Draw Pen
+                    for (int i = 0; i < this.tilesetWidth; i++) {
+                        for (int j = 0; j < this.tilesetHeight; j++) {
+
+                            int yTSCoord = this.tilesetY + j;
+
+                            if (this.map.getTileset().isTilesetCell(yTSCoord)) {
+                                // Tileset Case
+                                this.map.getTileset().drawTileTo(g, x + i,
+                                        y + j,
+                                        this.tilesetX + i,
+                                        yTSCoord - 1);
+                            } else {
+                                // Terrain Case
+                            }
+                        }
+                    }
+
                     g.setGlobalAlpha(1.0);
                 }
 
@@ -304,8 +322,15 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                     for (int i = 0; i < selectionWidth; i++) {
                         for (int j = 0; j < selectionHeight; j++) {
 
-                            this.map.getTileset().drawTileTo(g, newCoord[0] + i, newCoord[1] + j,
-                                    this.tilesetX + tsX, this.tilesetY + tsY);
+                            int yTSCoord = this.tilesetY + tsY;
+
+                            if (this.map.getTileset().isTilesetCell(yTSCoord)) {
+                                // Tileset Case
+                                this.map.getTileset().drawTileTo(g, newCoord[0] + i, newCoord[1] + j,
+                                        this.tilesetX + tsX, yTSCoord - 1);
+                            } else {
+                                // Terrain Case
+                            }
                             tsY += 1;
 
                             if (tsY == this.tilesetHeight) {
@@ -418,12 +443,18 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * @param y
      */
     private void penAdd(int x, int y) {
-        if (this.map != null) {
+        if (this.map != null && this.map.getTileset() != null) {
             for (int i = 0; i < this.tilesetWidth; i++) {
                 for (int j = 0; j < this.tilesetHeight; j++) {
 
-                    this.map.addCell(this.activeLayerId, x + i, y + j,
-                            this.tilesetX + i, this.tilesetY + j);
+                    int yCell = this.tilesetY + j;
+                    if (this.map.getTileset().isTilesetCell(yCell)) {
+                        // Tileset Cell
+                        this.map.addCell(this.activeLayerId, x + i, y + j,
+                                this.tilesetX + i, yCell - 1);
+                    } else {
+                        // Terrain Case
+                    }
                     this.renderPartial(x + i, y + j);
                 }
             }
@@ -434,31 +465,41 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      *
      */
     private void brushAdd(int x, int y) {
-        int tsX = 0;
-        int tsY = 0;
 
-        int[] newCoord = IgnisGlobals.fixCoords(this.brushStartX, this.brushStartY, x, y);
-        int selectionWidth = newCoord[2] - newCoord[0];
-        int selectionHeight = newCoord[3] - newCoord[1];
+        if (this.map != null && this.map.getTileset() != null) {
+            int tsX = 0;
+            int tsY = 0;
 
-        for (int i = 0; i < selectionWidth; i++) {
-            for (int j = 0; j < selectionHeight; j++) {
+            int[] newCoord = IgnisGlobals.fixCoords(this.brushStartX, this.brushStartY, x, y);
+            int selectionWidth = newCoord[2] - newCoord[0];
+            int selectionHeight = newCoord[3] - newCoord[1];
 
-                this.map.addCell(this.activeLayerId, newCoord[0] + i, newCoord[1] + j,
-                        this.tilesetX + tsX, this.tilesetY + tsY);
-                this.renderPartial(newCoord[0] + i, newCoord[1] + j);
-                tsY += 1;
+            for (int i = 0; i < selectionWidth; i++) {
+                for (int j = 0; j < selectionHeight; j++) {
 
-                if (tsY == this.tilesetHeight) {
-                    tsY = 0;
+                    int yCell = this.tilesetY + tsY;
+                    if (this.map.getTileset().isTilesetCell(yCell)) {
+                        // Tileset Case
+                        this.map.addCell(this.activeLayerId, newCoord[0] + i, newCoord[1] + j,
+                                this.tilesetX + tsX, yCell - 1);
+                    } else {
+                        // Terrain Case
+                    }
+
+                    this.renderPartial(newCoord[0] + i, newCoord[1] + j);
+                    tsY += 1;
+
+                    if (tsY == this.tilesetHeight) {
+                        tsY = 0;
+                    }
                 }
-            }
 
-            tsX += 1;
-            tsY = 0;
+                tsX += 1;
+                tsY = 0;
 
-            if (tsX == this.tilesetWidth) {
-                tsX = 0;
+                if (tsX == this.tilesetWidth) {
+                    tsX = 0;
+                }
             }
         }
     }

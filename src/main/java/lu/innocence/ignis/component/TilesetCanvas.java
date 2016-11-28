@@ -82,12 +82,13 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
 
     public void render() {
         GraphicsContext g = this.getGraphicsContext2D();
-        g.clearRect(0, 0, this.getWidth(), this.getHeight());
+
         if (this.linkedTileset != null) {
 
-            ChessBGDrawer.drawChessBackground(g, (int) this.getWidth() / 32, (int) this.getHeight() / 32, 32, 32);
+            ChessBGDrawer.drawChessBackground(g, (int) this.getWidth() / 32,
+                    (int) this.getHeight() / 32, 32, 32);
 
-            g.drawImage(this.linkedTileset.getTilesetImage(), 0, 0);
+            g.drawImage(this.linkedTileset.getTilesetImage(), 0, cellSize);
 
             int[] coords = IgnisGlobals.fixCoords(this.mouseStartX, this.mouseStartY, this.mouseEndX, this.mouseEndY);
 
@@ -97,6 +98,8 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
                     (coords[2] - coords[0]) * this.cellSize, (coords[3] - coords[1]) * this.cellSize);
             g.setGlobalAlpha(1);
 
+        } else {
+            g.clearRect(0, 0, this.getWidth(), this.getHeight());
         }
     }
 
@@ -106,7 +109,7 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
             this.setWidth(tileset.getTilesetImage().getWidth());
             this.setHeight(tileset.getTilesetImage().getHeight());
             this.linkedTileset = tileset;
-            this.fitToContainer(this.containerWidth, this.containerHeight);
+            this.fitToContainer(this.containerWidth, this.containerHeight + cellSize);
         } else {
             this.linkedTileset = null;
             this.setWidth(0);
