@@ -55,7 +55,11 @@ public class Tileset {
         return this.collisionMatrix[x][y];
     }
 
-    private boolean inRange(int x,int y) {
+    public void setCollisionAt(int x,int y,boolean collision) {
+        this.collisionMatrix[x][y] = collision;
+    }
+
+    public boolean inRange(int x,int y) {
         return x < this.getCellWidth() && y < this.getCellHeight();
     }
 

@@ -1,15 +1,14 @@
 package lu.innocence.ignis.view.gamedb;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import lu.innocence.ignis.ZeroStringGenerator;
 import lu.innocence.ignis.component.TilesetManagerCanvas;
 import lu.innocence.ignis.engine.Tileset;
 import lu.innocence.ignis.engine.TilesetManager;
@@ -25,8 +24,8 @@ public class TilesetTab extends GameDBTab {
     private final TextField edtTilesetName;
     private TilesetManager tsManager;
 
-    public TilesetTab(TilesetManager tsManager) {
-        super("Tileset List:");
+    public TilesetTab(TilesetManager tsManager,Stage parent) {
+        super("Tileset List:",parent);
         this.tsManager = tsManager;
 
         VBox centerBox = new VBox();
@@ -128,6 +127,7 @@ public class TilesetTab extends GameDBTab {
 
         centerHPanel.getChildren().add(tilesetScroller);
         centerHPanel.getChildren().add(rightBox);
+        centerBox.getChildren().add(new Separator());
         centerBox.getChildren().add(centerHPanel);
 
         centerBox.setMaxHeight(Integer.MAX_VALUE);
@@ -135,9 +135,6 @@ public class TilesetTab extends GameDBTab {
 
         this.setCenter(centerBox);
 
-        this.visibleProperty().addListener((observable, oldValue, newValue) -> {
-            this.fromTilesetManager(this.tsManager);
-        });
     }
 
     private void initTileset(Tileset tileset) {
@@ -146,21 +143,37 @@ public class TilesetTab extends GameDBTab {
         this.edtTilesetImage.setText(tileset.getImageName());
     }
 
-    private void fromTilesetManager(TilesetManager tsManager) {
+    @Override
+    public void selectionChanged(int index) {
+        if (index > -1) {
+            this.initTileset(this.tsManager.getTilesetAtIndex(index));
+        }
+    }
+
+    @Override
+    public void maxCountChanged(int max) {
+        this.tsManager.setTilesetMax(max);
+        this.init();
+    }
+
+    @Override
+    public int getMaxCount() {
+        return this.tsManager.getTilesetList().size();
+    }
+
+    public void init() {
         this.contentList.getItems().clear();
         int max = tsManager.getTilesetList().size();
         for (int i = 0; i < max; i++) {
             Tileset ts = this.tsManager.getTilesetAtIndex(i);
             if (ts != null) {
-                this.contentList.getItems().add(String.format("%s:%s", String.valueOf(i), ts.getName()));
+                this.contentList.getItems().add(String.format("%s: %s",
+                        ZeroStringGenerator.addZeros(i,9999), ts.getName()));
             }
         }
-    }
 
-    @Override
-    public void selectionChanged(int index) {
-        if (index > -1) {
-            this.initTileset(this.tsManager.getTilesetAtIndex(index));
+        if (max > 0) {
+            this.contentList.getSelectionModel().selectFirst();
         }
     }
 }

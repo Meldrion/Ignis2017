@@ -2,7 +2,12 @@ package lu.innocence.ignis.component;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Tileset;
 
@@ -22,6 +27,19 @@ public class TilesetManagerCanvas extends Canvas {
      */
     public TilesetManagerCanvas() {
         this.mode = MODE_COLLISION;
+
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, t -> {
+
+            int x = (int) t.getX() / 32;
+            int y = (int) t.getY() / 32;
+
+            if (this.tileset != null && this.tileset.inRange(x,y)) {
+                this.tileset.setCollisionAt(x,y,!this.tileset.collisionAt(x,y));
+            }
+
+            this.render();
+
+        });
     }
 
     /**
@@ -66,6 +84,12 @@ public class TilesetManagerCanvas extends Canvas {
                     g.strokeLine(0,i * cellSize,this.getWidth(),i*cellSize);
                 }
 
+                g.setFont(Font.font(null, FontWeight.BOLD, 20));
+                DropShadow ds = new DropShadow();
+                ds.setOffsetY(3.0f);
+                ds.setColor(Color.color(0.3f, 0.3f, 0.3f));
+                g.setEffect(ds);
+
                 for (int i=0;i<maxW; i++) {
                     for (int j=0;j<maxH; j++) {
 
@@ -81,11 +105,17 @@ public class TilesetManagerCanvas extends Canvas {
                         int th = IgnisGlobals.getTextHeight(g);
 
                         int xCenter = (this.cellSize - tw) / 2;
-                        int yCenter = (this.cellSize - th) / 2;
 
-                        g.fillText(text,i * cellSize + xCenter,j *cellSize - th + 3);
+                        g.setFill(Color.WHITE);
+                        g.fillText(text,i * cellSize + xCenter,j * cellSize + th);
+                        g.setStroke(Color.BLACK);
+                        g.strokeText(text,i * cellSize + xCenter,j * cellSize + th);
+
                     }
                 }
+
+                // Remove the Effect
+                g.setEffect(null);
 
             }
         }
