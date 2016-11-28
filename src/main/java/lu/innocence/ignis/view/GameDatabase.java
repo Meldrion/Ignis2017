@@ -69,7 +69,7 @@ public class GameDatabase extends Stage {
 
         Tab tilesetTab = new Tab();
         tilesetTab.setText("Tileset");
-        tilesetTabContent = new TilesetTab(project.getTilesetManager(),this);
+        tilesetTabContent = new TilesetTab(project,this);
         tilesetTab.setContent(tilesetTabContent);
 
         mainTabber.getTabs().addAll(actorTab, classTab, itemTab, skillTab, tilesetTab);

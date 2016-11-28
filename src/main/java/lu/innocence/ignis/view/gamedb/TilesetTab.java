@@ -10,8 +10,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import lu.innocence.ignis.ZeroStringGenerator;
 import lu.innocence.ignis.component.TilesetManagerCanvas;
+import lu.innocence.ignis.engine.AssetStructure;
+import lu.innocence.ignis.engine.Project;
 import lu.innocence.ignis.engine.Tileset;
 import lu.innocence.ignis.engine.TilesetManager;
+import lu.innocence.ignis.view.resourceView.ImageView;
 
 /**
  * Copyright by Fabien Steines
@@ -24,10 +27,9 @@ public class TilesetTab extends GameDBTab {
     private final TextField edtTilesetName;
     private TilesetManager tsManager;
 
-    public TilesetTab(TilesetManager tsManager,Stage parent) {
+    public TilesetTab(Project project, Stage parent) {
         super("Tileset List:",parent);
-        this.tsManager = tsManager;
-
+        this.tsManager = project.getTilesetManager();
         VBox centerBox = new VBox();
 
         GridPane topGrid = new GridPane();
@@ -56,6 +58,11 @@ public class TilesetTab extends GameDBTab {
 
         Button btnLookForTilesetImage = new Button();
         btnLookForTilesetImage.setText("...");
+        btnLookForTilesetImage.setOnAction(event -> {
+            ImageView imageView = new ImageView(parent);
+            imageView.setAssetManager(project.getAssetStructure(), AssetStructure.TILESET);
+            imageView.showAndWait();
+        });
 
         tilesetImageInputAndButtonLayout.getChildren().addAll(edtTilesetImage, btnLookForTilesetImage);
         topGrid.add(tilesetImageInputAndButtonLayout, 1, 1);

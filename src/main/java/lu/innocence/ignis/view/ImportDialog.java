@@ -151,6 +151,7 @@ public class ImportDialog extends Stage {
                 if (audio || image || json) {
                     ImportDialog.this.elementsListView.getItems().add(file);
                 }
+
             }
         }
     }

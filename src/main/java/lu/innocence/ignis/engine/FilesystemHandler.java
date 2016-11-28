@@ -106,7 +106,10 @@ public class FilesystemHandler {
     }
 
     public static boolean isImage(String path) {
-        String mimeType = new MimetypesFileTypeMap().getContentType(new File(path));
+
+        MimetypesFileTypeMap mtftp = new MimetypesFileTypeMap();
+        mtftp.addMimeTypes("image png tif jpg jpeg bmp");
+        String mimeType = mtftp.getContentType(new File(path));
         // mimeType should now be something like "image/png"
         return mimeType.substring(0, 5).equalsIgnoreCase("image");
     }
