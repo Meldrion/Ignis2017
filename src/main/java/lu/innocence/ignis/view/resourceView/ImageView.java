@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.AssetStructure;
 import lu.innocence.ignis.engine.FilesystemHandler;
-import lu.innocence.ignis.engine.Tileset;
 
 /**
  * @author Fabien Steines
@@ -41,6 +40,9 @@ public class ImageView extends ResourceView {
                 }
             }
 
+            if (this.resourceList.getItems().size() > 0) {
+                this.resourceList.getSelectionModel().selectFirst();
+            }
         }
     }
 

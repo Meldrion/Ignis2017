@@ -33,6 +33,10 @@ public class TilesetResourceView extends ResourceView {
                     ZeroStringGenerator.addZeros(i,TilesetManager.MAX_TILESET_COUNT),
                     tileset != null ? tileset.getName() : ""));
         }
+
+        if (this.resourceList.getItems().size() > 0) {
+            this.resourceList.getSelectionModel().selectFirst();
+        }
     }
 
     /**
