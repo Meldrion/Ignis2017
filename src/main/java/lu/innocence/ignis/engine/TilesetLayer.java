@@ -1,10 +1,12 @@
 package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.LogManager;
 
 /**
  * @author Fabien Steines
@@ -15,6 +17,7 @@ public class TilesetLayer {
     private List<List<TilesetCell>> matrix;
     private int width;
     private int height;
+    private static final Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TilesetLayer.class);
 
     /**
      * @param x
