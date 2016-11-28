@@ -59,6 +59,10 @@ public class Tileset {
         this.collisionMatrix[x][y] = collision;
     }
 
+    public boolean[][] getCollisionMatrix() {
+        return this.collisionMatrix;
+    }
+
     public boolean inRange(int x,int y) {
         return x < this.getCellWidth() && y < this.getCellHeight();
     }

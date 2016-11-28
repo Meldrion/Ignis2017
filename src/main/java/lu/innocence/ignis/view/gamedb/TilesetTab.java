@@ -67,7 +67,7 @@ public class TilesetTab extends GameDBTab {
                 String path = FilesystemHandler.concat(project.getAssetStructure().getPath(AssetStructure.TILESET),
                         imageView.getSelectedName());
                 this.tileset.loadImage(path);
-                this.tsManagerCanvas.render();
+                this.tsManagerCanvas.setTileset(this.tileset);
             }
         });
 

@@ -1,5 +1,8 @@
 package lu.innocence.ignis.engine;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +13,14 @@ public class TilesetManager {
 
     public static final int MAX_TILESET_COUNT = 9999;
     private List<Tileset> tilesetList;
+    private String jsonFolder;
 
     public TilesetManager() {
         this.tilesetList = new ArrayList<>();
+    }
+
+    public void setJSONFolder(String jsonFolder) {
+        this.jsonFolder = jsonFolder;
     }
 
     public void setTilesetMax(int maxCount) {
@@ -46,6 +54,46 @@ public class TilesetManager {
 
     public List<Tileset> getTilesetList() {
         return this.tilesetList;
+    }
+
+    public void save() {
+
+        JSONObject tilesetListJSON = new JSONObject();
+        JSONArray tilesets = new JSONArray();
+
+        for (Tileset tileset : this.tilesetList) {
+            JSONObject tilesetJSONObject = new JSONObject();
+            tilesetJSONObject.put("name", tileset.getName());
+            tilesetJSONObject.put("image", tileset.getTilesetImage() != null ? tileset.getImageName() : "");
+            JSONArray blockingMatrix = new JSONArray();
+
+            boolean[][] collisionMatrix = tileset.getCollisionMatrix();
+            if (collisionMatrix != null) {
+                for (int i = 0; i < collisionMatrix.length; i++) {
+                    for (int j = 0; j < collisionMatrix[0].length; j++) {
+
+                        if (collisionMatrix[i][j]) {
+
+                            JSONObject collisionLine = new JSONObject();
+                            collisionLine.put("x", i);
+                            collisionLine.put("y", j);
+                            blockingMatrix.add(collisionLine);
+                        }
+
+                    }
+                }
+            }
+
+            tilesetJSONObject.put("blocking", blockingMatrix);
+            tilesets.add(tilesetJSONObject);
+        }
+
+        tilesetListJSON.put("tilesets", tilesets);
+        FilesystemHandler.writeJson(tilesetListJSON, FilesystemHandler.concat(this.jsonFolder,"tilesettree.json"));
+    }
+
+    public void load() {
+
     }
 
 }

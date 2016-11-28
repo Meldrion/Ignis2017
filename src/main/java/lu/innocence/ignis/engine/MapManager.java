@@ -86,7 +86,8 @@ public class MapManager {
     }
 
     public void saveAll() {
-        this.activeMap.save();
+        if (this.activeMap != null)
+            this.activeMap.save();
     }
 
     public void saveMapFile(Map map) {

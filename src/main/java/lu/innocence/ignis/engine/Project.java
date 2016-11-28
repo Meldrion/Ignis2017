@@ -96,11 +96,14 @@ public class Project {
         this.mapManager.setMapFolder(this.assetStructure.getPath(AssetStructure.MAP));
         this.mapManager.setJsonFolder(this.assetStructure.getPath(AssetStructure.JSON));
         this.mapManager.setTilesetManager(this.tilesetManager);
+        this.tilesetManager.setJSONFolder(this.assetStructure.getPath(AssetStructure.JSON));
     }
 
     public boolean saveProject() {
 
         this.mapManager.saveAll();
+        this.tilesetManager.save();
+
         return true;
     }
 
