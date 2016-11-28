@@ -104,6 +104,15 @@ public class TilesetManager {
             current.setIndex(i);
             current.setName((String)tileset.get("name"));
             current.loadImage((String)tileset.get("image"));
+            JSONArray collisionMatrix = (JSONArray) tileset.get("blocking");
+
+            for (int j=0;j<collisionMatrix.size();j++) {
+                JSONObject collisionLine = (JSONObject) collisionMatrix.get(j);
+                int x = (int) (long) collisionLine.get("x");
+                int y = (int) (long) collisionLine.get("y");
+                current.setCollisionAt(x,y,true);
+            }
+
         }
     }
 
