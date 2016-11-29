@@ -68,7 +68,12 @@ public class TilesetLayer {
             for (int j = 0; j < this.height; j++) {
                 TilesetCell cell = this.matrix.get(i).get(j);
                 if (cell != null) {
-                    tileset.drawTileTo(g, i, j, cell.tsX, cell.tsY);
+                    if ((tileset.isTilesetCell(cell.tsY)) ) {
+                        // Tileset
+                        tileset.drawTileTo(g, i, j, cell.tsX, cell.tsY - 1);
+                    } else {
+                        // Terrain
+                    }
                 }
             }
         }
@@ -83,9 +88,9 @@ public class TilesetLayer {
     public void renderPartial(GraphicsContext g, int x, int y, Tileset tileset) {
         TilesetCell cell = this.matrix.get(x).get(y);
         if (cell != null) {
-            if (tileset.isTilesetCell(y)) {
+            if (tileset.isTilesetCell(cell.tsY)) {
                 // Tileset
-                tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY);
+                tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY - 1);
             } else {
                 // Terrain
             }

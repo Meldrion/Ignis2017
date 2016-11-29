@@ -446,15 +446,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         if (this.map != null && this.map.getTileset() != null) {
             for (int i = 0; i < this.tilesetWidth; i++) {
                 for (int j = 0; j < this.tilesetHeight; j++) {
-
-                    int yCell = this.tilesetY + j;
-                    if (this.map.getTileset().isTilesetCell(yCell)) {
-                        // Tileset Cell
-                        this.map.addCell(this.activeLayerId, x + i, y + j,
-                                this.tilesetX + i, yCell - 1);
-                    } else {
-                        // Terrain Case
-                    }
+                    this.map.addCell(this.activeLayerId, x + i, y + j,
+                            this.tilesetX + i, this.tilesetY + j);
                     this.renderPartial(x + i, y + j);
                 }
             }
@@ -477,14 +470,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             for (int i = 0; i < selectionWidth; i++) {
                 for (int j = 0; j < selectionHeight; j++) {
 
-                    int yCell = this.tilesetY + tsY;
-                    if (this.map.getTileset().isTilesetCell(yCell)) {
-                        // Tileset Case
-                        this.map.addCell(this.activeLayerId, newCoord[0] + i, newCoord[1] + j,
-                                this.tilesetX + tsX, yCell - 1);
-                    } else {
-                        // Terrain Case
-                    }
+                    this.map.addCell(this.activeLayerId, newCoord[0] + i, newCoord[1] + j,
+                            this.tilesetX + tsX, this.tilesetY + tsY);
 
                     this.renderPartial(newCoord[0] + i, newCoord[1] + j);
                     tsY += 1;
