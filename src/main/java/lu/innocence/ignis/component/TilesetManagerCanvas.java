@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import lu.innocence.ignis.IgnisGlobals;
+import lu.innocence.ignis.engine.Terrain;
 import lu.innocence.ignis.engine.Tileset;
 
 /**
@@ -71,6 +72,13 @@ public class TilesetManagerCanvas extends Canvas {
                     cellSize, cellSize);
 
             if (this.tileset != null && this.tileset.getTilesetImage() != null) {
+
+                for (int i=0;i<8;i++) {
+                    Terrain cTerrain = this.tileset.getTerrain(i);
+                    if (cTerrain != null)
+                        cTerrain.draw(g,i*cellSize,0,2,0);
+                }
+
                 g.drawImage(this.tileset.getTilesetImage(), 0, cellSize);
 
                 int maxW = this.tileset.getCellWidth();

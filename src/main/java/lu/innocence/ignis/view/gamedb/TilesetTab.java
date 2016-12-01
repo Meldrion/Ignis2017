@@ -111,7 +111,9 @@ public class TilesetTab extends GameDBTab {
                 imageView.showAndWait();
                 if (imageView.isAccepted()) {
                     edtTerrain[index].setText(imageView.getSelectedName());
-                    this.terrainChanged(index,imageView.getSelectedName());
+                    String path = FilesystemHandler.concat(project.getAssetStructure().getPath(AssetStructure.TILESET),
+                            imageView.getSelectedName());
+                    this.terrainChanged(index,path);
                 }
             });
 
@@ -211,12 +213,12 @@ public class TilesetTab extends GameDBTab {
     /**
      *
      * @param terrainIndex
-     * @param value
+     * @param path
      */
-    private void terrainChanged(int terrainIndex,String value) {
-
+    private void terrainChanged(int terrainIndex,String path) {
         Terrain terrain = new Terrain();
-
+        terrain.loadImage(path);
         this.tileset.setTerrain(terrainIndex,null);
+        this.tsManagerCanvas.render();
     }
 }
