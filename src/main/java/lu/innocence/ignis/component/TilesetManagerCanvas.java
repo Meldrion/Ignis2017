@@ -76,7 +76,7 @@ public class TilesetManagerCanvas extends Canvas {
                 for (int i=0;i<8;i++) {
                     Terrain cTerrain = this.tileset.getTerrain(i);
                     if (cTerrain != null)
-                        cTerrain.draw(g,i*cellSize,0,2,0);
+                        cTerrain.draw(g,i,0,2,0);
                 }
 
                 g.drawImage(this.tileset.getTilesetImage(), 0, cellSize);

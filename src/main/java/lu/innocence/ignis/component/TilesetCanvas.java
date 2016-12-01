@@ -6,6 +6,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Map;
+import lu.innocence.ignis.engine.Terrain;
 import lu.innocence.ignis.engine.Tileset;
 import lu.innocence.ignis.event.ActiveMapListener;
 import lu.innocence.ignis.event.TilesetSelectionChanged;
@@ -87,6 +88,12 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
 
             ChessBGDrawer.drawChessBackground(g, (int) this.getWidth() / 32,
                     (int) this.getHeight() / 32, 32, 32);
+
+            for (int i=0;i<8;i++) {
+                Terrain cTerrain = this.linkedTileset.getTerrain(i);
+                if (cTerrain != null)
+                    cTerrain.draw(g,i,0,2,0);
+            }
 
             g.drawImage(this.linkedTileset.getTilesetImage(), 0, cellSize);
 
