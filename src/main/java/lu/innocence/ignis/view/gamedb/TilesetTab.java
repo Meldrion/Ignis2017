@@ -24,6 +24,8 @@ public class TilesetTab extends GameDBTab {
     private final TextField edtTilesetName;
     private TilesetManager tsManager;
     private Tileset tileset;
+    private TextField[] edtTerrain;
+    private Button[] btnTerrain;
 
     public TilesetTab(Project project, Stage parent) {
         super("Tileset List:",parent);
@@ -31,6 +33,9 @@ public class TilesetTab extends GameDBTab {
         VBox centerBox = new VBox();
 
         this.tsManagerCanvas = new TilesetManagerCanvas();
+
+        this.edtTerrain = new TextField[8];
+        this.btnTerrain = new Button[8];
 
         GridPane topGrid = new GridPane();
         topGrid.setHgap(10);
@@ -94,12 +99,23 @@ public class TilesetTab extends GameDBTab {
         innerLeftPanel.setVgap(10);
 
         for (int i = 0; i < 8; i++) {
-            TextField edtTerrain = new TextField();
-            innerLeftPanel.add(edtTerrain, 0, 1 + i);
 
-            Button btnTerrain = new Button();
-            btnTerrain.setText("...");
-            innerLeftPanel.add(btnTerrain, 1, 1 + i);
+            final int index = i; // Needed because lambda needs final variables ...
+            edtTerrain[index] = new TextField();
+            innerLeftPanel.add(edtTerrain[i], 0, 1 + i);
+            btnTerrain[index] = new Button();
+            btnTerrain[index].setText("...");
+            btnTerrain[index].setOnAction(event -> {
+                ImageView imageView = new ImageView(parent);
+                imageView.setAssetManager(project.getAssetStructure(),AssetStructure.TERRAIN);
+                imageView.showAndWait();
+                if (imageView.isAccepted()) {
+                    edtTerrain[index].setText(imageView.getSelectedName());
+                    this.terrainChanged(index,imageView.getSelectedName());
+                }
+            });
+
+            innerLeftPanel.add(btnTerrain[index], 1, 1 + i);
         }
 
         centerHPanel.getChildren().add(innerLeftPanel);
@@ -190,5 +206,17 @@ public class TilesetTab extends GameDBTab {
         if (max > 0) {
             this.contentList.getSelectionModel().selectFirst();
         }
+    }
+
+    /**
+     *
+     * @param terrainIndex
+     * @param value
+     */
+    private void terrainChanged(int terrainIndex,String value) {
+
+        Terrain terrain = new Terrain();
+
+        this.tileset.setTerrain(terrainIndex,null);
     }
 }
