@@ -15,7 +15,6 @@ import java.util.List;
  */
 public class Map {
 
-
     private static Logger LOGGER = LogManager.getLogger(Map.class);
     private List<TilesetLayer> layers;
     private int width;

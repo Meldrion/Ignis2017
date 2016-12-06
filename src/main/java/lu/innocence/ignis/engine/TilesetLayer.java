@@ -73,6 +73,7 @@ public class TilesetLayer {
                         tileset.drawTileTo(g, i, j, cell.tsX, cell.tsY - 1);
                     } else {
                         // Terrain
+                        tileset.getTerrain(cell.tsX).draw(g,i,j,0,0);
                     }
                 }
             }
@@ -93,6 +94,7 @@ public class TilesetLayer {
                 tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY - 1);
             } else {
                 // Terrain
+                tileset.getTerrain(cell.tsX).draw(g,x,y,0,0);
             }
         }
     }

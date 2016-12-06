@@ -23,6 +23,10 @@ public class Terrain {
         this.terrainImage = new Image(String.format("file:%s", imagePath));;
     }
 
+    public String getImageName() {
+        return this.terrainImageName;
+    }
+
     public void draw(GraphicsContext g, int x, int y, int tsX, int tsY) {
         g.drawImage(this.terrainImage, tsX * cellSize, tsY * cellSize, cellSize, cellSize,
                 x * cellSize, y * cellSize, cellSize, cellSize);

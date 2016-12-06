@@ -101,6 +101,8 @@ public class Project {
         this.mapManager.setJsonFolder(this.assetStructure.getPath(AssetStructure.JSON));
         this.mapManager.setTilesetManager(this.tilesetManager);
         this.tilesetManager.setJSONFolder(this.assetStructure.getPath(AssetStructure.JSON));
+        this.tilesetManager.setTerrainFolder(this.assetStructure.getPath(AssetStructure.TERRAIN));
+        this.tilesetManager.setTilesetFolder(this.assetStructure.getPath(AssetStructure.TILESET));
     }
 
     public boolean saveProject() {

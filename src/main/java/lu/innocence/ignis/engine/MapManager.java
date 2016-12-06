@@ -106,6 +106,7 @@ public class MapManager {
         return this.root.getChildren();
     }
 
+    @SuppressWarnings("unchecked")
     public void saveMapTree() {
         JSONObject mapTreeSave = new JSONObject();
         JSONArray maps = new JSONArray();
@@ -113,9 +114,7 @@ public class MapManager {
         for (Map current : this.root.getChildren()) {
             this.saveSubMapTree(current, maps);
         }
-
         mapTreeSave.put("maps", maps);
-
         String fileName = FilesystemHandler.concat(this.jsonFolder, "maptree.json");
         FilesystemHandler.writeJson(mapTreeSave, fileName);
 
@@ -154,19 +153,16 @@ public class MapManager {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void saveSubMapTree(Map map, JSONArray mapTreeSave) {
-
         JSONObject currentMap = new JSONObject();
         currentMap.put("id", map.getMapId());
         JSONArray subMaps = new JSONArray();
-
         for (Map current : map.getChildren()) {
             saveSubMapTree(current, subMaps);
         }
-
         currentMap.put("submaps", subMaps);
         mapTreeSave.add(currentMap);
-
     }
 
     private int extractMapIdNumber(String input) {
