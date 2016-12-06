@@ -34,9 +34,23 @@ public class Terrain {
 
     public void draw(GraphicsContext g, int x, int y,Boolean[][] sameMatrix) {
         if (sameMatrix[1][0] && sameMatrix[0][1] && sameMatrix[2][1] && sameMatrix[1][2]) {
+            // Middle
             draw(g,x,y,1,2);
         } else {
-            draw(g,x,y,2,0);
+            if (sameMatrix[1][0] && sameMatrix[0][1] && sameMatrix[2][1]) {
+                // Middle Right
+                draw(g,x,y,2,2);
+            } else {
+                if (sameMatrix[0][1] && sameMatrix[1][2]) {
+                    // Top right
+                    draw(g,x,y,2,1);
+                } else {
+                    // We are nothing
+                    draw(g,x,y,0,0);
+                }
+
+            }
+
         }
     }
 
