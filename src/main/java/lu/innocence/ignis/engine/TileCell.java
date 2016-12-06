@@ -5,14 +5,14 @@ import org.json.simple.JSONObject;
 /**
  * @author Fabien Steines
  */
-public class TilesetCell {
+public class TileCell {
 
     int x;
     int y;
     int tsX;
     int tsY;
 
-    public TilesetCell(int x, int y, int tsX, int tsY) {
+    public TileCell(int x, int y, int tsX, int tsY) {
         this.x = x;
         this.y = y;
         this.tsX = tsX;
@@ -26,6 +26,15 @@ public class TilesetCell {
         tile.put("tsX", tsX);
         tile.put("tsY", tsY);
         return tile;
+    }
+
+    /**
+     *
+     * @param other
+     * @return
+     */
+    public boolean sameTileAs(TileCell other) {
+        return other != null && other.tsX == tsX && other.tsY == tsY;
     }
 
 }

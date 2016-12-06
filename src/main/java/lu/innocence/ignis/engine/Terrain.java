@@ -32,8 +32,12 @@ public class Terrain {
                 x * cellSize, y * cellSize, cellSize, cellSize);
     }
 
-    public void draw(GraphicsContext g, int x, int y) {
-
+    public void draw(GraphicsContext g, int x, int y,Boolean[][] sameMatrix) {
+        if (sameMatrix[1][0] && sameMatrix[0][1] && sameMatrix[2][1] && sameMatrix[1][2]) {
+            draw(g,x,y,1,2);
+        } else {
+            draw(g,x,y,2,0);
+        }
     }
 
 }

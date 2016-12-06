@@ -6,7 +6,6 @@ import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.LogManager;
 
 /**
  * @author Fabien Steines
@@ -14,7 +13,7 @@ import java.util.logging.LogManager;
 public class TilesetLayer {
 
     private final int cellSize = 32;
-    private List<List<TilesetCell>> matrix;
+    private List<List<TileCell>> matrix;
     private int width;
     private int height;
     private static final Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TilesetLayer.class);
@@ -37,7 +36,7 @@ public class TilesetLayer {
         this.matrix = new ArrayList<>();
         for (int i = 0; i < this.width; i++) {
 
-            List<TilesetCell> innerMatrix = new ArrayList<>();
+            List<TileCell> innerMatrix = new ArrayList<>();
             for (int j = 0; j < this.height; j++) {
                 innerMatrix.add(null);
             }
@@ -55,7 +54,7 @@ public class TilesetLayer {
      * @param tsY
      */
     public void addCell(int x, int y, int tsX, int tsY) {
-        this.matrix.get(x).set(y, new TilesetCell(x, y, tsX, tsY));
+        this.matrix.get(x).set(y, new TileCell(x, y, tsX, tsY));
     }
 
     /**
@@ -66,14 +65,31 @@ public class TilesetLayer {
 
         for (int i = 0; i < this.width; i++) {
             for (int j = 0; j < this.height; j++) {
-                TilesetCell cell = this.matrix.get(i).get(j);
+                TileCell cell = this.matrix.get(i).get(j);
                 if (cell != null) {
                     if ((tileset.isTilesetCell(cell.tsY)) ) {
                         // Tileset
                         tileset.drawTileTo(g, i, j, cell.tsX, cell.tsY - 1);
                     } else {
+
+                        boolean hasLeft = i != 0;
+                        boolean hasTop = j != 0;
+                        boolean hasRight = i != (this.width - 1);
+                        boolean hasBottom = j != (this.height - 1);
+
+                        Boolean[][] sameMatrix = new Boolean[3][3];
+                        sameMatrix[0][0] = (hasLeft && hasTop) ? cell.sameTileAs(this.matrix.get(i-1).get(j-1)) : null;
+                        sameMatrix[0][1] = (hasTop) ? cell.sameTileAs(this.matrix.get(i).get(j-1)) : null;
+                        sameMatrix[0][2] = (hasRight && hasTop) ? cell.sameTileAs(this.matrix.get(i+1).get(j-1)) : null;
+                        sameMatrix[1][0] = (hasLeft) ? cell.sameTileAs(this.matrix.get(i-1).get(j)) : null;
+                        sameMatrix[1][1] = null;
+                        sameMatrix[1][2] = (hasRight) ? cell.sameTileAs(this.matrix.get(i+1).get(j)) : null;
+                        sameMatrix[2][0] = (hasLeft && hasBottom) ? cell.sameTileAs(this.matrix.get(i-1).get(j+1)) : null;
+                        sameMatrix[2][1] = (hasBottom) ? cell.sameTileAs(this.matrix.get(i).get(j+1)) : null;
+                        sameMatrix[2][2] = (hasRight && hasBottom) ? cell.sameTileAs(this.matrix.get(i+1).get(j+1)) : null;
+
                         // Terrain
-                        tileset.getTerrain(cell.tsX).draw(g,i,j,0,0);
+                        tileset.getTerrain(cell.tsX).draw(g,i,j,sameMatrix);
                     }
                 }
             }
@@ -87,7 +103,7 @@ public class TilesetLayer {
      * @param tileset
      */
     public void renderPartial(GraphicsContext g, int x, int y, Tileset tileset) {
-        TilesetCell cell = this.matrix.get(x).get(y);
+        TileCell cell = this.matrix.get(x).get(y);
         if (cell != null) {
             if (tileset.isTilesetCell(cell.tsY)) {
                 // Tileset
@@ -114,7 +130,7 @@ public class TilesetLayer {
         JSONArray layer = new JSONArray();
         for (int i = 0; i < this.matrix.size(); i++) {
             for (int j = 0; j < this.matrix.get(0).size(); j++) {
-                TilesetCell cell = this.matrix.get(i).get(j);
+                TileCell cell = this.matrix.get(i).get(j);
                 if (cell != null) {
                     layer.add(cell.save());
                 }
@@ -129,4 +145,5 @@ public class TilesetLayer {
     public void clearLayer() {
         this.matrix.clear();
     }
+
 }

@@ -4,6 +4,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -11,6 +13,8 @@ import javafx.scene.text.FontWeight;
 import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Terrain;
 import lu.innocence.ignis.engine.Tileset;
+
+import java.awt.image.BufferedImage;
 
 /**
  * @author Fabien Steines
@@ -22,6 +26,7 @@ public class TilesetManagerCanvas extends Canvas {
     private int mode;
 
     public static final int MODE_COLLISION = 0x0;
+
 
     /**
      *
@@ -42,6 +47,7 @@ public class TilesetManagerCanvas extends Canvas {
 
         });
     }
+
 
     /**
      * @param tileset
@@ -68,6 +74,7 @@ public class TilesetManagerCanvas extends Canvas {
 
         if (this.getWidth() > 0 && this.getHeight() > 0) {
             GraphicsContext g = this.getGraphicsContext2D();
+
             ChessBGDrawer.drawChessBackground(g, (int) this.getWidth() / cellSize, (int) this.getHeight() / cellSize,
                     cellSize, cellSize);
 
@@ -93,16 +100,13 @@ public class TilesetManagerCanvas extends Canvas {
                 }
 
                 g.setFont(Font.font(null, FontWeight.BOLD, 20));
-                DropShadow ds = new DropShadow();
-                ds.setOffsetY(3.0f);
-                ds.setColor(Color.color(0.3f, 0.3f, 0.3f));
-                g.setEffect(ds);
+                Color colorWhite = new Color(1,1,1,0.90);
+                Color colorBlack = new Color(0,0,0,0.90);
 
                 for (int i=0;i<maxW; i++) {
                     for (int j=0;j<maxH; j++) {
 
                         String text;
-
                         if (this.tileset.collisionAt(i,j)) {
                             text = "X";
                         } else {
@@ -111,14 +115,12 @@ public class TilesetManagerCanvas extends Canvas {
 
                         int tw = IgnisGlobals.getTextWidth(g,text);
                         int th = IgnisGlobals.getTextHeight(g);
-
                         int xCenter = (this.cellSize - tw) / 2;
-
-                        g.setFill(Color.WHITE);
+                        g.setFill(colorWhite);
                         g.fillText(text,i * cellSize + xCenter,j * cellSize + th);
-                        g.setStroke(Color.BLACK);
+                        g.setStroke(colorBlack);
+                        g.setLineWidth(1.25);
                         g.strokeText(text,i * cellSize + xCenter,j * cellSize + th);
-
                     }
                 }
 
