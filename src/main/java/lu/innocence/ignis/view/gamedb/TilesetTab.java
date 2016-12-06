@@ -12,6 +12,8 @@ import lu.innocence.ignis.ZeroStringGenerator;
 import lu.innocence.ignis.component.TilesetManagerCanvas;
 import lu.innocence.ignis.engine.*;
 import lu.innocence.ignis.view.resourceView.ImageView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Copyright by Fabien Steines
@@ -19,6 +21,7 @@ import lu.innocence.ignis.view.resourceView.ImageView;
  */
 public class TilesetTab extends GameDBTab {
 
+    private static final Logger LOGGER = LogManager.getLogger(TilesetTab.class);
     private final TilesetManagerCanvas tsManagerCanvas;
     private final TextField edtTilesetImage;
     private final TextField edtTilesetName;
@@ -28,12 +31,11 @@ public class TilesetTab extends GameDBTab {
     private Button[] btnTerrain;
 
     public TilesetTab(Project project, Stage parent) {
-        super("Tileset List:",parent);
+        super("Tileset List:", parent);
         this.tsManager = project.getTilesetManager();
         VBox centerBox = new VBox();
 
         this.tsManagerCanvas = new TilesetManagerCanvas();
-
         this.edtTerrain = new TextField[8];
         this.btnTerrain = new Button[8];
 
@@ -46,7 +48,16 @@ public class TilesetTab extends GameDBTab {
         Text tilesetName = new Text();
         tilesetName.setText("Tileset Name:");
         topGrid.add(tilesetName, 0, 0);
+
+        // React on the Change and on the Enter Event of the TextField
         this.edtTilesetName = new TextField();
+        this.edtTilesetName.focusedProperty().addListener((observable, oldValue, newValue) ->
+                this.edtTilesetImageChanged()
+        );
+        this.edtTilesetName.setOnAction(event ->
+                this.edtTilesetImageChanged()
+        );
+
         this.edtTilesetName.setMaxWidth(Integer.MAX_VALUE);
         topGrid.add(this.edtTilesetName, 1, 0);
 
@@ -107,13 +118,13 @@ public class TilesetTab extends GameDBTab {
             btnTerrain[index].setText("...");
             btnTerrain[index].setOnAction(event -> {
                 ImageView imageView = new ImageView(parent);
-                imageView.setAssetManager(project.getAssetStructure(),AssetStructure.TERRAIN);
+                imageView.setAssetManager(project.getAssetStructure(), AssetStructure.TERRAIN);
                 imageView.showAndWait();
                 if (imageView.isAccepted()) {
                     edtTerrain[index].setText(imageView.getSelectedName());
                     String path = FilesystemHandler.concat(project.getAssetStructure().getPath(AssetStructure.TERRAIN),
                             imageView.getSelectedName());
-                    this.terrainChanged(index,path);
+                    this.terrainChanged(index, path);
                 }
             });
 
@@ -169,11 +180,27 @@ public class TilesetTab extends GameDBTab {
 
     }
 
+    private void edtTilesetImageChanged() {
+        String text = this.edtTilesetName.getText();
+        this.tileset.setName(text);
+        String newName = String.format("%s: %s", ZeroStringGenerator.
+                addZeros(tileset.getIndex(), 9999), text);
+        this.contentList.getItems().set(this.tileset.getIndex(), newName);
+    }
+
     private void initTileset(Tileset tileset) {
         tsManagerCanvas.setTileset(tileset);
         this.edtTilesetName.setText(tileset.getName());
         this.edtTilesetImage.setText(tileset.getImageName());
         this.tileset = tileset;
+        for (int i=0;i<8;i++) {
+            Terrain t = this.tileset.getTerrain(i);
+            if (t != null) {
+                this.edtTerrain[i].setText(t.getImageName());
+            } else {
+                this.edtTerrain[i].clear();
+            }
+        }
     }
 
     @Override
@@ -201,7 +228,7 @@ public class TilesetTab extends GameDBTab {
             Tileset ts = this.tsManager.getTilesetAtIndex(i);
             if (ts != null) {
                 this.contentList.getItems().add(String.format("%s: %s",
-                        ZeroStringGenerator.addZeros(i,9999), ts.getName()));
+                        ZeroStringGenerator.addZeros(i, 9999), ts.getName()));
             }
         }
 
@@ -211,11 +238,10 @@ public class TilesetTab extends GameDBTab {
     }
 
     /**
-     *
      * @param terrainIndex
      * @param path
      */
-    private void terrainChanged(int terrainIndex,String path) {
+    private void terrainChanged(int terrainIndex, String path) {
         if (this.tileset != null) {
             Terrain terrain = new Terrain();
             terrain.loadImage(path);

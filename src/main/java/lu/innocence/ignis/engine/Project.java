@@ -13,13 +13,12 @@ public class Project {
     private MapManager mapManager;
     private AssetStructure assetStructure;
     private TilesetManager tilesetManager;
-
     private String projectTitle;
     private String author;
     private String devCompany;
 
     /**
-     *
+     * Create an instance of the project
      */
     public Project() {
         this.mapManager = new MapManager();
@@ -28,13 +27,14 @@ public class Project {
 
 
     /**
-     * @param rootPath
-     * @param projectName
-     * @param projectTitle
-     * @param author
-     * @param devCompany
-     * @return
+     * @param rootPath root Path of the Project
+     * @param projectName the name of the Project Folder
+     * @param projectTitle the title of the project
+     * @param author the name of the author
+     * @param devCompany the name of the company
+     * @return true of the project was created without any errors
      */
+    @SuppressWarnings("unchecked")
     public boolean create(String rootPath, String projectName, String projectTitle, String author, String devCompany) {
 
         this.rootFolder = FilesystemHandler.concat(rootPath, projectName);
@@ -71,7 +71,11 @@ public class Project {
 
     }
 
-
+    /**
+     *
+     * @param rootFolder the project root folder
+     * @return true if the project has been loaded without any errors
+     */
     public boolean load(String rootFolder) {
         this.rootFolder = rootFolder;
         this.assetStructure = new AssetStructure(this.rootFolder);
@@ -96,6 +100,9 @@ public class Project {
 
     }
 
+    /**
+     *
+     */
     private void init() {
         this.mapManager.setMapFolder(this.assetStructure.getPath(AssetStructure.MAP));
         this.mapManager.setJsonFolder(this.assetStructure.getPath(AssetStructure.JSON));
@@ -105,6 +112,10 @@ public class Project {
         this.tilesetManager.setTilesetFolder(this.assetStructure.getPath(AssetStructure.TILESET));
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean saveProject() {
 
         this.mapManager.saveAll();
@@ -113,19 +124,76 @@ public class Project {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     public MapManager getMapManager() {
         return this.mapManager;
     }
 
-
+    /**
+     *
+     * @return
+     */
     public AssetStructure getAssetStructure() {
         return this.assetStructure;
     }
 
+    /**
+     *
+     * @return
+     */
     public TilesetManager getTilesetManager() {
         return this.tilesetManager;
     }
 
-    ;
+    /**
+     *
+     * @return
+     */
+    public String getProjectTitle() {
+        return projectTitle;
+    }
+
+    /**
+     *
+     * @param projectTitle
+     */
+    public void setProjectTitle(String projectTitle) {
+        this.projectTitle = projectTitle;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getAuthor() {
+        return author;
+    }
+
+    /**
+     *
+     * @param author
+     */
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getDevCompany() {
+        return devCompany;
+    }
+
+    /**
+     *
+     * @param devCompany
+     */
+    public void setDevCompany(String devCompany) {
+        this.devCompany = devCompany;
+    }
 
 }
