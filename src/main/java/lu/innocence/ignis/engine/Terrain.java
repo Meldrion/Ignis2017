@@ -37,11 +37,11 @@ public class Terrain {
             // Middle
             draw(g,x,y,1,2);
         } else {
-            if (sameMatrix[1][0] && sameMatrix[0][1] && sameMatrix[2][1]) {
+            if (sameMatrix[2][0] && sameMatrix[1][1] && sameMatrix[2][2]) {
                 // Middle Right
                 draw(g,x,y,2,2);
             } else {
-                if (sameMatrix[0][1] && sameMatrix[1][2]) {
+                if (sameMatrix[1][0] && sameMatrix[2][1]) {
                     // Top right
                     draw(g,x,y,2,1);
                 } else {
