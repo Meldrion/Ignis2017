@@ -10,6 +10,10 @@ import java.io.File;
  */
 public class Terrain {
 
+    public static final int IS_SAME = 0x0;
+    public static final int IS_DIFFERENT = 0x1;
+    public static final int IS_UNSET = 0x2;
+
     private String terrainImageName;
     private Image terrainImage;
     private int cellSize = 32;
@@ -32,16 +36,21 @@ public class Terrain {
                 x * cellSize, y * cellSize, cellSize, cellSize);
     }
 
-    public void draw(GraphicsContext g, int x, int y,Boolean[][] sameMatrix) {
-        if (sameMatrix[1][0] && sameMatrix[0][1] && sameMatrix[2][1] && sameMatrix[1][2]) {
+    public void draw(GraphicsContext g, int x, int y,Integer[][] sameMatrix) {
+
+
+        if (sameMatrix[1][0] == IS_SAME && sameMatrix[0][1] == IS_SAME
+                && sameMatrix[2][1] == IS_SAME  && sameMatrix[1][2] == IS_SAME) {
             // Middle
             draw(g,x,y,1,2);
         } else {
-            if (sameMatrix[2][0] && sameMatrix[1][1] && sameMatrix[2][2]) {
+            if (sameMatrix[0][0] == IS_SAME && sameMatrix[0][1] == IS_SAME &&
+                    sameMatrix[1][2] == IS_SAME) {
                 // Middle Right
                 draw(g,x,y,2,2);
             } else {
-                if (sameMatrix[1][0] && sameMatrix[2][1]) {
+                if (sameMatrix[0][1] == IS_SAME && sameMatrix[1][2] == IS_SAME
+                        &&  sameMatrix[2][1] == IS_DIFFERENT) {
                     // Top right
                     draw(g,x,y,2,1);
                 } else {
