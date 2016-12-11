@@ -24,7 +24,8 @@ public class Terrain {
 
     public void loadImage(String imagePath) {
         this.terrainImageName = (new File(imagePath)).getName();
-        this.terrainImage = new Image(String.format("file:%s", imagePath));;
+        this.terrainImage = new Image(String.format("file:%s", imagePath));
+        ;
     }
 
     public String getImageName() {
@@ -36,7 +37,7 @@ public class Terrain {
                 x * cellSize, y * cellSize, cellSize, cellSize);
     }
 
-    public void draw(GraphicsContext g, int x, int y,Integer[][] sameMatrix) {
+    public void draw(GraphicsContext g, int x, int y, Integer[][] sameMatrix) {
 
         int top_left = sameMatrix[0][0];
         int top = sameMatrix[1][0];
@@ -48,24 +49,51 @@ public class Terrain {
         int bottom = sameMatrix[1][2];
         int bottom_right = sameMatrix[2][2];
 
-        if (top == IS_SAME && bottom == IS_SAME && middle_left == IS_SAME && middle_right == IS_SAME) {
-            // Middle
-            draw(g,x,y,1,2);
+        // Middle
+        if (top == IS_SAME && bottom == IS_SAME && middle_left == IS_SAME
+                && middle_right == IS_SAME) {
+            draw(g, x, y, 1, 2);
         } else {
-            if (top == IS_SAME && bottom == IS_SAME && middle_left == IS_SAME && middle_right == IS_DIFFERENT) {
-                // Middle Right
-                draw(g,x,y,2,2);
+            // Middle Right
+            if (top == IS_SAME && bottom == IS_SAME && middle_left == IS_SAME
+                    && middle_right == IS_DIFFERENT) {
+                draw(g, x, y, 2, 2);
             } else {
-                if (middle_left == IS_SAME && bottom == IS_SAME
-                        && top == IS_DIFFERENT && middle_right == IS_DIFFERENT) {
-                    // Top right
-                    draw(g,x,y,2,1);
+                // Middle Left
+                if (top == IS_SAME && bottom == IS_SAME && middle_left == IS_DIFFERENT
+                        && middle_right == IS_SAME) {
+                    draw(g, x, y, 0, 2);
                 } else {
-                    // We are nothing
-                    draw(g,x,y,0,0);
+                    // Top right
+                    if (middle_left == IS_SAME && bottom == IS_SAME
+                            && top == IS_DIFFERENT && middle_right == IS_DIFFERENT) {
+                        draw(g, x, y, 2, 1);
+                    } else {
+                        // Top left
+                        if (middle_right == IS_SAME && bottom == IS_SAME
+                                && top == IS_DIFFERENT && middle_left == IS_DIFFERENT) {
+                            draw(g, x, y, 0, 1);
+                        } else {
+                            // TOP
+                            if (middle_left == IS_SAME && middle_right == IS_SAME
+                                    && bottom == IS_SAME && top == IS_DIFFERENT) {
+                                draw(g, x, y, 1, 1);
+                            } else {
+                                // BOTTOM
+                                if (middle_left == IS_SAME && middle_right == IS_SAME
+                                        && bottom == IS_DIFFERENT && top == IS_SAME) {
+                                    draw(g, x, y, 1, 3);
+                                } else {
+                                    // We are nothing
+                                    draw(g, x, y, 0, 0);
+                                }
+
+                            }
+                        }
+                    }
+
                 }
             }
         }
     }
-
 }
