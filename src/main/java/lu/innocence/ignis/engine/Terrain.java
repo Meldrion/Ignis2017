@@ -16,7 +16,7 @@ public class Terrain {
 
     private String terrainImageName;
     private Image terrainImage;
-    private int cellSize = 32;
+    private static final int cellSize = 32;
 
     public Terrain() {
         this.terrainImageName = "";
@@ -25,21 +25,34 @@ public class Terrain {
     public void loadImage(String imagePath) {
         this.terrainImageName = (new File(imagePath)).getName();
         this.terrainImage = new Image(String.format("file:%s", imagePath));
-        ;
     }
 
     public String getImageName() {
         return this.terrainImageName;
     }
 
-    public void draw(GraphicsContext g, int x, int y, int tsX, int tsY,boolean specialCase) {
+    public void draw(GraphicsContext g, int x, int y, int tsX, int tsY, boolean specialCase) {
 
         if (specialCase) {
-            g.drawImage(this.terrainImage, 0, cellSize, cellSize/2, cellSize,
-                    x * cellSize, y * cellSize, cellSize/2, cellSize);
 
-            g.drawImage(this.terrainImage, 2*cellSize+cellSize/2, cellSize, cellSize/2, cellSize,
-                    x * cellSize + cellSize/2, y * cellSize, cellSize/2, cellSize);
+            if (tsX == 1 && tsY == 1) {
+                g.drawImage(this.terrainImage, 0, cellSize, cellSize / 2, cellSize,
+                        x * cellSize, y * cellSize, cellSize / 2, cellSize);
+
+                g.drawImage(this.terrainImage, 2 * cellSize + cellSize / 2, cellSize, cellSize / 2, cellSize,
+                        x * cellSize + cellSize / 2, y * cellSize, cellSize / 2, cellSize);
+                return;
+            }
+
+            if (tsX == 1 && tsY == 3) {
+                g.drawImage(this.terrainImage, 0, cellSize * 3, cellSize / 2, cellSize,
+                        x * cellSize, y * cellSize, cellSize / 2, cellSize);
+
+                g.drawImage(this.terrainImage, 2 * cellSize + cellSize / 2, cellSize * 3, cellSize / 2, cellSize,
+                        x * cellSize + cellSize / 2, y * cellSize, cellSize / 2, cellSize);
+                return;
+            }
+
         } else {
             g.drawImage(this.terrainImage, tsX * cellSize, tsY * cellSize, cellSize, cellSize,
                     x * cellSize, y * cellSize, cellSize, cellSize);
@@ -48,7 +61,7 @@ public class Terrain {
     }
 
     public void draw(GraphicsContext g, int x, int y, int tsX, int tsY) {
-        draw(g,x,y,tsX,tsY,false);
+        draw(g, x, y, tsX, tsY, false);
     }
 
     public void draw(GraphicsContext g, int x, int y, Integer[][] sameMatrix) {
@@ -121,7 +134,14 @@ public class Terrain {
         // TOP w/o neighbours
         if (bottom == IS_SAME && middleLeft == IS_DIFFERENT
                 && middleRight == IS_DIFFERENT) {
-            draw(g, x, y, 1, 3,true);
+            draw(g, x, y, 1, 1, true);
+            return;
+        }
+
+        // Bottom w/o neighbours
+        if (top == IS_SAME && bottom == IS_DIFFERENT && middleLeft == IS_DIFFERENT
+                && middleRight == IS_DIFFERENT) {
+            draw(g, x, y, 1, 3, true);
             return;
         }
 
