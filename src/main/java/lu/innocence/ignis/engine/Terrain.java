@@ -32,76 +32,96 @@ public class Terrain {
         return this.terrainImageName;
     }
 
+    public void draw(GraphicsContext g, int x, int y, int tsX, int tsY,boolean specialCase) {
+
+        if (specialCase) {
+            g.drawImage(this.terrainImage, 0, cellSize, cellSize/2, cellSize,
+                    x * cellSize, y * cellSize, cellSize/2, cellSize);
+
+            g.drawImage(this.terrainImage, 2*cellSize+cellSize/2, cellSize, cellSize/2, cellSize,
+                    x * cellSize + cellSize/2, y * cellSize, cellSize/2, cellSize);
+        } else {
+            g.drawImage(this.terrainImage, tsX * cellSize, tsY * cellSize, cellSize, cellSize,
+                    x * cellSize, y * cellSize, cellSize, cellSize);
+        }
+
+    }
+
     public void draw(GraphicsContext g, int x, int y, int tsX, int tsY) {
-        g.drawImage(this.terrainImage, tsX * cellSize, tsY * cellSize, cellSize, cellSize,
-                x * cellSize, y * cellSize, cellSize, cellSize);
+        draw(g,x,y,tsX,tsY,false);
     }
 
     public void draw(GraphicsContext g, int x, int y, Integer[][] sameMatrix) {
 
-        int top_left = sameMatrix[0][0];
+        int topLeft = sameMatrix[0][0];
         int top = sameMatrix[1][0];
-        int top_right = sameMatrix[2][0];
-        int middle_left = sameMatrix[0][1];
-        int middle = IS_UNSET;
-        int middle_right = sameMatrix[2][1];
-        int bottom_left = sameMatrix[0][2];
+        int topRight = sameMatrix[2][0];
+        int middleLeft = sameMatrix[0][1];
+        int middleRight = sameMatrix[2][1];
+        int bottomLeft = sameMatrix[0][2];
         int bottom = sameMatrix[1][2];
-        int bottom_right = sameMatrix[2][2];
+        int bottomRight = sameMatrix[2][2];
 
         // Middle
-        if (top == IS_SAME && bottom == IS_SAME && middle_left == IS_SAME
-                && middle_right == IS_SAME) {
+        if (top == IS_SAME && bottom == IS_SAME && middleLeft == IS_SAME
+                && middleRight == IS_SAME) {
             draw(g, x, y, 1, 2);
             return;
         }
         // Middle Right
-        if (top == IS_SAME && bottom == IS_SAME && middle_left == IS_SAME
-                && middle_right == IS_DIFFERENT) {
+        if (top == IS_SAME && bottom == IS_SAME && middleLeft == IS_SAME
+                && middleRight == IS_DIFFERENT) {
             draw(g, x, y, 2, 2);
             return;
         }
         // Middle Left
-        if (top == IS_SAME && bottom == IS_SAME && middle_left == IS_DIFFERENT
-                && middle_right == IS_SAME) {
+        if (top == IS_SAME && bottom == IS_SAME && middleLeft == IS_DIFFERENT
+                && middleRight == IS_SAME) {
             draw(g, x, y, 0, 2);
             return;
         }
         // Top right
-        if (middle_left == IS_SAME && bottom == IS_SAME
-                && top == IS_DIFFERENT && middle_right == IS_DIFFERENT) {
+        if (middleLeft == IS_SAME && bottom == IS_SAME
+                && top == IS_DIFFERENT && middleRight == IS_DIFFERENT) {
             draw(g, x, y, 2, 1);
             return;
         }
         // Top left
-        if (middle_right == IS_SAME && bottom == IS_SAME
-                && top == IS_DIFFERENT && middle_left == IS_DIFFERENT) {
+        if (middleRight == IS_SAME && bottom == IS_SAME
+                && top == IS_DIFFERENT && middleLeft == IS_DIFFERENT) {
             draw(g, x, y, 0, 1);
             return;
         }
 
         // Bottom left
-        if (middle_right == IS_SAME && bottom == IS_DIFFERENT
-                && top == IS_SAME && middle_left == IS_DIFFERENT) {
+        if (middleRight == IS_SAME && bottom == IS_DIFFERENT
+                && top == IS_SAME && middleLeft == IS_DIFFERENT) {
             draw(g, x, y, 0, 3);
             return;
         }
         // Bottom right
-        if (middle_left == IS_SAME && bottom == IS_DIFFERENT
-                && top == IS_SAME && middle_right == IS_DIFFERENT) {
+        if (middleLeft == IS_SAME && bottom == IS_DIFFERENT
+                && top == IS_SAME && middleRight == IS_DIFFERENT) {
             draw(g, x, y, 2, 3);
             return;
         }
         // TOP
-        if (middle_left == IS_SAME && middle_right == IS_SAME
+        if (middleLeft == IS_SAME && middleRight == IS_SAME
                 && bottom == IS_SAME && top == IS_DIFFERENT) {
             draw(g, x, y, 1, 1);
             return;
         }
         // BOTTOM
-        if (middle_left == IS_SAME && middle_right == IS_SAME
+        if (middleLeft == IS_SAME && middleRight == IS_SAME
                 && bottom == IS_DIFFERENT && top == IS_SAME) {
             draw(g, x, y, 1, 3);
+            return;
+        }
+
+        // TOP w/o neighbours
+        if (bottom == IS_SAME && middleLeft == IS_DIFFERENT
+                && middleRight == IS_DIFFERENT) {
+            draw(g, x, y, 1, 3,true);
             return;
         }
 
