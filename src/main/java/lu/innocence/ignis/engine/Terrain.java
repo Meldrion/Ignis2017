@@ -74,21 +74,35 @@ public class Terrain {
                                 && top == IS_DIFFERENT && middle_left == IS_DIFFERENT) {
                             draw(g, x, y, 0, 1);
                         } else {
-                            // TOP
-                            if (middle_left == IS_SAME && middle_right == IS_SAME
-                                    && bottom == IS_SAME && top == IS_DIFFERENT) {
-                                draw(g, x, y, 1, 1);
-                            } else {
-                                // BOTTOM
-                                if (middle_left == IS_SAME && middle_right == IS_SAME
-                                        && bottom == IS_DIFFERENT && top == IS_SAME) {
-                                    draw(g, x, y, 1, 3);
-                                } else {
-                                    // We are nothing
-                                    draw(g, x, y, 0, 0);
-                                }
 
+                            // Bottom left
+                            if (middle_right == IS_SAME && bottom == IS_DIFFERENT
+                                    && top == IS_SAME && middle_left == IS_DIFFERENT) {
+                                draw(g, x, y, 0, 3);
+                            } else {
+                                // Bottom right
+                                if (middle_left == IS_SAME && bottom == IS_DIFFERENT
+                                        && top == IS_SAME && middle_right == IS_DIFFERENT) {
+                                    draw(g, x, y, 2, 3);
+                                } else {
+                                    // TOP
+                                    if (middle_left == IS_SAME && middle_right == IS_SAME
+                                            && bottom == IS_SAME && top == IS_DIFFERENT) {
+                                        draw(g, x, y, 1, 1);
+                                    } else {
+                                        // BOTTOM
+                                        if (middle_left == IS_SAME && middle_right == IS_SAME
+                                                && bottom == IS_DIFFERENT && top == IS_SAME) {
+                                            draw(g, x, y, 1, 3);
+                                        } else {
+                                            // We are nothing
+                                            draw(g, x, y, 0, 0);
+                                        }
+
+                                    }
+                                }
                             }
+
                         }
                     }
 
