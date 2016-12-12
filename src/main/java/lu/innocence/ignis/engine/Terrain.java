@@ -131,12 +131,20 @@ public class Terrain {
             return;
         }
 
+        // Special Middle
+        if (top == IS_UNSET && bottom == IS_SAME && middleLeft == IS_SAME
+                && middleRight == IS_SAME) {
+            draw(g, x, y, 1, 2);
+            return;
+        }
+
         // TOP w/o neighbours
         if (bottom == IS_SAME && middleLeft == IS_DIFFERENT
                 && middleRight == IS_DIFFERENT) {
             draw(g, x, y, 1, 1, true);
             return;
         }
+
 
         // Bottom w/o neighbours
         if (top == IS_SAME && bottom == IS_DIFFERENT && middleLeft == IS_DIFFERENT
