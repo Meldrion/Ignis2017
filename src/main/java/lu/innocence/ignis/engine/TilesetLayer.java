@@ -74,7 +74,7 @@ public class TilesetLayer {
             for (int j = 0; j < this.height; j++) {
                 TileCell cell = this.matrix.get(i).get(j);
                 if (cell != null) {
-                    cellDrawing(g, tileset, cell, i, j, false);
+                    cellDrawing(g, tileset, cell, i, j, true);
                 }
             }
         }

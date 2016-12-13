@@ -65,6 +65,16 @@ public class Terrain {
                 return;
             }
 
+            // Right w/o neighbours
+            if (tsX == 2 && tsY == 2) {
+                g.drawImage(this.terrainImage, cellSize*2, cellSize, cellSize, cellSize / 2,
+                        x * cellSize, y * cellSize, cellSize, cellSize / 2);
+
+                g.drawImage(this.terrainImage, cellSize * 2, cellSize * 3 + cellSize / 2, cellSize, cellSize / 2,
+                        x * cellSize, y * cellSize + cellSize / 2, cellSize, cellSize / 2);
+                return;
+            }
+
         } else {
             g.drawImage(this.terrainImage, tsX * cellSize, tsY * cellSize, cellSize, cellSize,
                     x * cellSize, y * cellSize, cellSize, cellSize);
@@ -168,6 +178,12 @@ public class Terrain {
         // Left w/o neighbours
         if (top == IS_DIFFERENT && bottom == IS_DIFFERENT && middleLeft == IS_DIFFERENT && middleRight == IS_SAME) {
             draw(g, x, y, 0, 2, true);
+            return;
+        }
+
+        // Right w/o neighbours
+        if (top == IS_DIFFERENT && bottom == IS_DIFFERENT && middleLeft == IS_SAME && middleRight == IS_DIFFERENT) {
+            draw(g, x, y, 2, 2, true);
             return;
         }
 
