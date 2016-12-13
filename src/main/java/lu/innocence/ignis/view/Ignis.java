@@ -254,8 +254,11 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
         leftSplitter.getItems().add(mapTree);
         leftSplitter.setDividerPosition(0, 0.7);
-
         root.setLeft(leftSplitter);
+
+        Pane bottomBox = new Pane();
+        bottomBox.setPrefHeight(20);
+        root.setBottom(bottomBox);
 
         this.userInterfaceChanges(null);
         primaryStage.show();

@@ -121,6 +121,21 @@ public class Terrain {
             draw(g, x, y, 2, 1);
             return;
         }
+
+        // Top right with UNSET
+        if (middleLeft == IS_SAME && bottom == IS_SAME
+                && top == IS_UNSET && middleRight == IS_DIFFERENT) {
+            draw(g, x, y, 2, 2);
+            return;
+        }
+
+        // Top left with UNSET
+        if (middleRight == IS_SAME && bottom == IS_SAME
+                && top == IS_UNSET && middleLeft == IS_DIFFERENT) {
+            draw(g, x, y, 0, 2);
+            return;
+        }
+
         // Top left
         if (middleRight == IS_SAME && bottom == IS_SAME
                 && top == IS_DIFFERENT && middleLeft == IS_DIFFERENT) {
@@ -140,6 +155,8 @@ public class Terrain {
             draw(g, x, y, 2, 3);
             return;
         }
+
+
         // TOP
         if (middleLeft == IS_SAME && middleRight == IS_SAME
                 && bottom == IS_SAME && top == IS_DIFFERENT) {
@@ -150,6 +167,27 @@ public class Terrain {
         if (middleLeft == IS_SAME && middleRight == IS_SAME
                 && bottom == IS_DIFFERENT && top == IS_SAME) {
             draw(g, x, y, 1, 3);
+            return;
+        }
+
+        // BOTTOM width unset
+        if (middleLeft == IS_SAME && middleRight == IS_SAME
+                && bottom == IS_UNSET && top == IS_SAME) {
+            draw(g, x, y, 1, 2);
+            return;
+        }
+
+        // Bottom right with UNSET
+        if (middleLeft == IS_SAME && bottom == IS_UNSET
+                && top == IS_SAME && middleRight == IS_DIFFERENT) {
+            draw(g, x, y, 2, 2);
+            return;
+        }
+
+        // Bottom right with UNSET
+        if (middleLeft == IS_DIFFERENT && bottom == IS_UNSET
+                && top == IS_SAME && middleRight == IS_SAME) {
+            draw(g, x, y, 0, 2);
             return;
         }
 
