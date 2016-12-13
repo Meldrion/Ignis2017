@@ -130,7 +130,6 @@ public class TilesetLayer {
                 this.renderTerrainTileInterface.forceRenderTile(g, x, y + 1);
                 this.renderTerrainTileInterface.forceRenderTile(g, x + 1, y + 1);
             }
-
         }
     }
 
@@ -142,15 +141,16 @@ public class TilesetLayer {
      * @param ignoreRenderOthersArround
      */
     public void renderPartial(GraphicsContext g, int x, int y, Tileset tileset, boolean ignoreRenderOthersArround) {
-        TileCell cell = this.matrix.get(x).get(y);
-        if (cell != null) {
-            if (tileset.isTilesetCell(cell.tsY)) {
-                // Tileset
-                tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY - 1);
-            } else {
-                // Terrain
-                //tileset.getTerrain(cell.tsX).draw(g,x,y,0,0);
-                cellDrawing(g, tileset, cell, x, y, ignoreRenderOthersArround);
+        if (-1 < x && -1 < y && x < this.width && y < this.height) {
+            TileCell cell = this.matrix.get(x).get(y);
+            if (cell != null) {
+                if (tileset.isTilesetCell(cell.tsY)) {
+                    // Tileset
+                    tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY - 1);
+                } else {
+                    // Terrain
+                    cellDrawing(g, tileset, cell, x, y, ignoreRenderOthersArround);
+                }
             }
         }
     }
