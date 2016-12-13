@@ -35,6 +35,7 @@ public class Terrain {
 
         if (specialCase) {
 
+            // Top w/o neighbours
             if (tsX == 1 && tsY == 1) {
                 g.drawImage(this.terrainImage, 0, cellSize, cellSize / 2, cellSize,
                         x * cellSize, y * cellSize, cellSize / 2, cellSize);
@@ -44,12 +45,23 @@ public class Terrain {
                 return;
             }
 
+            // Bottom w/o neighbours
             if (tsX == 1 && tsY == 3) {
                 g.drawImage(this.terrainImage, 0, cellSize * 3, cellSize / 2, cellSize,
                         x * cellSize, y * cellSize, cellSize / 2, cellSize);
 
                 g.drawImage(this.terrainImage, 2 * cellSize + cellSize / 2, cellSize * 3, cellSize / 2, cellSize,
                         x * cellSize + cellSize / 2, y * cellSize, cellSize / 2, cellSize);
+                return;
+            }
+
+            // Left w/o neighbours
+            if (tsX == 0 && tsY == 2) {
+                g.drawImage(this.terrainImage, 0, cellSize, cellSize, cellSize / 2,
+                        x * cellSize, y * cellSize, cellSize, cellSize / 2);
+
+                g.drawImage(this.terrainImage, 0, cellSize * 3 + cellSize / 2, cellSize, cellSize / 2,
+                        x * cellSize, y * cellSize + cellSize / 2, cellSize, cellSize / 2);
                 return;
             }
 
@@ -150,6 +162,12 @@ public class Terrain {
         if (top == IS_SAME && bottom == IS_DIFFERENT && middleLeft == IS_DIFFERENT
                 && middleRight == IS_DIFFERENT) {
             draw(g, x, y, 1, 3, true);
+            return;
+        }
+
+        // Left w/o neighbours
+        if (top == IS_DIFFERENT && bottom == IS_DIFFERENT && middleLeft == IS_DIFFERENT && middleRight == IS_SAME) {
+            draw(g, x, y, 0, 2, true);
             return;
         }
 
