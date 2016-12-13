@@ -1,6 +1,7 @@
 package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
+import lu.innocence.ignis.event.RenderTerrainTileInterface;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 
@@ -17,6 +18,12 @@ public class TilesetLayer {
     private int width;
     private int height;
     private static final Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TilesetLayer.class);
+    private RenderTerrainTileInterface renderTerrainTileInterface;
+
+
+    public TilesetLayer(RenderTerrainTileInterface renderTerrainTileInterface) {
+        this.renderTerrainTileInterface = renderTerrainTileInterface;
+    }
 
     /**
      * @param x
@@ -67,39 +74,63 @@ public class TilesetLayer {
             for (int j = 0; j < this.height; j++) {
                 TileCell cell = this.matrix.get(i).get(j);
                 if (cell != null) {
-                    if ((tileset.isTilesetCell(cell.tsY)) ) {
-                        // Tileset
-                        tileset.drawTileTo(g, i, j, cell.tsX, cell.tsY - 1);
-                    } else {
-
-                        boolean hasLeft = i != 0;
-                        boolean hasTop = j != 0;
-                        boolean hasRight = i != (this.width - 1);
-                        boolean hasBottom = j != (this.height - 1);
-
-                        Integer[][] sameMatrix = new Integer[3][3];
-                        sameMatrix[0][0] = (hasLeft && hasTop) ? cell.sameTileAs(this.matrix.get(i-1).get(j-1))
-                                ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-                        sameMatrix[0][1] = hasLeft ? cell.sameTileAs(this.matrix.get(i-1).get(j))
-                                ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-                        sameMatrix[0][2] = (hasLeft && hasBottom) ? cell.sameTileAs(this.matrix.get(i-1).get(j+1))
-                                ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-                        sameMatrix[1][0] = hasTop ? cell.sameTileAs(this.matrix.get(i).get(j-1))
-                                ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-                        sameMatrix[1][1] = null;
-                        sameMatrix[1][2] = hasBottom ? cell.sameTileAs(this.matrix.get(i).get(j+1))
-                                ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-                        sameMatrix[2][0] = (hasRight && hasTop) ? cell.sameTileAs(this.matrix.get(i+1).get(j-1))
-                                ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-                        sameMatrix[2][1] = hasRight ? cell.sameTileAs(this.matrix.get(i+1).get(j))
-                                ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-                        sameMatrix[2][2] = (hasRight && hasBottom) ? cell.sameTileAs(this.matrix.get(i+1).get(j+1))
-                                ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-                        // Terrain
-                        tileset.getTerrain(cell.tsX).draw(g,i,j,sameMatrix);
-                    }
+                    cellDrawing(g, tileset, cell, i, j, false);
                 }
             }
+        }
+    }
+
+    /**
+     * @param g
+     * @param tileset
+     * @param cell
+     * @param x
+     * @param y
+     */
+    private void cellDrawing(GraphicsContext g, Tileset tileset, TileCell cell, int x, int y, boolean ignoreRenderOthersArround) {
+        if (tileset.isTilesetCell(cell.tsY)) {
+            // Tileset
+            tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY - 1);
+        } else {
+
+            boolean hasLeft = x != 0;
+            boolean hasTop = y != 0;
+            boolean hasRight = x != (this.width - 1);
+            boolean hasBottom = y != (this.height - 1);
+
+            Integer[][] sameMatrix = new Integer[3][3];
+            sameMatrix[0][0] = (hasLeft && hasTop) ? cell.sameTileAs(this.matrix.get(x - 1).get(y - 1))
+                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            sameMatrix[0][1] = hasLeft ? cell.sameTileAs(this.matrix.get(x - 1).get(y))
+                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            sameMatrix[0][2] = (hasLeft && hasBottom) ? cell.sameTileAs(this.matrix.get(x - 1).get(y + 1))
+                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            sameMatrix[1][0] = hasTop ? cell.sameTileAs(this.matrix.get(x).get(y - 1))
+                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            sameMatrix[1][1] = null;
+            sameMatrix[1][2] = hasBottom ? cell.sameTileAs(this.matrix.get(x).get(y + 1))
+                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            sameMatrix[2][0] = (hasRight && hasTop) ? cell.sameTileAs(this.matrix.get(x + 1).get(y - 1))
+                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            sameMatrix[2][1] = hasRight ? cell.sameTileAs(this.matrix.get(x + 1).get(y))
+                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            sameMatrix[2][2] = (hasRight && hasBottom) ? cell.sameTileAs(this.matrix.get(x + 1).get(y + 1))
+                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            // Terrain
+            tileset.getTerrain(cell.tsX).draw(g, x, y, sameMatrix);
+
+            // Render the 8 Tiles around this one
+            if (!ignoreRenderOthersArround) {
+                this.renderTerrainTileInterface.forceRenderTile(g, x - 1, y - 1);
+                this.renderTerrainTileInterface.forceRenderTile(g, x, y - 1);
+                this.renderTerrainTileInterface.forceRenderTile(g, x + 1, y - 1);
+                this.renderTerrainTileInterface.forceRenderTile(g, x - 1, y);
+                this.renderTerrainTileInterface.forceRenderTile(g, x + 1, y);
+                this.renderTerrainTileInterface.forceRenderTile(g, x - 1, y + 1);
+                this.renderTerrainTileInterface.forceRenderTile(g, x, y + 1);
+                this.renderTerrainTileInterface.forceRenderTile(g, x + 1, y + 1);
+            }
+
         }
     }
 
@@ -108,8 +139,9 @@ public class TilesetLayer {
      * @param x
      * @param y
      * @param tileset
+     * @param ignoreRenderOthersArround
      */
-    public void renderPartial(GraphicsContext g, int x, int y, Tileset tileset) {
+    public void renderPartial(GraphicsContext g, int x, int y, Tileset tileset, boolean ignoreRenderOthersArround) {
         TileCell cell = this.matrix.get(x).get(y);
         if (cell != null) {
             if (tileset.isTilesetCell(cell.tsY)) {
@@ -117,7 +149,8 @@ public class TilesetLayer {
                 tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY - 1);
             } else {
                 // Terrain
-                tileset.getTerrain(cell.tsX).draw(g,x,y,0,0);
+                //tileset.getTerrain(cell.tsX).draw(g,x,y,0,0);
+                cellDrawing(g, tileset, cell, x, y, ignoreRenderOthersArround);
             }
         }
     }

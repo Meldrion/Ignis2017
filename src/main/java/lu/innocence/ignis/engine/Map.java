@@ -2,6 +2,7 @@ package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import lu.innocence.ignis.event.RenderTerrainTileInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * @author Fabien Steines
  */
-public class Map {
+public class Map implements RenderTerrainTileInterface {
 
     private static Logger LOGGER = LogManager.getLogger(Map.class);
     private List<TilesetLayer> layers;
@@ -39,7 +40,7 @@ public class Map {
         this.layers = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-            this.layers.add(new TilesetLayer());
+            this.layers.add(new TilesetLayer(this));
         }
     }
 
@@ -100,6 +101,10 @@ public class Map {
     }
 
     public void renderPartialMap(GraphicsContext g, int x, int y) {
+        renderPartialMap(g,x,y,false);
+    }
+
+    public void renderPartialMap(GraphicsContext g, int x, int y,boolean ignoreRenderTilesArround) {
 
         if (this.tileset != null) {
             for (int index = 0; index < this.layers.size(); index++) {
@@ -115,7 +120,7 @@ public class Map {
                     }
                 }
 
-                this.layers.get(index).renderPartial(g, x, y, this.tileset);
+                this.layers.get(index).renderPartial(g, x, y, this.tileset,ignoreRenderTilesArround);
                 g.setGlobalAlpha(1.0);
             }
         }
@@ -231,5 +236,10 @@ public class Map {
         return this.tilesetId;
     }
 
+
+    @Override
+    public void forceRenderTile(GraphicsContext g,int x, int y) {
+        renderPartialMap(g,x,y,true);
+    }
 
 }
