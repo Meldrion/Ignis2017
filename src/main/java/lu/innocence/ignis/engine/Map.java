@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Fabien Steines
  */
-public class Map implements RenderTerrainTileInterface {
+public class Map {
 
     private static Logger LOGGER = LogManager.getLogger(Map.class);
     private List<TilesetLayer> layers;
@@ -40,7 +40,7 @@ public class Map implements RenderTerrainTileInterface {
         this.layers = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
-            this.layers.add(new TilesetLayer(this));
+            this.layers.add(new TilesetLayer());
         }
     }
 
@@ -126,13 +126,8 @@ public class Map implements RenderTerrainTileInterface {
         }
     }
 
-
-    public void addCell(int layerIndex, int x, int y, int tsX, int tsY) {
-        this.layers.get(layerIndex).addCell(x, y, tsX, tsY);
-    }
-
-    public void removeCell(int layerIndex, int x, int y) {
-        this.layers.get(layerIndex).removeCell(x, y);
+    public TileCell removeCell(int layerIndex, int x, int y) {
+        return this.layers.get(layerIndex).removeCell(x, y);
     }
 
     public Tileset getTileset() {
@@ -228,18 +223,13 @@ public class Map implements RenderTerrainTileInterface {
 
     }
 
-    public void addTile(int layerId, int x, int y, int tsX, int tsY) {
-        this.layers.get(layerId).addCell(x, y, tsX, tsY);
+    public TileCell addTile(int layerId, int x, int y, int tsX, int tsY) {
+        return this.layers.get(layerId).addCell(x, y, tsX, tsY);
     }
 
     public int getTilesetId() {
         return this.tilesetId;
     }
 
-
-    @Override
-    public void forceRenderTile(GraphicsContext g,int x, int y) {
-        renderPartialMap(g,x,y,true);
-    }
 
 }

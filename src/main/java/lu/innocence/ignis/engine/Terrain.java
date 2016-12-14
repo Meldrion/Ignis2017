@@ -156,7 +156,6 @@ public class Terrain {
             return;
         }
 
-
         // TOP
         if (middleLeft == IS_SAME && middleRight == IS_SAME
                 && bottom == IS_SAME && top == IS_DIFFERENT) {

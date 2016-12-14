@@ -37,7 +37,7 @@ public class Tileset {
                 x * cellSize, y * cellSize, cellSize, cellSize);
     }
 
-    public boolean isTilesetCell(int y) {
+    public static boolean isTilesetCell(int y) {
         return 0 < y;
     }
 

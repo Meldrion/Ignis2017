@@ -18,12 +18,6 @@ public class TilesetLayer {
     private int width;
     private int height;
     private static final Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TilesetLayer.class);
-    private RenderTerrainTileInterface renderTerrainTileInterface;
-
-
-    public TilesetLayer(RenderTerrainTileInterface renderTerrainTileInterface) {
-        this.renderTerrainTileInterface = renderTerrainTileInterface;
-    }
 
     /**
      * @param x
@@ -60,8 +54,9 @@ public class TilesetLayer {
      * @param tsX
      * @param tsY
      */
-    public void addCell(int x, int y, int tsX, int tsY) {
-        this.matrix.get(x).set(y, new TileCell(x, y, tsX, tsY));
+    public TileCell addCell(int x, int y, int tsX, int tsY) {
+        TileCell tsCell = new TileCell(x, y, tsX, tsY);
+        return this.matrix.get(x).set(y, tsCell);
     }
 
     /**
@@ -88,7 +83,7 @@ public class TilesetLayer {
      * @param y
      */
     private void cellDrawing(GraphicsContext g, Tileset tileset, TileCell cell, int x, int y, boolean ignoreRenderOthersArround) {
-        if (tileset.isTilesetCell(cell.tsY)) {
+        if (Tileset.isTilesetCell(cell.tsY)) {
             // Tileset
             tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY - 1);
         } else {
@@ -118,20 +113,9 @@ public class TilesetLayer {
                     ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
             // Terrain
             tileset.getTerrain(cell.tsX).draw(g, x, y, sameMatrix);
-
-            // Render the 8 Tiles around this one
-            if (!ignoreRenderOthersArround) {
-                this.renderTerrainTileInterface.forceRenderTile(g, x - 1, y - 1);
-                this.renderTerrainTileInterface.forceRenderTile(g, x, y - 1);
-                this.renderTerrainTileInterface.forceRenderTile(g, x + 1, y - 1);
-                this.renderTerrainTileInterface.forceRenderTile(g, x - 1, y);
-                this.renderTerrainTileInterface.forceRenderTile(g, x + 1, y);
-                this.renderTerrainTileInterface.forceRenderTile(g, x - 1, y + 1);
-                this.renderTerrainTileInterface.forceRenderTile(g, x, y + 1);
-                this.renderTerrainTileInterface.forceRenderTile(g, x + 1, y + 1);
-            }
         }
     }
+
 
     /**
      * @param g
@@ -159,8 +143,10 @@ public class TilesetLayer {
      * @param x
      * @param y
      */
-    public void removeCell(int x, int y) {
+    public TileCell removeCell(int x, int y) {
+        TileCell cell = this.matrix.get(x).get(y);
         this.matrix.get(x).set(y, null);
+        return cell;
     }
 
     /**

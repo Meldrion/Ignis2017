@@ -8,6 +8,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Map;
+import lu.innocence.ignis.engine.TileCell;
+import lu.innocence.ignis.engine.Tileset;
 import lu.innocence.ignis.event.ActiveMapListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
 import lu.innocence.ignis.event.TilesetSelectionChanged;
@@ -97,12 +99,23 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * @param x
      * @param y
      */
-    public void renderPartial(int x, int y) {
-        if (this.map != null) {
+    public void renderPartial(int x, int y,boolean renderOthersArround) {
 
+        if (this.map != null) {
             GraphicsContext g = this.getGraphicsContext2D();
             ChessBGDrawer.drawChessBackgroundSingle(g, x, y, 32, 32);
-            this.map.renderPartialMap(g, x, y);
+            if (!renderOthersArround) {
+                this.map.renderPartialMap(g, x, y);
+                return;
+            }
+
+            // Render other arround
+            for (int i=-1;i<2;i++) {
+                for (int j=-1;j<2;j++) {
+                    this.map.renderPartialMap(g, x + i, y + j);
+                }
+            }
+
         }
     }
 
@@ -219,13 +232,12 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                 this.renderCursor(x, y, false, false);
             }
 
-            if (mouseEvent == MouseEvent.MOUSE_RELEASED) {
+            if (mouseEvent == MouseEvent.MOUSE_RELEASED && this.mouseIsDown) {
 
-                if (this.mouseIsDown) {
-                    this.mouseIsDown = false;
-                    this.renderCursor(x, y, false, true);
-                    this.brushAdd(x, y);
-                }
+                this.mouseIsDown = false;
+                this.renderCursor(x, y, false, true);
+                this.brushAdd(x, y);
+
 
             }
         }
@@ -271,7 +283,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
                             int yTSCoord = this.tilesetY + j;
 
-                            if (this.map.getTileset().isTilesetCell(yTSCoord)) {
+                            if (Tileset.isTilesetCell(yTSCoord)) {
                                 // Tileset Case
                                 this.map.getTileset().drawTileTo(g, x + i,
                                         y + j,
@@ -324,7 +336,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
                             int yTSCoord = this.tilesetY + tsY;
 
-                            if (this.map.getTileset().isTilesetCell(yTSCoord)) {
+                            if (Tileset.isTilesetCell(yTSCoord)) {
                                 // Tileset Case
                                 this.map.getTileset().drawTileTo(g, newCoord[0] + i, newCoord[1] + j,
                                         this.tilesetX + tsX, yTSCoord - 1);
@@ -446,9 +458,13 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         if (this.map != null && this.map.getTileset() != null) {
             for (int i = 0; i < this.tilesetWidth; i++) {
                 for (int j = 0; j < this.tilesetHeight; j++) {
-                    this.map.addCell(this.activeLayerId, x + i, y + j,
+
+                    TileCell cell = this.map.addTile(this.activeLayerId, x + i, y + j,
                             this.tilesetX + i, this.tilesetY + j);
-                    this.renderPartial(x + i, y + j);
+
+                    this.renderPartial(x + i, y + j,
+                            !Tileset.isTilesetCell(this.tilesetY + j) ||
+                                    (cell != null && !Tileset.isTilesetCell(cell.getTsY())));
                 }
             }
         }
@@ -470,10 +486,12 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             for (int i = 0; i < selectionWidth; i++) {
                 for (int j = 0; j < selectionHeight; j++) {
 
-                    this.map.addCell(this.activeLayerId, newCoord[0] + i, newCoord[1] + j,
+                    TileCell cell = this.map.addTile(this.activeLayerId, newCoord[0] + i, newCoord[1] + j,
                             this.tilesetX + tsX, this.tilesetY + tsY);
 
-                    this.renderPartial(newCoord[0] + i, newCoord[1] + j);
+                    this.renderPartial(newCoord[0] + i, newCoord[1] + j,
+                            !Tileset.isTilesetCell(this.tilesetY + tsY) ||
+                                    (cell != null && !Tileset.isTilesetCell(cell.getTsY())));
                     tsY += 1;
 
                     if (tsY == this.tilesetHeight) {
@@ -497,8 +515,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      */
     private void erase(int x, int y) {
         if (this.map != null) {
-            this.map.removeCell(this.activeLayerId, x, y);
-            this.renderPartial(x, y);
+            TileCell cell = this.map.removeCell(this.activeLayerId, x, y);
+            this.renderPartial(x, y,cell != null && Tileset.isTilesetCell(cell.getTsY()));
         }
     }
 

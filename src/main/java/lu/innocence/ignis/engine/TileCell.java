@@ -37,4 +37,12 @@ public class TileCell {
         return other != null && other.tsX == tsX && other.tsY == tsY;
     }
 
+
+    public int getTsX() {
+        return tsX;
+    }
+
+    public int getTsY() {
+        return tsY;
+    }
 }
