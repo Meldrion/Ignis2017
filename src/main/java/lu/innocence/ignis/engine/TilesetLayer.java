@@ -93,24 +93,17 @@ public class TilesetLayer {
             boolean hasRight = x != (this.width - 1);
             boolean hasBottom = y != (this.height - 1);
 
-            Integer[][] sameMatrix = new Integer[3][3];
-            sameMatrix[0][0] = (hasLeft && hasTop) ? cell.sameTileAs(this.matrix.get(x - 1).get(y - 1))
-                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-            sameMatrix[0][1] = hasLeft ? cell.sameTileAs(this.matrix.get(x - 1).get(y))
-                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-            sameMatrix[0][2] = (hasLeft && hasBottom) ? cell.sameTileAs(this.matrix.get(x - 1).get(y + 1))
-                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-            sameMatrix[1][0] = hasTop ? cell.sameTileAs(this.matrix.get(x).get(y - 1))
-                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            Boolean[][] sameMatrix = new Boolean[3][3];
+            sameMatrix[0][0] = !(hasLeft && hasTop) || cell.sameTileAs(this.matrix.get(x - 1).get(y - 1));
+            sameMatrix[0][1] = !hasLeft || cell.sameTileAs(this.matrix.get(x - 1).get(y));
+            sameMatrix[0][2] = !(hasLeft && hasBottom) || cell.sameTileAs(this.matrix.get(x - 1).get(y + 1));
+            sameMatrix[1][0] = !hasTop || cell.sameTileAs(this.matrix.get(x).get(y - 1));
             sameMatrix[1][1] = null;
-            sameMatrix[1][2] = hasBottom ? cell.sameTileAs(this.matrix.get(x).get(y + 1))
-                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-            sameMatrix[2][0] = (hasRight && hasTop) ? cell.sameTileAs(this.matrix.get(x + 1).get(y - 1))
-                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-            sameMatrix[2][1] = hasRight ? cell.sameTileAs(this.matrix.get(x + 1).get(y))
-                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
-            sameMatrix[2][2] = (hasRight && hasBottom) ? cell.sameTileAs(this.matrix.get(x + 1).get(y + 1))
-                    ? Terrain.IS_SAME : Terrain.IS_DIFFERENT : Terrain.IS_UNSET;
+            sameMatrix[1][2] = !hasBottom || cell.sameTileAs(this.matrix.get(x).get(y + 1));
+            sameMatrix[2][0] = !(hasRight && hasTop) || cell.sameTileAs(this.matrix.get(x + 1).get(y - 1));
+            sameMatrix[2][1] = !hasRight || cell.sameTileAs(this.matrix.get(x + 1).get(y));
+            sameMatrix[2][2] = !(hasRight && hasBottom) || cell.sameTileAs(this.matrix.get(x + 1).get(y + 1));
+
             // Terrain
             tileset.getTerrain(cell.tsX).draw(g, x, y, sameMatrix);
         }
