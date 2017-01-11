@@ -55,8 +55,12 @@ public class TilesetLayer {
      * @param tsY
      */
     public TileCell addCell(int x, int y, int tsX, int tsY) {
-        TileCell tsCell = new TileCell(x, y, tsX, tsY);
-        return this.matrix.get(x).set(y, tsCell);
+        if (this.isInRange(x,y)) {
+            TileCell tsCell = new TileCell(x, y, tsX, tsY);
+            return this.matrix.get(x).set(y, tsCell);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -110,7 +114,7 @@ public class TilesetLayer {
                 // If the tile is not in range, the result will
                 // always be true
                 if (this.isInRange(nX + i, nY + j)) {
-                    TileCell cTile = this.matrix.get(nY + j).get(nX + i);
+                    TileCell cTile = this.matrix.get(nX + i).get(nY + j);
                     matrix[i][j] = cTile.sameTileAs(cellToTest);
                 } else {
                     matrix[i][j] = true;
@@ -136,7 +140,7 @@ public class TilesetLayer {
     }
 
     private boolean isInRange(int x,int y) {
-        return 0 <= x && x < this.width - 1 && 0 <= y && y < this.height - 1;
+        return 0 <= x && x < this.width && 0 <= y && y < this.height;
     }
 
 
