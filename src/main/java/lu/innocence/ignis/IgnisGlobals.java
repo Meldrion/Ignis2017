@@ -13,6 +13,10 @@ import java.net.URL;
  */
 public class IgnisGlobals {
 
+    private IgnisGlobals() {
+
+    }
+
     public static int[] fixCoords(int startX, int startY, int endX, int endY) {
         int swap;
 
@@ -64,6 +68,5 @@ public class IgnisGlobals {
     public static int getTextHeight(GraphicsContext g) {
         return (int) com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().getFontMetrics(g.getFont()).getLineHeight();
     }
-
 
 }
