@@ -82,31 +82,61 @@ public class TilesetLayer {
      * @param x
      * @param y
      */
-    private void cellDrawing(GraphicsContext g, Tileset tileset, TileCell cell, int x, int y, boolean ignoreRenderOthersArround) {
+    private void cellDrawing(GraphicsContext g, Tileset tileset, TileCell cell,
+                             int x, int y, boolean ignoreRenderOthersArround) {
         if (Tileset.isTilesetCell(cell.tsY)) {
             // Tileset
             tileset.drawTileTo(g, x, y, cell.tsX, cell.tsY - 1);
         } else {
-
-            boolean hasLeft = x != 0;
-            boolean hasTop = y != 0;
-            boolean hasRight = x != (this.width - 1);
-            boolean hasBottom = y != (this.height - 1);
-
-            Boolean[][] sameMatrix = new Boolean[3][3];
-            sameMatrix[0][0] = !(hasLeft && hasTop) || cell.sameTileAs(this.matrix.get(x - 1).get(y - 1));
-            sameMatrix[0][1] = !hasLeft || cell.sameTileAs(this.matrix.get(x - 1).get(y));
-            sameMatrix[0][2] = !(hasLeft && hasBottom) || cell.sameTileAs(this.matrix.get(x - 1).get(y + 1));
-            sameMatrix[1][0] = !hasTop || cell.sameTileAs(this.matrix.get(x).get(y - 1));
-            sameMatrix[1][1] = null;
-            sameMatrix[1][2] = !hasBottom || cell.sameTileAs(this.matrix.get(x).get(y + 1));
-            sameMatrix[2][0] = !(hasRight && hasTop) || cell.sameTileAs(this.matrix.get(x + 1).get(y - 1));
-            sameMatrix[2][1] = !hasRight || cell.sameTileAs(this.matrix.get(x + 1).get(y));
-            sameMatrix[2][2] = !(hasRight && hasBottom) || cell.sameTileAs(this.matrix.get(x + 1).get(y + 1));
-
             // Terrain
-            tileset.getTerrain(cell.tsX).draw(g, x, y, sameMatrix);
+            tileset.getTerrain(cell.tsX).draw(g, x, y,
+                    this.calculateScore(this.buildNeightbourMatrix(x,y)));
         }
+    }
+
+    private boolean[][] buildNeightbourMatrix(int x, int y) {
+        TileCell cellToTest = this.matrix.get(x).get(y);
+
+        // Create the Matrix the will be analysed later
+        boolean[][] matrix = new boolean[3][3];
+        // Get the Point Zero
+        int nX = x - 1;
+        int nY = y - 1;
+
+        // Loop through the neightbours
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+
+                // If the tile is not in range, the result will
+                // always be true
+                if (this.isInRange(nX + i, nY + j)) {
+                    TileCell cTile = this.matrix.get(nY + j).get(nX + i);
+                    matrix[i][j] = cTile.sameTileAs(cellToTest);
+                } else {
+                    matrix[i][j] = true;
+                }
+
+            }
+        }
+
+        // Return the Matrix
+        return matrix;
+    }
+
+    // Get the Score Value depending on the 9x9 Matrix
+    private int calculateScore(boolean[][] neightbours) {
+        int totalScore = 0;
+
+        totalScore += neightbours[1][0] ? 1 : 0;
+        totalScore += neightbours[0][1] ? 2 : 0;
+        totalScore += neightbours[2][1] ? 4 : 0;
+        totalScore += neightbours[1][2] ? 8 : 0;
+
+        return totalScore;
+    }
+
+    private boolean isInRange(int x,int y) {
+        return 0 <= x && x < this.width - 1 && 0 <= y && y < this.height - 1;
     }
 
 

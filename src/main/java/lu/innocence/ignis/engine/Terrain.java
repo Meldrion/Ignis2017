@@ -50,7 +50,18 @@ public class Terrain {
     public void loadImage(String imagePath) {
         this.terrainImageName = (new File(imagePath)).getName();
         this.terrainImage = new Image(String.format("file:%s", imagePath));
-        this.terrainTiles = new Image[(int) Math.pow(MAX, 2)];
+        this.terrainTiles = new Image[(int) Math.pow(MAX, 2) + 1];
+        for (int i = 0; i < MAX; i++) {
+            for (int j = 0; j < MAX; j++) {
+                Image tile = this.createTile(i, j, this.terrainImage, cellSize, MAX);
+                int index = j * MAX + i;
+                this.terrainTiles[TERRAIN_SETTINGS[index]] = tile;
+            }
+        }
+
+        // TESTING ONLY
+        this.terrainTiles[this.terrainTiles.length - 1] = this.createTile(0, 4,
+                this.terrainImage, cellSize, MAX);
     }
 
     /**
@@ -106,16 +117,8 @@ public class Terrain {
         return this.terrainImageName;
     }
 
-    public void draw(GraphicsContext g, int x, int y, int tileId) {
-
-    }
-
-    public void draw(GraphicsContext g, int x, int y, int tsX, int tsY) {
-        //draw(g, x, y, tsX, tsY, false);
-    }
-
-    public void draw(GraphicsContext g, int x, int y, Boolean[][] sameMatrix) {
-
+    public void draw(GraphicsContext g, int x, int y, int index) {
+        g.drawImage(this.terrainTiles[index],x * this.cellSize,y * this.cellSize);
     }
 
 }
