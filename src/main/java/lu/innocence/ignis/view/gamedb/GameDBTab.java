@@ -35,7 +35,7 @@ public abstract class GameDBTab extends BorderPane {
 
         Button changeContentCount = new Button();
         changeContentCount.setOnAction(event -> {
-            SetMaxCountDialiog setMaxCountDialog = new SetMaxCountDialiog(parent);
+            SetMaxCountDialog setMaxCountDialog = new SetMaxCountDialog(parent);
             setMaxCountDialog.setMaxCount(this.getMaxCount());
             setMaxCountDialog.showAndWait();
             if (setMaxCountDialog.accepted()) {
