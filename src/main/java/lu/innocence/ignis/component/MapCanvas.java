@@ -252,7 +252,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      */
     private void renderCursor(int x, int y, boolean clearOnly, boolean mouseUpEvent) {
 
-        if (this.map != null) {
+        if (this.map != null && this.map.getTileset() != null) {
             int w = this.tilesetWidth * 32;
             int h = this.tilesetHeight * 32;
             GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
