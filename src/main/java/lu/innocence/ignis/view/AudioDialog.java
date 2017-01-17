@@ -116,8 +116,8 @@ public class AudioDialog extends Stage {
         playButton.setOnAction(event -> {
             if (isBGM) {
                 if (this.bgmList.getSelectionModel().getSelectedIndex() > -1) {
-                    this.audioManager.loadBGMInSlot(this.bgmList.getSelectionModel().getSelectedItem(), 0);
-                    this.audioManager.playBGM(0);
+                    //this.audioManager.loadBGMInSlot(, 0);
+                    this.audioManager.playBGM(this.bgmList.getSelectionModel().getSelectedItem());
                 }
             }
         });
@@ -129,7 +129,7 @@ public class AudioDialog extends Stage {
                 ("icons/Stop-icon-16.png").getFile()));
         stopButton.setOnAction(event -> {
             if (isBGM) {
-                this.audioManager.stopBGM(0);
+                this.audioManager.stopBGM();
             }
         });
 

@@ -2,6 +2,12 @@ package lu.innocence.ignis.engine;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import paulscode.sound.SoundSystem;
+import paulscode.sound.SoundSystemConfig;
+import paulscode.sound.SoundSystemException;
+import paulscode.sound.codecs.CodecJOrbis;
+import paulscode.sound.codecs.CodecWav;
+import paulscode.sound.libraries.LibraryJavaSound;
 
 import java.util.List;
 
@@ -18,13 +24,53 @@ public class AudioManager {
     private static final Logger LOGGER = LogManager.getLogger(AudioManager.class);
     private String bgmFolder;
     private String seFolder;
-    private SoftwareAudioEngine[]  bgmSlots;
+
+    private static SoundSystem bgmSoundSystem;
+    private static boolean audioSystemIsOnline;
+
+    private String activeBGM;
 
     /**
      *
      */
     public AudioManager() {
-        this.bgmSlots = new SoftwareAudioEngine[10]; // Allocate 10 empty slots
+        if (!AudioManager.audioSystemIsOnline) {
+            AudioManager.initAudioSystem();
+        }
+    }
+
+    /**
+     *
+     */
+    public static void initAudioSystem() {
+        AudioManager.bgmSoundSystem = new SoundSystem();
+        try {
+
+            LOGGER.info("Using Library Java Sound");
+            SoundSystemConfig.addLibrary( LibraryJavaSound.class );
+
+            LOGGER.info("Registering WAV Codec");
+            SoundSystemConfig.setCodec( "wav", CodecWav.class );
+            LOGGER.info("Registering OGG Codec");
+            SoundSystemConfig.setCodec( "ogg", CodecJOrbis.class );
+
+            AudioManager.audioSystemIsOnline = true;
+
+        } catch( SoundSystemException e ) {
+            LOGGER.error( "Error linking with the LibraryJavaSound plug-in" );
+            LOGGER.error(e);
+        }
+
+    }
+
+    /**
+     *
+     */
+    public static void shutdownAudioSystem() {
+        if (audioSystemIsOnline) {
+            AudioManager.bgmSoundSystem.cleanup();
+            AudioManager.audioSystemIsOnline = false;
+        }
     }
 
     /**
@@ -63,56 +109,17 @@ public class AudioManager {
     /**
      *
      * @param bgmName
-     * @param bgmSlot
      */
-    public void loadBGMInSlot(String bgmName,int bgmSlot) {
+    public void playBGM(String bgmName) {
 
-        if (-1 < bgmSlot && bgmSlot < 10) {
-            String url = String.format("file:///%s", FilesystemHandler.concat(this.bgmFolder, bgmName));
-            SoftwareAudioEngine softwareAudioEngine = new SoftwareAudioEngine(url);
-            this.bgmSlots[bgmSlot] = softwareAudioEngine;
-        } else {
-            LOGGER.error("Invalid BGM Slot... Slot must be between 0 and 10 but it is {}",bgmSlot);
-        }
+        String fullFilePath = FilesystemHandler.concat(this.bgmFolder, bgmName);
+        this.bgmSoundSystem.backgroundMusic(bgmName,fullFilePath,true);
     }
 
     /**
      *
-     * @param bgmSlot
      */
-    public void playBGM(int bgmSlot) {
-
-        if (-1 < bgmSlot && bgmSlot < 10) {
-            SoftwareAudioEngine softwareAudioEngine = this.bgmSlots[bgmSlot];
-            if (softwareAudioEngine != null) {
-                stopBGM(bgmSlot);
-                softwareAudioEngine.start();
-            } else {
-                LOGGER.error("No active audio element in slot {}",bgmSlot);
-            }
-        } else {
-            LOGGER.error("Invalid BGM Slot... Slot must be between 0 and 10 but it is {}",bgmSlot);
-        }
-    }
-
-    /**
-     *
-     * @param bgmSlot
-     */
-    public void stopBGM(int bgmSlot) {
-
-        if (-1 < bgmSlot && bgmSlot < 10) {
-            SoftwareAudioEngine softwareAudioEngine = this.bgmSlots[bgmSlot];
-            if (softwareAudioEngine != null) {
-                // End the Audio
-                softwareAudioEngine.endAudio();
-                softwareAudioEngine.interrupt();
-                this.bgmSlots[bgmSlot] = null; // Delete it from the Memory
-            } else {
-                LOGGER.error("No active audio element in slot {}",bgmSlot);
-            }
-        } else {
-            LOGGER.error("Invalid BGM Slot... Slot must be between 0 and 10 but it is {}",bgmSlot);
-        }
+    public void stopBGM() {
+        this.bgmSoundSystem.stop(activeBGM);
     }
 }

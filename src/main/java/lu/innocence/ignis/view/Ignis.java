@@ -281,6 +281,12 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
         buildUserInterface(primaryStage);
 
+        AudioManager.initAudioSystem();
+        primaryStage.setOnCloseRequest(event -> {
+            AudioManager.shutdownAudioSystem();
+            // event.consume(); // This prevents the closing action
+        });
+
     }
 
     /**

@@ -16,20 +16,20 @@
         </repository>
     </repositories>
 
-
     <dependencies>
+
+        <dependency>
+            <!-- LUA Scripting System -->
+            <groupId>org.luaj</groupId>
+            <artifactId>luaj-jse</artifactId>
+            <version>3.0-beta2</version>
+        </dependency>
 
         <dependency>
             <!-- This dependency will replace the old temporary sound system -->
             <groupId>com.github.nifty-gui</groupId>
             <artifactId>nifty-pauls-soundsystem</artifactId>
             <version>1.4.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jcraft</groupId>
-            <artifactId>jorbis</artifactId>
-            <version>0.0.17</version>
         </dependency>
 
         <dependency>
