@@ -61,7 +61,8 @@ public class Tileset {
         return this.collisionMatrix[x][y];
     }
 
-    public void setCollisionAt(int x,int y,boolean collision) {
+    public void setCollisionAt(int x,int y,boolean collision)
+    {
         this.collisionMatrix[x][y] = collision;
     }
 

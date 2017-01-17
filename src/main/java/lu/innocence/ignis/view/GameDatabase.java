@@ -51,7 +51,6 @@ public class GameDatabase extends Stage {
             }
         });
 
-
         TabPane mainTabber = new TabPane();
 
         Tab actorTab = new Tab();

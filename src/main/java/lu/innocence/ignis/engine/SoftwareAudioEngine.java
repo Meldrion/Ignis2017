@@ -1,4 +1,4 @@
-package lu.innocence.ignis;
+package lu.innocence.ignis.engine;
 
 /*
  * Copyright © Jon Kristensen, 2008.
@@ -56,13 +56,13 @@ import java.net.URLConnection;
 import java.net.UnknownServiceException;
 
 /**
- * The <code>ExamplePlayer</code> thread class will simply download and play
+ * The <code>SoftwareAudioEngine</code> thread class will simply download and play
  * OGG media. All you need to do is supply a valid URL as the first argument.
  *
  * @author Jon Kristensen
  * @version 1.0
  */
-public class ExamplePlayer extends Thread {
+public class SoftwareAudioEngine extends Thread {
     // If you wish to debug this source, please set the variable below to true.
     private final boolean debugMode = true;
     /*
@@ -113,33 +113,8 @@ public class ExamplePlayer extends Thread {
      *
      * @param pUrl the URL to be opened
      */
-    ExamplePlayer(String pUrl) {
+    public SoftwareAudioEngine(String pUrl) {
         configureInputStream(getUrl(pUrl));
-    }
-
-    /**
-     * The programs <code>main()</code> method. Will readJSON the first
-     * command-line argument and use it as URL, after which it will start the
-     * thread.
-     *
-     * @param args command-line arguments
-     */
-    public static void main(String[] args) {
-        // Set the URL as the first argument, if any.
-        // String url = args.length > 0 ? url = args[0] : null;
-        String url = "file:///C:/Users/Fabien/Development/Java/JavaFX_Test/templeLevel.ogg";
-
-        /*
-         * If the url variable is set, start the thread. If not, give an error
-         * and die.
-         */
-        if (url != null) {
-            ExamplePlayer examplePlayer = new ExamplePlayer(url);
-            examplePlayer.start();
-        } else {
-            System.err.println("Please provide an argument with the file to "
-                    + "play.");
-        }
     }
 
     /**

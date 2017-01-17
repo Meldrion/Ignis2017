@@ -13,6 +13,7 @@ public class Project {
     private MapManager mapManager;
     private AssetStructure assetStructure;
     private TilesetManager tilesetManager;
+    private AudioManager audioManager;
     private String projectTitle;
     private String author;
     private String devCompany;
@@ -23,6 +24,7 @@ public class Project {
     public Project() {
         this.mapManager = new MapManager();
         this.tilesetManager = new TilesetManager();
+        this.audioManager = new AudioManager();
     }
 
 
@@ -110,6 +112,8 @@ public class Project {
         this.tilesetManager.setJSONFolder(this.assetStructure.getPath(AssetStructure.JSON));
         this.tilesetManager.setTerrainFolder(this.assetStructure.getPath(AssetStructure.TERRAIN));
         this.tilesetManager.setTilesetFolder(this.assetStructure.getPath(AssetStructure.TILESET));
+        this.audioManager.setBgmFolder(this.assetStructure.getPath(AssetStructure.BACKGROUNDMUSIC));
+        this.audioManager.setSEFolder(this.assetStructure.getPath(AssetStructure.SOUNDEFFECT));
     }
 
     /**
@@ -146,6 +150,14 @@ public class Project {
      */
     public TilesetManager getTilesetManager() {
         return this.tilesetManager;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public AudioManager getAudioManager() {
+        return this.audioManager;
     }
 
     /**
