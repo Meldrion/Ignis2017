@@ -2,6 +2,7 @@ package lu.innocence.ignis.engine;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.SoundSystemException;
@@ -112,7 +113,8 @@ public class AudioManager {
      */
     public void playBGM(String bgmName) {
 
-        String fullFilePath = FilesystemHandler.concat(this.bgmFolder, bgmName);
+        String fullFilePath = String.format("file:///%s", FilesystemHandler.concat(this.bgmFolder, bgmName));
+        this.activeBGM = bgmName;
         this.bgmSoundSystem.backgroundMusic(bgmName,fullFilePath,true);
     }
 
@@ -120,6 +122,6 @@ public class AudioManager {
      *
      */
     public void stopBGM() {
-        this.bgmSoundSystem.stop(activeBGM);
+        this.bgmSoundSystem.stop(this.activeBGM);
     }
 }

@@ -116,7 +116,6 @@ public class AudioDialog extends Stage {
         playButton.setOnAction(event -> {
             if (isBGM) {
                 if (this.bgmList.getSelectionModel().getSelectedIndex() > -1) {
-                    //this.audioManager.loadBGMInSlot(, 0);
                     this.audioManager.playBGM(this.bgmList.getSelectionModel().getSelectedItem());
                 }
             }
