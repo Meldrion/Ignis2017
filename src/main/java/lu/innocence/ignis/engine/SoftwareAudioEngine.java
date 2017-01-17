@@ -46,6 +46,8 @@ import com.jcraft.jorbis.Block;
 import com.jcraft.jorbis.Comment;
 import com.jcraft.jorbis.DspState;
 import com.jcraft.jorbis.Info;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -63,6 +65,9 @@ import java.net.UnknownServiceException;
  * @version 1.0
  */
 public class SoftwareAudioEngine extends Thread {
+
+    private static final Logger LOGGER = LogManager.getLogger(SoftwareAudioEngine.class);
+
     // If you wish to debug this source, please set the variable below to true.
     private final boolean debugMode = true;
     /*
@@ -70,17 +75,17 @@ public class SoftwareAudioEngine extends Thread {
      * and an index to keep track of where we are. This is standard networking
      * stuff used with readJSON().
      */
-    byte[] buffer = null;
-    int bufferSize = 2048;
-    int count = 0;
-    int index = 0;
+    private byte[] buffer = null;
+    private int bufferSize = 2048;
+    private int count = 0;
+    private int index = 0;
     /*
      * JOgg and JOrbis require fields for the converted buffer. This is a buffer
      * that is modified in regards to the number of audio channels. Naturally,
      * it will also need a size.
      */
-    byte[] convertedBuffer;
-    int convertedBufferSize;
+    private byte[] convertedBuffer;
+    private int convertedBufferSize;
     /*
      * URLConnection and InputStream objects so that we can open a connection to
      * the media file.
@@ -107,6 +112,7 @@ public class SoftwareAudioEngine extends Thread {
     private Block jorbisBlock = new Block(jorbisDspState);
     private Comment jorbisComment = new Comment();
     private Info jorbisInfo = new Info();
+    private boolean endAudio;
 
     /**
      * The constructor; will configure the <code>InputStream</code>.
@@ -123,13 +129,14 @@ public class SoftwareAudioEngine extends Thread {
      * @param pUrl the URL to be opened
      * @return the URL object
      */
-    public URL getUrl(String pUrl) {
+    private URL getUrl(String pUrl) {
         URL url = null;
 
         try {
             url = new URL(pUrl);
         } catch (MalformedURLException exception) {
-            System.err.println("Malformed \"url\" parameter: \"" + pUrl + "\"");
+            LOGGER.error("Malformed url parameter: {}",pUrl);
+            LOGGER.error(exception);
         }
 
         return url;
@@ -146,10 +153,11 @@ public class SoftwareAudioEngine extends Thread {
         try {
             urlConnection = pUrl.openConnection();
         } catch (UnknownServiceException exception) {
-            System.err.println("The protocol does not support input.");
+            LOGGER.error("The protocol does not support input.");
+            LOGGER.error(exception);
         } catch (IOException exception) {
-            System.err.println("An I/O error occoured while trying create the "
-                    + "URL connection.");
+            LOGGER.error("An I/O error occoured while trying create the URL connection.");
+            LOGGER.error(exception);
         }
 
         // If we have a connection, try to create an input stream.
@@ -157,10 +165,8 @@ public class SoftwareAudioEngine extends Thread {
             try {
                 inputStream = urlConnection.getInputStream();
             } catch (IOException exception) {
-                System.err
-                        .println("An I/O error occoured while trying to get an "
-                                + "input stream from the URL.");
-                System.err.println(exception);
+                LOGGER.error("An I/O error occoured while trying to get an input stream from the URL.");
+                LOGGER.error(exception);
             }
         }
     }
@@ -171,11 +177,14 @@ public class SoftwareAudioEngine extends Thread {
      * JOgg JOrbis libraries, readJSON the header, initialize the sound system, readJSON
      * the body of the stream and clean up.
      */
+    @Override
     public void run() {
+
+        this.endAudio = false;
+
         // Check that we got an InputStream.
         if (inputStream == null) {
-            System.err.println("We don't have an input stream and therefor "
-                    + "cannot continue.");
+            LOGGER.error("We don't have an input stream and therefor cannot continue.");
             return;
         }
 
@@ -186,10 +195,8 @@ public class SoftwareAudioEngine extends Thread {
          * If we can readJSON the header, we try to inialize the sound system. If we
          * could initialize the sound system, we try to readJSON the body.
          */
-        if (readHeader()) {
-            if (initializeSound()) {
-                readBody();
-            }
+        if (readHeader() && initializeSound()) {
+            readBody();
         }
 
         // Afterwards, we clean up.
@@ -252,8 +259,8 @@ public class SoftwareAudioEngine extends Thread {
             try {
                 count = inputStream.read(buffer, index, bufferSize);
             } catch (IOException exception) {
-                System.err.println("Could not readJSON from the input stream.");
-                System.err.println(exception);
+                LOGGER.error("Could not read from the input stream.");
+                LOGGER.error(exception);
             }
 
             // We let SyncState know how many bytes we readJSON.
@@ -530,10 +537,6 @@ public class SoftwareAudioEngine extends Thread {
 
         while (needMoreData) {
             switch (joggSyncState.pageout(joggPage)) {
-                // If there is a hole in the data, we just proceed.
-                case -1: {
-                    debugOutput("There is a hole in the data. We proceed.");
-                }
 
                 // If we need more data, we break to get it.
                 case 0: {
@@ -580,7 +583,7 @@ public class SoftwareAudioEngine extends Thread {
                      * If the page is the end-of-stream, we don't need more
                      * data.
                      */
-                    if (joggPage.eos() != 0) needMoreData = false;
+                    needMoreData = joggPage.eos() == 0;
                 }
             }
 
@@ -594,7 +597,7 @@ public class SoftwareAudioEngine extends Thread {
                 try {
                     count = inputStream.read(buffer, index, bufferSize);
                 } catch (Exception e) {
-                    System.err.println(e);
+                    LOGGER.error(e);
                     return;
                 }
 
@@ -602,7 +605,7 @@ public class SoftwareAudioEngine extends Thread {
                 joggSyncState.wrote(count);
 
                 // There's no more data in the stream.
-                if (count == 0) needMoreData = false;
+                needMoreData = count != 0;
             }
         }
         debugOutput("Done reading the body.");
@@ -613,6 +616,7 @@ public class SoftwareAudioEngine extends Thread {
      * JOgg/JOrbis objects and closes the <code>InputStream</code>.
      */
     private void cleanUp() {
+
         debugOutput("Cleaning up.");
 
         // Clear the necessary JOgg/JOrbis objects.
@@ -624,8 +628,10 @@ public class SoftwareAudioEngine extends Thread {
 
         // Closes the stream.
         try {
-            if (inputStream != null) inputStream.close();
+            if (inputStream != null)
+                inputStream.close();
         } catch (Exception e) {
+            LOGGER.error(e);
         }
 
         debugOutput("Done cleaning up.");
@@ -650,8 +656,7 @@ public class SoftwareAudioEngine extends Thread {
          * Get the PCM information and count the samples. And while these
          * samples are more than zero...
          */
-        while ((samples = jorbisDspState.synthesis_pcmout(pcmInfo, pcmIndex))
-                > 0) {
+        while (!this.endAudio && (samples = jorbisDspState.synthesis_pcmout(pcmInfo, pcmIndex)) > 0) {
             // We need to know for how many samples we are going to process.
             if (samples < convertedBufferSize) {
                 range = samples;
@@ -678,6 +683,7 @@ public class SoftwareAudioEngine extends Thread {
                     if (value > 32767) {
                         value = 32767;
                     }
+
                     if (value < -32768) {
                         value = -32768;
                     }
@@ -686,7 +692,8 @@ public class SoftwareAudioEngine extends Thread {
                      * It the value is less than zero, we bitwise-or it with
                      * 32768 (which is 1000000000000000 = 10^15).
                      */
-                    if (value < 0) value = value | 32768;
+                    if (value < 0)
+                        value = value | 32768;
 
                     /*
                      * Take our value and split it into two, one with the last
@@ -719,6 +726,12 @@ public class SoftwareAudioEngine extends Thread {
      * @param output the debug output information
      */
     private void debugOutput(String output) {
-        if (debugMode) System.out.println("Debug: " + output);
+        if (debugMode)
+            LOGGER.debug("Debug: " + output);
+    }
+
+
+    public void endAudio() {
+        this.endAudio = true;
     }
 }
