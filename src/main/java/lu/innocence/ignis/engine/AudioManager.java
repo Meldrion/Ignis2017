@@ -105,9 +105,10 @@ public class AudioManager {
         if (-1 < bgmSlot && bgmSlot < 10) {
             SoftwareAudioEngine softwareAudioEngine = this.bgmSlots[bgmSlot];
             if (softwareAudioEngine != null) {
-                softwareAudioEngine.endAudio();
-                softwareAudioEngine.interrupt();
-                this.bgmSlots[bgmSlot] = null; // Delete it from the Memory
+                softwareAudioEngine.pauseAudio();
+                //softwareAudioEngine.endAudio();
+                //softwareAudioEngine.interrupt();
+                //this.bgmSlots[bgmSlot] = null; // Delete it from the Memory
             } else {
                 LOGGER.error("No active audio element in slot {}",bgmSlot);
             }

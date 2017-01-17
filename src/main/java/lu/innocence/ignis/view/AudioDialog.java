@@ -110,22 +110,14 @@ public class AudioDialog extends Stage {
         playButton.setText("Play");
         playButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder
                 ("icons/Play-1-Normal-icon-16.png").getFile()));
+
         playButton.setOnAction(event -> {
             if (isBGM) {
                 if (this.bgmList.getSelectionModel().getSelectedIndex() > -1) {
-                    this.audioManager.loadBGMInSlot(this.bgmList.getSelectionModel().getSelectedItem(),0);
+                    this.audioManager.loadBGMInSlot(this.bgmList.getSelectionModel().getSelectedItem(), 0);
                     this.audioManager.playBGM(0);
                 }
             }
-        });
-
-        Button pauseButton = new Button();
-        pauseButton.setText("Pause");
-        pauseButton.setMinWidth(120);
-        pauseButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder
-                ("icons/pause-icon.-16png.png").getFile()));
-        pauseButton.setOnAction(event -> {
-
         });
 
         Button stopButton = new Button();
@@ -139,7 +131,7 @@ public class AudioDialog extends Stage {
             }
         });
 
-        rightBox.getChildren().addAll(playButton,pauseButton,stopButton);
+        rightBox.getChildren().addAll(playButton,stopButton);
         return rightBox;
     }
 

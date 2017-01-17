@@ -69,7 +69,7 @@ public class SoftwareAudioEngine extends Thread {
     private static final Logger LOGGER = LogManager.getLogger(SoftwareAudioEngine.class);
 
     // If you wish to debug this source, please set the variable below to true.
-    private final boolean debugMode = true;
+    private final boolean debugMode = false;
     /*
      * We need a buffer, it's size, a count to know how many bytes we have readJSON
      * and an index to keep track of where we are. This is standard networking
@@ -187,9 +187,10 @@ public class SoftwareAudioEngine extends Thread {
             LOGGER.error("We don't have an input stream and therefor cannot continue.");
             return;
         }
-
         // Initialize JOrbis.
         initializeJOrbis();
+
+
 
         /*
          * If we can readJSON the header, we try to inialize the sound system. If we
@@ -436,7 +437,7 @@ public class SoftwareAudioEngine extends Thread {
              * enough information.
              */
             if (count == 0 && needMoreData) {
-                System.err.println("Not enough header data was supplied.");
+                LOGGER.error("Not enough header data was supplied.");
                 return false;
             }
         }
@@ -475,12 +476,13 @@ public class SoftwareAudioEngine extends Thread {
         // Creates an AudioFormat object and a DataLine.Info object.
         AudioFormat audioFormat = new AudioFormat((float) rate, 16, channels,
                 true, false);
+
         DataLine.Info datalineInfo = new DataLine.Info(SourceDataLine.class,
                 audioFormat, AudioSystem.NOT_SPECIFIED);
 
         // Check if the line is supported.
         if (!AudioSystem.isLineSupported(datalineInfo)) {
-            System.err.println("Audio output line is not supported.");
+            LOGGER.error("Audio output line is not supported.");
             return false;
         }
 
@@ -492,18 +494,16 @@ public class SoftwareAudioEngine extends Thread {
             outputLine = (SourceDataLine) AudioSystem.getLine(datalineInfo);
             outputLine.open(audioFormat);
         } catch (LineUnavailableException exception) {
-            System.out.println("The audio output line could not be opened due "
-                    + "to resource restrictions.");
-            System.err.println(exception);
+            LOGGER.error("The audio output line could not be opened due to resource restrictions.");
+            LOGGER.error(exception);
             return false;
         } catch (IllegalStateException exception) {
-            System.out.println("The audio output line is already open.");
-            System.err.println(exception);
+            LOGGER.error("The audio output line is already open.");
+            LOGGER.error(exception);
             return false;
         } catch (SecurityException exception) {
-            System.out.println("The audio output line could not be opened due "
-                    + "to security restrictions.");
-            System.err.println(exception);
+            LOGGER.error("The audio output line could not be opened due to security restrictions.");
+            LOGGER.error(exception);
             return false;
         }
 
@@ -734,4 +734,5 @@ public class SoftwareAudioEngine extends Thread {
     public void endAudio() {
         this.endAudio = true;
     }
+
 }
