@@ -9,7 +9,22 @@
     <artifactId>Ignis</artifactId>
     <version>0.0.1</version>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
+
+
     <dependencies>
+
+        <dependency>
+            <!-- This dependency will replace the old temporary sound system -->
+            <groupId>com.github.nifty-gui</groupId>
+            <artifactId>nifty-pauls-soundsystem</artifactId>
+            <version>1.4.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.jcraft</groupId>

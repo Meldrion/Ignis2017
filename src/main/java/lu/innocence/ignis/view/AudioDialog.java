@@ -105,6 +105,8 @@ public class AudioDialog extends Stage {
         rightBox.setSpacing(10);
         rightBox.setPadding(new Insets(15,0,15,15));
 
+        rightBox.setAlignment(Pos.BOTTOM_CENTER);
+
         Button playButton = new Button();
         playButton.setMinWidth(120);
         playButton.setText("Play");
