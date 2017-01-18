@@ -199,6 +199,11 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
         this.audioManagerButton.setOnAction(event -> {
             AudioDialog audioDialog = new AudioDialog(mainStage,this.project.getAudioManager());
             audioDialog.showAndWait();
+
+            // TODO: TESTING CODE ONLY !
+            LuaEditor luaEditor = new LuaEditor(mainStage);
+            luaEditor.showAndWait();
+
         });
         this.audioManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/audioManager22.png").getFile()));
         toolBar.getItems().addAll(newProjectBtn, openProjectBtn, saveProjectBtn, new Separator(),
