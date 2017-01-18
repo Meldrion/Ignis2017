@@ -128,6 +128,7 @@ public class AudioManager {
                         true,0,0,0,SoundSystemConfig.ATTENUATION_NONE,0);
                 AudioManager.bgmSoundSystem.play(bgmName);
 
+
             } catch (MalformedURLException e) {
                 LOGGER.error(e);
             }
