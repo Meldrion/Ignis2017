@@ -46,7 +46,7 @@ public class AudioManager {
      *
      */
     public static void initAudioSystem() {
-        AudioManager.bgmSoundSystem = new SoundSystem();
+
         try {
 
             LOGGER.info("Using Library Java Sound");
@@ -56,6 +56,7 @@ public class AudioManager {
             LOGGER.info("Registering OGG Codec");
             SoundSystemConfig.setCodec( "ogg", CodecJOrbis.class );
 
+            AudioManager.bgmSoundSystem = new SoundSystem();
             AudioManager.audioSystemIsOnline = true;
 
         } catch( SoundSystemException e ) {
@@ -118,13 +119,14 @@ public class AudioManager {
         File musicFile = new File(fullFilePath);
 
         if (musicFile.exists() && musicFile.isFile()) {
+
             try {
 
                 URL musicFileUrl = musicFile.toURI().toURL();
                 this.activeBGM = bgmName;
-                AudioManager.bgmSoundSystem.newStreamingSource(true,"bgm",musicFileUrl,"bgm",
+                AudioManager.bgmSoundSystem.newStreamingSource(true,bgmName,musicFileUrl,bgmName,
                         true,0,0,0,SoundSystemConfig.ATTENUATION_NONE,0);
-                AudioManager.bgmSoundSystem.play("bgm");
+                AudioManager.bgmSoundSystem.play(bgmName);
 
             } catch (MalformedURLException e) {
                 LOGGER.error(e);
@@ -138,6 +140,6 @@ public class AudioManager {
      *
      */
     public void stopBGM() {
-        AudioManager.bgmSoundSystem.stop("bgm");
+        AudioManager.bgmSoundSystem.stop(this.activeBGM);
     }
 }
