@@ -2,7 +2,6 @@ package lu.innocence.ignis.engine;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import paulscode.sound.Library;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.SoundSystemException;
@@ -10,6 +9,9 @@ import paulscode.sound.codecs.CodecJOrbis;
 import paulscode.sound.codecs.CodecWav;
 import paulscode.sound.libraries.LibraryJavaSound;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -49,7 +51,6 @@ public class AudioManager {
 
             LOGGER.info("Using Library Java Sound");
             SoundSystemConfig.addLibrary( LibraryJavaSound.class );
-
             LOGGER.info("Registering WAV Codec");
             SoundSystemConfig.setCodec( "wav", CodecWav.class );
             LOGGER.info("Registering OGG Codec");
@@ -113,15 +114,30 @@ public class AudioManager {
      */
     public void playBGM(String bgmName) {
 
-        String fullFilePath = String.format("file:///%s", FilesystemHandler.concat(this.bgmFolder, bgmName));
-        this.activeBGM = bgmName;
-        this.bgmSoundSystem.backgroundMusic(bgmName,fullFilePath,true);
+        String fullFilePath = FilesystemHandler.concat(this.bgmFolder, bgmName);
+        File musicFile = new File(fullFilePath);
+
+        if (musicFile.exists() && musicFile.isFile()) {
+            try {
+
+                URL musicFileUrl = musicFile.toURI().toURL();
+                this.activeBGM = bgmName;
+                AudioManager.bgmSoundSystem.newStreamingSource(true,"bgm",musicFileUrl,"bgm",
+                        true,0,0,0,SoundSystemConfig.ATTENUATION_NONE,0);
+                AudioManager.bgmSoundSystem.play("bgm");
+
+            } catch (MalformedURLException e) {
+                LOGGER.error(e);
+            }
+
+        }
+
     }
 
     /**
      *
      */
     public void stopBGM() {
-        this.bgmSoundSystem.stop(this.activeBGM);
+        AudioManager.bgmSoundSystem.stop("bgm");
     }
 }
