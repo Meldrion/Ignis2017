@@ -5,18 +5,26 @@ import javafx.stage.Stage;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.MapManager;
 import lu.innocence.ignis.engine.Project;
-import lu.innocence.ignis.view.CreateMapDialog;
+import lu.innocence.ignis.view.MapPropertiesDialog;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+
 
 /**
  * @author Fabien Steines
  */
 public class MapTree extends TreeView<String> {
 
+    private static final Logger LOGGER = LogManager.getLogger(MapTree.class);
     private Project project;
     private Stage parentStage;
 
+    /**
+     *
+     * @param parentStage
+     */
     public MapTree(Stage parentStage) {
         this.parentStage = parentStage;
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -33,41 +41,97 @@ public class MapTree extends TreeView<String> {
         this.buildContextMenu();
     }
 
+    /**
+     *
+     */
     private void buildContextMenu() {
         ContextMenu mapTreeMenu = new ContextMenu();
         MenuItem createMap = new MenuItem("Create Map...");
+
+        // Create Dialog
         createMap.setOnAction(event -> {
             if (this.getSelectionModel().getSelectedIndex() > -1) {
-                CreateMapDialog mapDialog = new CreateMapDialog(this.parentStage, this.project);
-                mapDialog.showAndWait();
-                if (mapDialog.isAccepted()) {
-
-                    Map newMap = mapDialog.createMap();
-                    MapTreeNode currentSelected = (MapTreeNode) this.getSelectionModel().getSelectedItem();
-
-                    if (currentSelected != null && currentSelected != this.getRoot()) {
-                        this.project.getMapManager().addMap(newMap, currentSelected.getMapId());
-                    } else {
-                        this.project.getMapManager().addMap(newMap);
-                    }
-
-                    this.project.getMapManager().saveMapTree();
-
-                    MapTreeNode treeItem = new MapTreeNode(newMap.getName());
-                    treeItem.setMapId(newMap.getMapId());
-                    this.getSelectionModel().getSelectedItem().getChildren().add(treeItem);
-                    if (currentSelected != null) currentSelected.setExpanded(true);
-
-                }
+                callToMapCreationDialog();
             }
         });
+
+        // Edit Dialog
         MenuItem editMap = new MenuItem("Edit Map...");
+        editMap.setOnAction(event -> {
+            if (this.getSelectionModel().getSelectedIndex() > -1) {
+
+                MapTreeNode cNode = (MapTreeNode) this.getSelectionModel().getSelectedItem();
+                Map map = this.project.getMapManager().getRoot().find(cNode.getMapId());
+
+                if (map != null)
+                    callToMapEditDialog(map);
+                else
+                    LOGGER.error("Unable to find Map with Id {}",cNode.getMapId());
+            }
+        });
+
+
         MenuItem copyMap = new MenuItem("Copy");
 
         mapTreeMenu.getItems().addAll(createMap, new SeparatorMenuItem(), editMap, copyMap);
         this.setContextMenu(mapTreeMenu);
     }
 
+    /**
+     *
+     */
+    private void callToMapCreationDialog() {
+
+        // Open the Map Dialog || Tell the Dialog that it was opened in creation mode
+        MapPropertiesDialog mapDialog = new MapPropertiesDialog(this.parentStage, this.project, MapPropertiesDialog.MODE_CREATE);
+        mapDialog.showAndWait();
+
+        // Check if the Dialog has been accepted
+        if (mapDialog.isAccepted()) {
+
+            Map newMap = mapDialog.createMap();
+            MapTreeNode currentSelected = (MapTreeNode) this.getSelectionModel().getSelectedItem();
+
+            // Add the NewMap to the MapManager
+            if (currentSelected != null && currentSelected != this.getRoot()) {
+                this.project.getMapManager().addMap(newMap, currentSelected.getMapId());
+            } else {
+                this.project.getMapManager().addMap(newMap);
+            }
+            // Save the MapTree, so that the Map keeps registered
+            this.project.getMapManager().saveMapTree();
+
+            // Create the Node for the MapTreeView
+            MapTreeNode treeItem = new MapTreeNode(newMap.getName());
+            treeItem.setMapId(newMap.getMapId());
+            this.getSelectionModel().getSelectedItem().getChildren().add(treeItem);
+
+            // Expand the Parent Node (if any)
+            if (currentSelected != null)
+                currentSelected.setExpanded(true);
+        }
+    }
+
+    /**
+     *
+     */
+    private void callToMapEditDialog(Map map) {
+
+        // Open the Map Dialog || Tell the Dialog that it was opened in edit mode
+        MapPropertiesDialog mapDialog = new MapPropertiesDialog(this.parentStage, this.project, MapPropertiesDialog.MODE_EDIT);
+        mapDialog.initMap(map);
+        mapDialog.showAndWait();
+
+        // Check if the Dialog has been accepted
+        if (mapDialog.isAccepted()) {
+            mapDialog.changeMap(map);
+        }
+    }
+
+    /**
+     *
+     * @param p
+     */
     public void setProject(Project p) {
         if (p != null) {
             this.project = p;
@@ -77,15 +141,11 @@ public class MapTree extends TreeView<String> {
         }
     }
 
-    private void buildFromMapManager(MapManager mapManager) {
-
-        MapTreeNode rootNode = new MapTreeNode("TEST");
-        rootNode.setMapId("-1");
-        this.setRoot(rootNode);
-        buildFromNode(mapManager.getRoot(), rootNode);
-        rootNode.setExpanded(true);
-    }
-
+    /**
+     *
+     * @param map
+     * @param node
+     */
     private void buildFromNode(Map map, TreeItem<String> node) {
 
         List<Map> maps = map.getChildren();
@@ -93,9 +153,24 @@ public class MapTree extends TreeView<String> {
             MapTreeNode currentTreeNode = new MapTreeNode(current.getName());
             currentTreeNode.setMapId(current.getMapId());
             node.getChildren().add(currentTreeNode);
-            buildFromNode(current, currentTreeNode);
+            this.buildFromNode(current, currentTreeNode);
         }
 
     }
+
+    /**
+     *
+     * @param mapManager
+     */
+    private void buildFromMapManager(MapManager mapManager) {
+
+        MapTreeNode rootNode = new MapTreeNode("TEST");
+        rootNode.setMapId("-1");
+        this.setRoot(rootNode);
+        this.buildFromNode(mapManager.getRoot(), rootNode);
+        rootNode.setExpanded(true);
+    }
+
+
 
 }

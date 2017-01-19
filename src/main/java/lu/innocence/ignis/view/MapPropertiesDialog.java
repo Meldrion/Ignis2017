@@ -25,9 +25,9 @@ import org.apache.logging.log4j.Logger;
 /**
  * @author Fabien Steines
  */
-public class CreateMapDialog extends Stage {
+public class MapPropertiesDialog extends Stage {
 
-    private Logger LOGGER = LogManager.getLogger(CreateMapDialog.class);
+    private static final Logger LOGGER = LogManager.getLogger(MapPropertiesDialog.class);
     private Project project;
 
     private int selectedTilesetIndex;
@@ -37,32 +37,69 @@ public class CreateMapDialog extends Stage {
     private Spinner<Integer> heightSpinner;
     private TextField textFieldMapName;
 
-    public CreateMapDialog(Stage parentStage, Project project) {
+    public static final int MODE_CREATE = 0x0;
+    public static final int MODE_EDIT = 0x1;
+
+    private static final String CREATE_MAP_TITLE = "Create Map";
+    private static final String EDIT_MAP_TITLE = "Edit Map";
+
+    public MapPropertiesDialog(Stage parentStage, Project project, int mode) {
         this.accepted = false;
         this.project = project;
         this.selectedTilesetIndex = -1;
         this.initModality(Modality.APPLICATION_MODAL);
-        this.setTitle("Create Map...");
+
+        if (mode == MODE_EDIT) {
+            this.setTitle(EDIT_MAP_TITLE);
+        } else {
+            this.setTitle(CREATE_MAP_TITLE);
+        }
+
         this.setResizable(false);
         this.buildGUI();
-        this.initData();
         this.initOwner(parentStage);
         this.sizeToScene();
     }
 
+    /**
+     *
+     * @param map
+     */
+    public void initMap(Map map) {
+        this.textFieldMapName.setText(map.getName());
+        this.widthSpinner.getEditor().setText(String.valueOf(map.getWidth()));
+        this.heightSpinner.getEditor().setText(String.valueOf(map.getHeight()));
+    }
+
+    /**
+     *
+     * @return
+     */
     public Map createMap() {
-        int w = Integer.parseInt(this.widthSpinner.getEditor().getText());
-        int h = Integer.parseInt(this.heightSpinner.getEditor().getText());
+
 
         Map newMap = this.project.getMapManager().createNewMap();
-        newMap.setDimension(w, h);
-        newMap.setName(this.textFieldMapName.getText());
-        newMap.setTileset(this.project.getTilesetManager().getTilesetAtIndex(selectedTilesetIndex));
+        this.changeMap(newMap);
         newMap.save();
 
         return newMap;
     }
 
+    /**
+     *
+     * @param map
+     */
+    public void changeMap(Map map) {
+        int w = Integer.parseInt(this.widthSpinner.getEditor().getText());
+        int h = Integer.parseInt(this.heightSpinner.getEditor().getText());
+        map.setDimension(w, h);
+        map.setName(this.textFieldMapName.getText());
+        map.setTileset(this.project.getTilesetManager().getTilesetAtIndex(selectedTilesetIndex));
+    }
+
+    /**
+     *
+     */
     private void buildGUI() {
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
@@ -159,10 +196,10 @@ public class CreateMapDialog extends Stage {
         root.setBottom(bottomBar);
     }
 
-    private void initData() {
-
-    }
-
+    /**
+     *
+     * @return
+     */
     public boolean isAccepted() {
         return accepted;
     }

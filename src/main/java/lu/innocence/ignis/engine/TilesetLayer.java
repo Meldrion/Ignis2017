@@ -19,14 +19,23 @@ public class TilesetLayer {
     private int height;
     private static final Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TilesetLayer.class);
 
+    public TilesetLayer() {
+        this.width = 0;
+        this.height = 0;
+    }
+
     /**
      * @param x
      * @param y
      */
     public void setDimension(int x, int y) {
-        this.width = x;
-        this.height = y;
-        this.buildMatrix();
+
+        if (this.width != x || this.height != y) {
+            this.width = x;
+            this.height = y;
+            this.buildMatrix();
+        }
+
     }
 
     /**
