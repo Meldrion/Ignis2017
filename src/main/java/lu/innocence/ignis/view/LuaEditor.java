@@ -25,7 +25,6 @@ public class LuaEditor extends Stage {
         this.setTitle("Import Manager Window");
         this.setResizable(false);
         this.buildGUI();
-        //this.initData();
         this.initOwner(parent);
         this.sizeToScene();
         this.show();
