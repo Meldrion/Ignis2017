@@ -22,6 +22,7 @@ import java.util.List;
  *         <p>
  *         Last revision - $(DATE) - Fabien Steines
  */
+
 public class AudioManager {
 
     private static final Logger LOGGER = LogManager.getLogger(AudioManager.class);
@@ -34,7 +35,17 @@ public class AudioManager {
     private String activeBGM;
 
     /**
+     * There is a problem with the Audio Manager on Windows 32 and Windows 64
+     * It will work just fine, but generate the following error:
      *
+     *Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002
+     *
+     * The fix to this is to generate the following reg keys:
+     * 32 bit Windows
+     * HKEY_LOCAL_MACHINE\Software\JavaSoft\Prefs
+
+     * 64 bit Windows
+     * HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\JavaSoft\Prefs
      */
     public AudioManager() {
         if (!AudioManager.audioSystemIsOnline) {
