@@ -4,11 +4,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
-import org.fxmisc.richtext.StyleSpans;
-import org.fxmisc.richtext.StyleSpansBuilder;
+
 
 /**
  * @author Fabien Steines
@@ -27,7 +25,6 @@ public class LuaEditor extends Stage {
         this.buildGUI();
         this.initOwner(parent);
         this.sizeToScene();
-        this.show();
     }
 
     private void buildGUI() {
@@ -39,6 +36,7 @@ public class LuaEditor extends Stage {
 
         CodeArea codeArea = new CodeArea();
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
+
 
         codeArea.textProperty().addListener((obs, oldText, newText) -> {
             //codeArea.setStyleSpans(0, computeHighlighting(newText));
