@@ -2,13 +2,18 @@ package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * @author Fabien Steines
  */
 public class Tileset {
+
+    private final static Logger LOGGER = LogManager.getLogger(Tileset.class);
 
     private Image tilesetImage;
     private int cellSize = 32;
@@ -26,10 +31,16 @@ public class Tileset {
     }
 
     public void loadImage(String imagePath) {
-        this.imageName = (new File(imagePath)).getName();
-        Image newTsImage = new Image(String.format("file:%s", imagePath));
-        initCollisionMatrix(newTsImage);
-        this.tilesetImage = newTsImage;
+        File f = new File(imagePath);
+        if (f.exists() && f.isFile()) {
+            this.imageName = f.getName();
+            Image newTsImage = new Image(String.format("file:%s", imagePath));
+            initCollisionMatrix(newTsImage);
+            this.tilesetImage = newTsImage;
+        } else {
+            LOGGER.error("Cannot find file: {}",imagePath);
+        }
+
     }
 
     public void drawTileTo(GraphicsContext g, int x, int y, int tsX, int tsY) {

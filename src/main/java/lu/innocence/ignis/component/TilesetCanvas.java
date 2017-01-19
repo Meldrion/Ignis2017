@@ -92,7 +92,7 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
             for (int i=0;i<8;i++) {
                 Terrain cTerrain = this.linkedTileset.getTerrain(i);
                 if (cTerrain != null)
-                    cTerrain.draw(g,i,0,2,0);
+                    cTerrain.draw(g,i,0,0);
             }
 
             g.drawImage(this.linkedTileset.getTilesetImage(), 0, cellSize);

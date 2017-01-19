@@ -20,12 +20,12 @@ import javafx.stage.Stage;
 /**
  * Created by fabien on 26/11/16.
  */
-public class SetMaxCountDialiog extends Stage {
+public class SetMaxCountDialog extends Stage {
 
     private Spinner<Integer> spMaxCount;
     private boolean accepted;
 
-    public SetMaxCountDialiog(Stage parent) {
+    public SetMaxCountDialog(Stage parent) {
         this.accepted = false;
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Load Project Window");

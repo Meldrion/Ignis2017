@@ -96,6 +96,11 @@ public class Map {
 
                 this.layers.get(index).render(g, this.tileset);
                 g.setGlobalAlpha(1.0);
+
+            }
+
+            if (this.activeLayerIndex == 3) {
+                LOGGER.info("EVENT LAYER");
             }
         }
     }
