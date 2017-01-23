@@ -29,9 +29,8 @@ public class TilesetResourceView extends ResourceView {
         this.resourceList.getItems().clear();
         for (int i = 0; i < tsManager.getTilesetList().size(); i++) {
             Tileset tileset = tsManager.getTilesetAtIndex(i);
-            this.resourceList.getItems().add(String.format("%s: %s",
-                    ZeroStringGenerator.addZeros(i,TilesetManager.MAX_TILESET_COUNT),
-                    tileset != null ? tileset.getName() : ""));
+            this.resourceList.getItems().add(
+                    TilesetResourceView.generateTilesetName(i,tileset != null ? tileset.getName() : ""));
         }
 
         if (this.resourceList.getItems().size() > 0) {
@@ -52,8 +51,23 @@ public class TilesetResourceView extends ResourceView {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Tileset getSelected() {
         int index = this.resourceList.getSelectionModel().getSelectedIndex();
         return (index > -1 && this.tsManager != null) ? this.tsManager.getTilesetAtIndex(index) : null;
+    }
+
+    /**
+     *
+     * @param index
+     * @param name
+     * @return
+     */
+    public static String generateTilesetName(int index,String name) {
+        return String.format("%s: %s",
+                ZeroStringGenerator.addZeros(index,TilesetManager.MAX_TILESET_COUNT), name);
     }
 }

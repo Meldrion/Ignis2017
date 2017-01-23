@@ -25,14 +25,16 @@ import java.util.List;
  */
 public class MapCanvas extends Canvas implements TilesetSelectionChanged, ActiveMapListener {
 
+    // TOOLS
     public static final int TOOL_PEN = 0x0;
     public static final int TOOL_BRUSH = 0x1;
     public static final int TOOL_FILL = 0x2;
     public static final int TOOL_ERASE = 0x3;
-    public static final int LAYER_1 = 0x4;
-    public static final int LAYER_2 = 0x5;
-    public static final int LAYER_3 = 0x6;
-    public static final int LAYER_EVENT = 0x7;
+    // LAYERS
+    public static final int LAYER_1 = 0x0;
+    public static final int LAYER_2 = 0x1;
+    public static final int LAYER_3 = 0x2;
+    public static final int LAYER_EVENT = 0x3;
 
     private static final Logger LOGGER = LogManager.getLogger(MapCanvas.class);
 
@@ -92,6 +94,21 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         if (this.map != null) {
             ChessBGDrawer.drawChessBackground(g, this.map.getWidth(), this.map.getHeight(), 32, 32);
             this.map.renderMap(g);
+
+            // Check if we shall draw the Map Grid
+            if (this.activeLayerId == MapCanvas.LAYER_EVENT) {
+
+                // Draw the Grid
+                for (int i=0;i<this.map.getWidth();i++) {
+                    int x = i * this.map.getCellSize();
+                    g.strokeLine(x,0,x,this.map.getHeight() * this.map.getCellSize());
+                }
+
+                for (int j=0;j<this.map.getHeight();j++) {
+                    int y = j * this.map.getCellSize();
+                    g.strokeLine(0,y,this.map.getWidth() * this.map.getCellSize(),y);
+                }
+            }
         }
     }
 

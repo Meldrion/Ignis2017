@@ -2,7 +2,6 @@ package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import lu.innocence.ignis.event.RenderTerrainTileInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -20,6 +19,7 @@ public class Map {
     private List<TilesetLayer> layers;
     private int width;
     private int height;
+    private int cellSize;
     private Tileset tileset;
     private int activeLayerIndex;
     private List<Map> children;
@@ -29,10 +29,13 @@ public class Map {
     private String mapFilePath;
     private int tilesetId;
 
-
+    /**
+     *
+     */
     public Map() {
 
         this.uniqueId = "root";
+        this.cellSize = 32;
         this.activeLayerIndex = 0;
         this.name = "Untitled";
         this.children = new ArrayList<>();
@@ -44,26 +47,51 @@ public class Map {
         }
     }
 
+    /**
+     *
+     * @param path
+     */
     public void setMapFilePath(String path) {
         this.mapFilePath = path;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMapId() {
         return this.uniqueId;
     }
 
+    /**
+     *
+     * @param uniqueId
+     */
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setDimension(int x, int y) {
         this.width = x;
         this.height = y;
@@ -72,12 +100,19 @@ public class Map {
         }
     }
 
+    /**
+     *
+     */
     public void clearMap() {
         for (TilesetLayer layer : this.layers) {
             layer.clearLayer();
         }
     }
 
+    /**
+     *
+     * @param g
+     */
     public void renderMap(GraphicsContext g) {
 
         if (this.tileset != null) {
@@ -98,18 +133,16 @@ public class Map {
                 g.setGlobalAlpha(1.0);
 
             }
-
-            if (this.activeLayerIndex == 3) {
-                LOGGER.info("EVENT LAYER");
-            }
         }
     }
 
+    /**
+     *
+     * @param g
+     * @param x
+     * @param y
+     */
     public void renderPartialMap(GraphicsContext g, int x, int y) {
-        renderPartialMap(g,x,y,false);
-    }
-
-    public void renderPartialMap(GraphicsContext g, int x, int y,boolean ignoreRenderTilesArround) {
 
         if (this.tileset != null) {
             for (int index = 0; index < this.layers.size(); index++) {
@@ -125,20 +158,35 @@ public class Map {
                     }
                 }
 
-                this.layers.get(index).renderPartial(g, x, y, this.tileset,ignoreRenderTilesArround);
+                this.layers.get(index).renderPartial(g, x, y, this.tileset);
                 g.setGlobalAlpha(1.0);
             }
         }
     }
 
+    /**
+     *
+     * @param layerIndex
+     * @param x
+     * @param y
+     * @return
+     */
     public TileCell removeCell(int layerIndex, int x, int y) {
         return this.layers.get(layerIndex).removeCell(x, y);
     }
 
+    /**
+     *
+     * @return
+     */
     public Tileset getTileset() {
         return this.tileset;
     }
 
+    /**
+     *
+     * @param tileset
+     */
     public void setTileset(Tileset tileset) {
         if (tileset != null) {
             this.tilesetId = tileset.getIndex();
@@ -148,18 +196,34 @@ public class Map {
         this.tileset = tileset;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getWidth() {
         return this.width;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getHeight() {
         return this.height;
     }
 
+    /**
+     *
+     * @param activeLayerIndex
+     */
     public void setActiveLayerIndex(int activeLayerIndex) {
         this.activeLayerIndex = activeLayerIndex;
     }
 
+    /**
+     *
+     * @param map
+     */
     public void addMap(Map map) {
         if (!this.children.contains(map)) {
             this.children.add(map);
@@ -167,6 +231,11 @@ public class Map {
         }
     }
 
+    /**
+     *
+     * @param uniqueId
+     * @return
+     */
     public Map find(String uniqueId) {
 
         int index = 0;
@@ -180,10 +249,18 @@ public class Map {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Map> getChildren() {
         return this.children;
     }
 
+    /**
+     *
+     */
+    @SuppressWarnings("unchecked")
     public void save() {
         JSONObject mapJSON = new JSONObject();
         mapJSON.put("name", this.getName());
@@ -202,6 +279,9 @@ public class Map {
         FilesystemHandler.writeJson(mapJSON, this.mapFilePath);
     }
 
+    /**
+     *
+     */
     public void load() {
 
         JSONObject mapData = FilesystemHandler.readJSON(this.mapFilePath);
@@ -228,13 +308,48 @@ public class Map {
 
     }
 
+    /**
+     *
+     * @param layerId
+     * @param x
+     * @param y
+     * @param tsX
+     * @param tsY
+     * @return
+     */
     public TileCell addTile(int layerId, int x, int y, int tsX, int tsY) {
         return this.layers.get(layerId).addCell(x, y, tsX, tsY);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTilesetId() {
         return this.tilesetId;
     }
 
+    /**
+     *
+     * @return
+     */
+    public int getCellSize() {
+        return cellSize;
+    }
 
+    /**
+     *
+     * @param cellSize
+     */
+    public void setCellSize(int cellSize) {
+        this.cellSize = cellSize;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Map getParen() {
+        return this.parent;
+    }
 }

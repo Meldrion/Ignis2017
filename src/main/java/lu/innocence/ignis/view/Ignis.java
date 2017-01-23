@@ -5,6 +5,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -22,6 +23,8 @@ import lu.innocence.ignis.event.ActiveProjectListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
 
 /**
  *
@@ -166,16 +169,16 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
                 toggle.setSelected(true);
             } else {
                 if (newSelected == layer1Button) {
-                    this.mapCanvas.setActiveLayerId(MapCanvas.TOOL_PEN);
+                    this.mapCanvas.setActiveLayerId(MapCanvas.LAYER_1);
                 }
                 if (newSelected == layer2Button) {
-                    this.mapCanvas.setActiveLayerId(MapCanvas.TOOL_BRUSH);
+                    this.mapCanvas.setActiveLayerId(MapCanvas.LAYER_2);
                 }
                 if (newSelected == layer3Button) {
-                    this.mapCanvas.setActiveLayerId(MapCanvas.TOOL_FILL);
+                    this.mapCanvas.setActiveLayerId(MapCanvas.LAYER_3);
                 }
                 if (newSelected == layer4Button) {
-                    this.mapCanvas.setActiveLayerId(MapCanvas.TOOL_ERASE);
+                    this.mapCanvas.setActiveLayerId(MapCanvas.LAYER_EVENT);
                 }
             }
         });
@@ -279,6 +282,16 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
         ProjectManager.getInstance().init();
         ProjectManager.getInstance().addActiveProjectListener(this);
 
+        String iconPath = "icons/ignis.png";
+        URL iconURL = this.getClass().getClassLoader().getResource(iconPath);
+        if (iconURL != null) {
+            // Primary Stage set Application Icon
+            primaryStage.getIcons().add(new Image(String.format("file:%s",iconURL.getFile())));
+        } else {
+            LOGGER.error("Application ICON not found {}",iconPath);
+        }
+
+        // Build Stage
         buildUserInterface(primaryStage);
 
         AudioManager.initAudioSystem();

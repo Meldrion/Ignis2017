@@ -36,6 +36,7 @@ public class MapPropertiesDialog extends Stage {
     private Spinner<Integer> widthSpinner;
     private Spinner<Integer> heightSpinner;
     private TextField textFieldMapName;
+    private TextField tilesetTextField;
 
     public static final int MODE_CREATE = 0x0;
     public static final int MODE_EDIT = 0x1;
@@ -66,9 +67,19 @@ public class MapPropertiesDialog extends Stage {
      * @param map
      */
     public void initMap(Map map) {
-        this.textFieldMapName.setText(map.getName());
-        this.widthSpinner.getEditor().setText(String.valueOf(map.getWidth()));
-        this.heightSpinner.getEditor().setText(String.valueOf(map.getHeight()));
+        if (map != null) {
+            this.textFieldMapName.setText(map.getName());
+            this.widthSpinner.getEditor().setText(String.valueOf(map.getWidth()));
+            this.heightSpinner.getEditor().setText(String.valueOf(map.getHeight()));
+            this.selectedTilesetIndex = map.getTilesetId();
+            if (map.getTileset() != null) {
+                this.tilesetTextField.setText(TilesetResourceView.
+                        generateTilesetName(this.selectedTilesetIndex, map.getTileset().getName()));
+            }
+        } else {
+            LOGGER.error("Map is null");
+            this.close();
+        }
     }
 
     /**
@@ -77,11 +88,9 @@ public class MapPropertiesDialog extends Stage {
      */
     public Map createMap() {
 
-
         Map newMap = this.project.getMapManager().createNewMap();
         this.changeMap(newMap);
         newMap.save();
-
         return newMap;
     }
 
@@ -145,9 +154,9 @@ public class MapPropertiesDialog extends Stage {
         labelTileset.setText("Tileset: ");
         grid.add(labelTileset, 0, 2);
 
-        TextField tilesetTextField = new TextField();
-        tilesetTextField.setMaxWidth(Integer.MAX_VALUE);
-        tilesetTextField.setEditable(false);
+        this.tilesetTextField = new TextField();
+        this.tilesetTextField.setMaxWidth(Integer.MAX_VALUE);
+        this.tilesetTextField.setEditable(false);
 
         Button tilesetSearchButton = new Button();
         tilesetSearchButton.setText("...");
