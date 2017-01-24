@@ -1,6 +1,7 @@
 package lu.innocence.ignis.component;
 
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.MapManager;
@@ -20,6 +21,7 @@ public class MapTree extends TreeView<String> {
     private static final Logger LOGGER = LogManager.getLogger(MapTree.class);
     private Project project;
     private Stage parentStage;
+
 
     /**
      *

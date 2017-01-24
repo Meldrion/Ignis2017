@@ -542,7 +542,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     private void erase(int x, int y) {
         if (this.map != null) {
             TileCell cell = this.map.removeCell(this.activeLayerId, x, y);
-            this.renderPartial(x, y,cell != null && Tileset.isTilesetCell(cell.getTsY()));
+            this.renderPartial(x, y,cell != null && !Tileset.isTilesetCell(cell.getTsY()));
         }
     }
 

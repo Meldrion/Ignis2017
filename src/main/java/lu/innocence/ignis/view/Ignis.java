@@ -5,7 +5,6 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -18,13 +17,14 @@ import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.component.MapCanvas;
 import lu.innocence.ignis.component.MapTree;
 import lu.innocence.ignis.component.TilesetCanvas;
-import lu.innocence.ignis.engine.*;
+import lu.innocence.ignis.engine.AudioManager;
+import lu.innocence.ignis.engine.MapManager;
+import lu.innocence.ignis.engine.Project;
+import lu.innocence.ignis.engine.ProjectManager;
 import lu.innocence.ignis.event.ActiveProjectListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.net.URL;
 
 /**
  *
@@ -94,15 +94,16 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
         topContainer.getChildren().add(toolBar);
         Button newProjectBtn = new Button();
         newProjectBtn.setFocusTraversable(false);
-        newProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Document-Blank-icon-24.png").getFile()));
+
+        newProjectBtn.setGraphic(new ImageView(IgnisGlobals.getIconNewProject()));
         newProjectBtn.setOnAction(e -> new CreateProjectDialog(mainStage));
         Button openProjectBtn = new Button();
         openProjectBtn.setOnAction(e -> new LoadProjectDialog(mainStage));
         openProjectBtn.setFocusTraversable(false);
-        openProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Files-icon-24.png").getFile()));
+        openProjectBtn.setGraphic(new ImageView(IgnisGlobals.getIconLoadProject()));
         this.saveProjectBtn = new Button();
         this.saveProjectBtn.setFocusTraversable(false);
-        this.saveProjectBtn.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/Actions-document-save-icon.png").getFile()));
+        this.saveProjectBtn.setGraphic(new ImageView(IgnisGlobals.getIconSaveProject()));
         this.saveProjectBtn.setOnAction(event -> {
             if (this.project != null) {
                 this.project.saveProject();
@@ -112,20 +113,20 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
         ToggleGroup toolsGroup = new ToggleGroup();
         this.penToolButton = new ToggleButton();
         penToolButton.setFocusTraversable(false);
-        penToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-line-2.png").getFile()));
+        penToolButton.setGraphic(new ImageView(IgnisGlobals.getIconPen()));
         penToolButton.setToggleGroup(toolsGroup);
         penToolButton.setSelected(true);
         this.brushToolButton = new ToggleButton();
         brushToolButton.setFocusTraversable(false);
-        brushToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-brush.png").getFile()));
+        brushToolButton.setGraphic(new ImageView(IgnisGlobals.getIconBrush()));
         brushToolButton.setToggleGroup(toolsGroup);
         this.fillToolButton = new ToggleButton();
         fillToolButton.setFocusTraversable(false);
-        fillToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-fill-2.png").getFile()));
+        fillToolButton.setGraphic(new ImageView(IgnisGlobals.getIconFill()));
         fillToolButton.setToggleGroup(toolsGroup);
         this.eraseToolButton = new ToggleButton();
         eraseToolButton.setFocusTraversable(false);
-        eraseToolButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/draw-eraser-2.png").getFile()));
+        eraseToolButton.setGraphic(new ImageView(IgnisGlobals.getIconErase()));
         eraseToolButton.setToggleGroup(toolsGroup);
         toolsGroup.selectedToggleProperty().addListener((ov, toggle, newSelected) -> {
             if (newSelected == null) {
@@ -149,20 +150,20 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
         ToggleGroup layersGroup = new ToggleGroup();
         this.layer1Button = new ToggleButton();
         this.layer1Button.setFocusTraversable(false);
-        this.layer1Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_bottom_24.png").getFile()));
+        this.layer1Button.setGraphic(new ImageView(IgnisGlobals.getIconLayer1()));
         this.layer1Button.setToggleGroup(layersGroup);
         this.layer1Button.setSelected(true);
         this.layer2Button = new ToggleButton();
         this.layer2Button.setFocusTraversable(false);
-        this.layer2Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_middle_24.png").getFile()));
+        this.layer2Button.setGraphic(new ImageView(IgnisGlobals.getIconLayer2()));
         this.layer2Button.setToggleGroup(layersGroup);
         this.layer3Button = new ToggleButton();
         this.layer3Button.setFocusTraversable(false);
-        this.layer3Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
+        this.layer3Button.setGraphic(new ImageView(IgnisGlobals.getIconLayer3()));
         this.layer3Button.setToggleGroup(layersGroup);
         this.layer4Button = new ToggleButton();
         this.layer4Button.setFocusTraversable(false);
-        this.layer4Button.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/layer_top_24.png").getFile()));
+        this.layer4Button.setGraphic(new ImageView(IgnisGlobals.getIconLayerEvent()));
         this.layer4Button.setToggleGroup(layersGroup);
         layersGroup.selectedToggleProperty().addListener((ov, toggle, newSelected) -> {
             if (newSelected == null) {
@@ -182,9 +183,10 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
                 }
             }
         });
+
         this.importManagerButton = new Button();
         this.importManagerButton.setFocusTraversable(false);
-        this.importManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/import-icon-24.png").getFile()));
+        this.importManagerButton.setGraphic(new ImageView(IgnisGlobals.getIconImport()));
         this.importManagerButton.setOnAction(event -> {
             new ImportDialog(mainStage, this.project);
         });
@@ -195,7 +197,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
             GameDatabase gameDatabase = new GameDatabase(mainStage, this.project);
             gameDatabase.showAndWait();
         });
-        this.gameDBButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/ignis24px.png").getFile()));
+        this.gameDBButton.setGraphic(new ImageView(IgnisGlobals.getIconIgnis24px()));
 
         this.audioManagerButton = new Button();
         this.audioManagerButton.setFocusTraversable(false);
@@ -203,7 +205,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
             AudioDialog audioDialog = new AudioDialog(mainStage,this.project.getAudioManager());
             audioDialog.showAndWait();
         });
-        this.audioManagerButton.setGraphic(new ImageView("file:" + IgnisGlobals.loadFromResourceFolder("icons/audioManager22.png").getFile()));
+        this.audioManagerButton.setGraphic(new ImageView(IgnisGlobals.getIconAudioManager()));
         toolBar.getItems().addAll(newProjectBtn, openProjectBtn, saveProjectBtn, new Separator(),
                 penToolButton, brushToolButton, fillToolButton, eraseToolButton, new Separator(),
                 layer1Button, layer2Button, layer3Button, layer4Button, new Separator(), importManagerButton, gameDBButton, audioManagerButton);
@@ -281,15 +283,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
         ProjectManager.getInstance().init();
         ProjectManager.getInstance().addActiveProjectListener(this);
-
-        String iconPath = "icons/ignis.png";
-        URL iconURL = this.getClass().getClassLoader().getResource(iconPath);
-        if (iconURL != null) {
-            // Primary Stage set Application Icon
-            primaryStage.getIcons().add(new Image(String.format("file:%s",iconURL.getFile())));
-        } else {
-            LOGGER.error("Application ICON not found {}",iconPath);
-        }
+        primaryStage.getIcons().add(IgnisGlobals.getIconIgnis());
 
         // Build Stage
         buildUserInterface(primaryStage);
