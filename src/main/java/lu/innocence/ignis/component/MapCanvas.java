@@ -12,6 +12,7 @@ import lu.innocence.ignis.engine.TileCell;
 import lu.innocence.ignis.engine.Tileset;
 import lu.innocence.ignis.event.ActiveMapListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
+import lu.innocence.ignis.event.MapPropertiesUpdated;
 import lu.innocence.ignis.event.TilesetSelectionChanged;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * @author Fabien Steines
  */
-public class MapCanvas extends Canvas implements TilesetSelectionChanged, ActiveMapListener {
+public class MapCanvas extends Canvas implements TilesetSelectionChanged, ActiveMapListener, MapPropertiesUpdated {
 
     // TOOLS
     public static final int TOOL_PEN = 0x0;
@@ -67,8 +68,16 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * @param map
      */
     public void setMap(Map map) {
-        this.map = map;
 
+        if (map != null) {
+            map.addMapPropertiesListener(this);
+        }
+
+        this.map = map;
+        this.applyMapProperties();
+    }
+
+    private void applyMapProperties() {
         int w = this.map != null ? this.map.getWidth() * 32 : 0;
         int h = this.map != null ? this.map.getHeight() * 32 : 0;
 
@@ -537,5 +546,10 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         }
     }
 
+
+    @Override
+    public void mapPropertiesUpdated() {
+        this.applyMapProperties();
+    }
 
 }

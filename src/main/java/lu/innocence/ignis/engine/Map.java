@@ -2,6 +2,7 @@ package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import lu.innocence.ignis.event.MapPropertiesUpdated;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
@@ -16,6 +17,8 @@ import java.util.List;
 public class Map {
 
     private static Logger LOGGER = LogManager.getLogger(Map.class);
+
+    private List<MapPropertiesUpdated> mapPropertiesListeners;
     private List<TilesetLayer> layers;
     private int width;
     private int height;
@@ -40,10 +43,20 @@ public class Map {
         this.name = "Untitled";
         this.children = new ArrayList<>();
         this.parent = null;
+        this.mapPropertiesListeners = new ArrayList<>();
         this.layers = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
             this.layers.add(new TilesetLayer());
+        }
+    }
+
+    /**
+     *
+     */
+    public void addMapPropertiesListener(MapPropertiesUpdated mapPropertiesUpdated) {
+        if (!this.mapPropertiesListeners.contains(mapPropertiesUpdated)) {
+            this.mapPropertiesListeners.add(mapPropertiesUpdated);
         }
     }
 
@@ -98,6 +111,7 @@ public class Map {
         for (TilesetLayer layer : this.layers) {
             layer.setDimension(x, y);
         }
+        this.fireMapProprtiesUpdated();
     }
 
     /**
@@ -107,6 +121,7 @@ public class Map {
         for (TilesetLayer layer : this.layers) {
             layer.clearLayer();
         }
+        this.fireMapProprtiesUpdated();
     }
 
     /**
@@ -194,6 +209,7 @@ public class Map {
             this.tilesetId = -1;
         }
         this.tileset = tileset;
+        this.fireMapProprtiesUpdated();
     }
 
     /**
@@ -349,7 +365,16 @@ public class Map {
      *
      * @return
      */
-    public Map getParen() {
+    public Map getParent() {
         return this.parent;
+    }
+
+    /**
+     *
+     */
+    private void fireMapProprtiesUpdated() {
+        for (MapPropertiesUpdated current : this.mapPropertiesListeners) {
+            current.mapPropertiesUpdated();
+        }
     }
 }
