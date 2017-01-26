@@ -2,7 +2,9 @@ package lu.innocence.ignis.component;
 
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.MapManager;
 import lu.innocence.ignis.engine.Project;
@@ -106,6 +108,7 @@ public class MapTree extends TreeView<String> {
             // Create the Node for the MapTreeView
             MapTreeNode treeItem = new MapTreeNode(newMap.getName());
             treeItem.setMapId(newMap.getMapId());
+            treeItem.setGraphic(new ImageView(IgnisGlobals.getIconMap()));
             this.getSelectionModel().getSelectedItem().getChildren().add(treeItem);
 
             // Expand the Parent Node (if any)
@@ -153,9 +156,15 @@ public class MapTree extends TreeView<String> {
         List<Map> maps = map.getChildren();
         for (Map current : maps) {
             MapTreeNode currentTreeNode = new MapTreeNode(current.getName());
+            currentTreeNode.setGraphic(new ImageView(IgnisGlobals.getIconMap()));
             currentTreeNode.setMapId(current.getMapId());
             node.getChildren().add(currentTreeNode);
             this.buildFromNode(current, currentTreeNode);
+        }
+
+        // If the map has any submaps, then change the icon to the folder icon
+        if (!maps.isEmpty()) {
+            node.setGraphic(new ImageView(IgnisGlobals.getIconMapFolder()));
         }
 
     }
@@ -166,7 +175,7 @@ public class MapTree extends TreeView<String> {
      */
     private void buildFromMapManager(MapManager mapManager) {
 
-        MapTreeNode rootNode = new MapTreeNode("TEST");
+        MapTreeNode rootNode = new MapTreeNode(this.project.getProjectTitle());
         rootNode.setMapId("-1");
         this.setRoot(rootNode);
         this.buildFromNode(mapManager.getRoot(), rootNode);

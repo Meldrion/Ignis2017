@@ -28,8 +28,10 @@ public class IgnisGlobals {
     private static Image iconLayer2 = IgnisGlobals.loadResource("icons/layer_middle_24.png");
     private static Image iconLayer3 = IgnisGlobals.loadResource("icons/layer_top_24.png");
     private static Image iconLayerEvent = IgnisGlobals.loadResource("icons/layer_top_24.png");
-    private static Image iconImport = IgnisGlobals.loadResource("icons/import-icon-24.png");;
-    private static Image iconAudioManager = IgnisGlobals.loadResource("icons/audioManager22.png");;
+    private static Image iconImport = IgnisGlobals.loadResource("icons/import-icon-24.png");
+    private static Image iconAudioManager = IgnisGlobals.loadResource("icons/audioManager22.png");
+    private static Image iconMap = IgnisGlobals.loadResource("icons/Document-Blank-icon-16.png");
+    private static Image iconMapFolder = IgnisGlobals.loadResource("icons/document-open-2.png");
 
     private IgnisGlobals() {
 
@@ -161,5 +163,13 @@ public class IgnisGlobals {
 
     public static Image getIconImport() {
         return iconImport;
+    }
+
+    public static Image getIconMapFolder() {
+        return iconMapFolder;
+    }
+
+    public static Image getIconMap() {
+        return iconMap;
     }
 }
