@@ -3,6 +3,7 @@ package lu.innocence.ignis.component;
 import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -39,6 +40,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     private static final Logger LOGGER = LogManager.getLogger(MapCanvas.class);
 
+    private int currentX = -1;
+    private int currentY = -1;
     private int lastX = -1;
     private int lastY = -1;
     private Canvas frontCanvas;
@@ -54,6 +57,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     private boolean mouseIsDown;
     private int brushStartX;
     private int brushStartY;
+    private boolean ctrlIsDown;
 
     /**
      * @param width
@@ -119,8 +123,6 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                 }
             }
         }
-
-        //if (this.activeLayerId == )
     }
 
     /**
@@ -155,62 +157,62 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
         // Mouse Press Event
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, t -> {
-            int x = (int) t.getX() / 32;
-            int y = (int) t.getY() / 32;
-            this.handleAction(x, y, MouseEvent.MOUSE_PRESSED);
+            this.currentX = (int) t.getX() / 32;
+            this.currentY = (int) t.getY() / 32;
+            this.handleAction(this.currentX, this.currentY, MouseEvent.MOUSE_PRESSED);
         });
 
         // Mouse Release Event
         this.frontCanvas.addEventFilter(MouseEvent.MOUSE_RELEASED, t -> {
-            int x = (int) t.getX() / 32;
-            int y = (int) t.getY() / 32;
-            this.handleAction(x, y, MouseEvent.MOUSE_RELEASED);
+            this.currentX = (int) t.getX() / 32;
+            this.currentY = (int) t.getY() / 32;
+            this.handleAction(this.currentX, this.currentY, MouseEvent.MOUSE_RELEASED);
         });
 
         // Mouse Drag Event
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, t -> {
-            int x = (int) t.getX() / 32;
-            int y = (int) t.getY() / 32;
-            if (x != lastX || y != lastY) {
-                this.handleAction(x, y, MouseEvent.MOUSE_DRAGGED);
-                lastX = x;
-                lastY = y;
+            this.currentX = (int) t.getX() / 32;
+            this.currentY = (int) t.getY() / 32;
+            if (this.currentX != lastX || this.currentY != lastY) {
+                this.handleAction(this.currentX, this.currentY, MouseEvent.MOUSE_DRAGGED);
+                lastX = this.currentX;
+                lastY = this.currentY;
             }
         });
 
         // Mouse Move Event
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_MOVED, t -> {
-            int x = (int) t.getX() / 32;
-            int y = (int) t.getY() / 32;
-            if ((x != lastX || y != lastY) && this.activeLayerId != LAYER_EVENT) {
-                this.renderCursor(x, y, false, false);
-                lastX = x;
-                lastY = y;
+            this.currentX = (int) t.getX() / 32;
+            this.currentY = (int) t.getY() / 32;
+            if ((this.currentX != lastX || this.currentY != lastY) && this.activeLayerId != LAYER_EVENT) {
+                this.renderCursor(this.currentX, this.currentY, false, false);
+                lastX = this.currentX;
+                lastY = this.currentY;
             }
         });
 
         // Mouse Exit Event
         this.frontCanvas.addEventFilter(MouseEvent.MOUSE_EXITED, t -> {
-            int x = (int) t.getX() / 32;
-            int y = (int) t.getY() / 32;
+            this.currentX = (int) t.getX() / 32;
+            this.currentY = (int) t.getY() / 32;
 
-            this.renderCursor(x, y, true, false);
+            this.renderCursor(this.currentX, this.currentY, true, false);
 
-            lastX = x;
-            lastY = y;
+            lastX = this.currentX;
+            lastY = this.currentY;
 
         });
 
         // Mouse Enter Event
         this.frontCanvas.addEventFilter(MouseEvent.MOUSE_ENTERED, t -> {
 
-            int x = (int) t.getX() / 32;
-            int y = (int) t.getY() / 32;
+            this.currentX = (int) t.getX() / 32;
+            this.currentY = (int) t.getY() / 32;
             if (this.activeLayerId != LAYER_EVENT) {
-                this.renderCursor(x, y, false, false);
+                this.renderCursor(this.currentX, this.currentY, false, false);
             }
-            lastX = x;
-            lastY = y;
+            lastX = this.currentX;
+            lastY = this.currentY;
 
         });
 
@@ -220,24 +222,85 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         this.frontCanvas.addEventFilter(MouseEvent.ANY, (e) -> this.frontCanvas.requestFocus());
         this.frontCanvas.setOnKeyPressed(key -> {
             if (this.map != null) {
-                switch (key.getCode()) {
-                    case DIGIT1:
-                        this.setActiveLayerId(LAYER_1, true);
-                        break;
-                    case DIGIT2:
-                        this.setActiveLayerId(LAYER_2, true);
-                        break;
-                    case DIGIT3:
-                        this.setActiveLayerId(LAYER_3, true);
-                        break;
-                    case DIGIT4:
-                        this.setActiveLayerId(LAYER_EVENT, true);
-                        break;
-                    default:
-                        break;
-                }
+                this.reactOnKeyBoardPress(key.getCode());
             }
         });
+
+        this.frontCanvas.setOnKeyReleased(key -> {
+            if (key.getCode() == KeyCode.CONTROL) {
+                this.ctrlIsDown = false;
+            }
+        });
+    }
+
+    /**
+     *
+     * @param key
+     */
+    private void reactOnKeyBoardPress(final KeyCode key) {
+        switch (key) {
+            case DIGIT1:
+                this.digit1Pressed();
+                break;
+            case DIGIT2:
+                this.digit2Pressed();
+                break;
+            case DIGIT3:
+                this.digit3Pressed();
+                break;
+            case DIGIT4:
+                this.digit4Pressed();
+                break;
+            case CONTROL:
+                this.ctrlIsDown = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     *
+     */
+    private void digit1Pressed() {
+        if (this.ctrlIsDown) {
+            this.setActiveToolId(TOOL_PEN);
+        } else {
+            this.setActiveLayerId(LAYER_1, true);
+        }
+    }
+
+    /**
+     *
+     */
+    private void digit2Pressed() {
+        if (this.ctrlIsDown) {
+            this.setActiveToolId(TOOL_BRUSH);
+        } else {
+            this.setActiveLayerId(LAYER_2, true);
+        }
+    }
+
+    /**
+     *
+     */
+    private void digit3Pressed() {
+        if (this.ctrlIsDown) {
+            this.setActiveToolId(TOOL_FILL);
+        } else {
+            this.setActiveLayerId(LAYER_3, true);
+        }
+    }
+
+    /**
+     *
+     */
+    private void digit4Pressed() {
+        if (this.ctrlIsDown) {
+            this.setActiveToolId(TOOL_ERASE);
+        } else {
+            this.setActiveLayerId(LAYER_EVENT, true);
+        }
     }
 
     /**
@@ -315,22 +378,34 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             // Draw Pen
             for (int i = 0; i < this.tilesetWidth; i++) {
                 for (int j = 0; j < this.tilesetHeight; j++) {
-
-                    int yTSCoord = this.tilesetY + j;
-
-                    if (Tileset.isTilesetCell(yTSCoord)) {
-                        // Tileset Case
-                        this.map.getTileset().drawTileTo(g, x + i,
-                                y + j,
-                                this.tilesetX + i,
-                                yTSCoord - 1);
-                    } else {
-                        // Terrain Case
-                    }
+                    this.renderPenDecideWhatToDraw(g,x,y,i,j);
                 }
             }
 
             g.setGlobalAlpha(1.0);
+        }
+    }
+
+    /**
+     *
+     * @param g
+     * @param x
+     * @param y
+     * @param i
+     * @param j
+     */
+    private void renderPenDecideWhatToDraw(GraphicsContext g,int x, int y,int i,int j) {
+
+        int yTSCoord = this.tilesetY + j;
+
+        if (Tileset.isTilesetCell(yTSCoord)) {
+            // Tileset Case
+            this.map.getTileset().drawTileTo(g, x + i,
+                    y + j,
+                    this.tilesetX + i,
+                    yTSCoord - 1);
+        } else {
+            // Terrain Case
         }
     }
 
@@ -460,6 +535,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             if (fireUpdate)
                 this.fireUpdateLayerButtons();
             this.render();
+            this.renderCursor(this.currentX,this.currentY,this.activeLayerId == LAYER_EVENT,false);
         }
     }
 
