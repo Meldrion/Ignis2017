@@ -9,7 +9,6 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
-import org.luaj.vm2.Lua;
 
 import java.net.URL;
 import java.util.Collection;
@@ -96,17 +95,13 @@ public class LuaEditor extends Stage {
 
         CodeArea codeArea = new CodeArea();
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
-
         codeArea.textProperty().addListener((obs, oldText, newText) -> {
             codeArea.setStyleSpans(0, computeHighlighting(newText));
         });
 
         codeArea.setMinSize(640,480);
-
         root.setCenter(codeArea);
-
         codeArea.replaceText(0, 0, sampleCode);
-
 
         URL url = this.getClass().getClassLoader().getResource("xml-highlighting.css");
         if (url != null)

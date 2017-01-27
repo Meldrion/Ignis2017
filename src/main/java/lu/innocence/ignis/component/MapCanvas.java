@@ -119,6 +119,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                 }
             }
         }
+
+        //if (this.activeLayerId == )
     }
 
     /**
@@ -151,18 +153,21 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     public void linkFrontCanvas(Canvas canvas) {
         this.frontCanvas = canvas;
 
+        // Mouse Press Event
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, t -> {
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
             this.handleAction(x, y, MouseEvent.MOUSE_PRESSED);
         });
 
+        // Mouse Release Event
         this.frontCanvas.addEventFilter(MouseEvent.MOUSE_RELEASED, t -> {
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
             this.handleAction(x, y, MouseEvent.MOUSE_RELEASED);
         });
 
+        // Mouse Drag Event
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_DRAGGED, t -> {
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
@@ -173,16 +178,18 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             }
         });
 
+        // Mouse Move Event
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_MOVED, t -> {
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
-            if (x != lastX || y != lastY) {
+            if ((x != lastX || y != lastY) && this.activeLayerId != LAYER_EVENT) {
                 this.renderCursor(x, y, false, false);
                 lastX = x;
                 lastY = y;
             }
         });
 
+        // Mouse Exit Event
         this.frontCanvas.addEventFilter(MouseEvent.MOUSE_EXITED, t -> {
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
@@ -194,32 +201,37 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
         });
 
+        // Mouse Enter Event
         this.frontCanvas.addEventFilter(MouseEvent.MOUSE_ENTERED, t -> {
 
             int x = (int) t.getX() / 32;
             int y = (int) t.getY() / 32;
-            this.renderCursor(x, y, false, false);
+            if (this.activeLayerId != LAYER_EVENT) {
+                this.renderCursor(x, y, false, false);
+            }
             lastX = x;
             lastY = y;
 
         });
 
+
+        // Link the Keyboard to the Canvas
         this.frontCanvas.setFocusTraversable(true);
         this.frontCanvas.addEventFilter(MouseEvent.ANY, (e) -> this.frontCanvas.requestFocus());
         this.frontCanvas.setOnKeyPressed(key -> {
             if (this.map != null) {
                 switch (key.getCode()) {
                     case DIGIT1:
-                        this.setActiveLayerId(0, true);
+                        this.setActiveLayerId(LAYER_1, true);
                         break;
                     case DIGIT2:
-                        this.setActiveLayerId(1, true);
+                        this.setActiveLayerId(LAYER_2, true);
                         break;
                     case DIGIT3:
-                        this.setActiveLayerId(2, true);
+                        this.setActiveLayerId(LAYER_3, true);
                         break;
                     case DIGIT4:
-                        this.setActiveLayerId(3, true);
+                        this.setActiveLayerId(LAYER_EVENT, true);
                         break;
                     default:
                         break;
@@ -264,8 +276,138 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
                 this.renderCursor(x, y, false, true);
                 this.brushAdd(x, y);
 
-
             }
+        }
+
+    }
+
+
+    /**
+     *
+     * @param g
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     * @param clearOnly
+     * @param mouseUpEvent
+     */
+    private void renderCursorRegular(GraphicsContext g, int x, int y, int w, int h, boolean clearOnly, boolean mouseUpEvent) {
+
+        if (mouseUpEvent && this.activeToolId == MapCanvas.TOOL_BRUSH) {
+
+            int[] oldCoord = IgnisGlobals.fixCoords(this.brushStartX, this.brushStartY, this.lastX, this.lastY);
+            int lastSelectionWidth = oldCoord[2] - oldCoord[0];
+            int lastSelectionHeight = oldCoord[3] - oldCoord[1];
+
+            g.clearRect(oldCoord[0] * 32, oldCoord[1] * 32,
+                    lastSelectionWidth * 32, lastSelectionHeight * 32);
+        } else {
+            g.clearRect(lastX * 32, lastY * 32, w, h);
+        }
+
+        if (!clearOnly) {
+
+            g.setGlobalAlpha(0.5);
+            g.setFill(Color.RED);
+            g.fillRect(x * 32, y * 32, w, h);
+
+            // Draw Pen
+            for (int i = 0; i < this.tilesetWidth; i++) {
+                for (int j = 0; j < this.tilesetHeight; j++) {
+
+                    int yTSCoord = this.tilesetY + j;
+
+                    if (Tileset.isTilesetCell(yTSCoord)) {
+                        // Tileset Case
+                        this.map.getTileset().drawTileTo(g, x + i,
+                                y + j,
+                                this.tilesetX + i,
+                                yTSCoord - 1);
+                    } else {
+                        // Terrain Case
+                    }
+                }
+            }
+
+            g.setGlobalAlpha(1.0);
+        }
+    }
+
+    /**
+     *
+     * @param g
+     * @param x
+     * @param y
+     */
+    private void renderCursorBrushRect(GraphicsContext g, int x, int y) {
+
+        int[] oldCoord = IgnisGlobals.fixCoords(this.brushStartX, this.brushStartY, this.lastX, this.lastY);
+        int[] newCoord = IgnisGlobals.fixCoords(this.brushStartX, this.brushStartY, x, y);
+
+        int lastSelectionWidth = oldCoord[2] - oldCoord[0];
+        int lastSelectionHeight = oldCoord[3] - oldCoord[1];
+
+        if (lastSelectionWidth < this.tilesetWidth) {
+            lastSelectionWidth = this.tilesetWidth;
+        }
+
+        if (lastSelectionHeight < this.tilesetHeight) {
+            lastSelectionHeight = this.tilesetHeight;
+        }
+
+        int selectionWidth = newCoord[2] - newCoord[0];
+        int selectionHeight = newCoord[3] - newCoord[1];
+
+        g.clearRect(oldCoord[0] * 32, oldCoord[1] * 32,
+                lastSelectionWidth * 32, lastSelectionHeight * 32);
+
+        g.setGlobalAlpha(0.5);
+        g.setFill(Color.RED);
+        g.fillRect(newCoord[0] * 32, newCoord[1] * 32,
+                selectionWidth * 32, selectionHeight * 32);
+
+        int tsX = 0;
+        int tsY = 0;
+
+        // Loop over the selection
+        for (int i = 0; i < selectionWidth; i++) {
+            for (int j = 0; j < selectionHeight; j++) {
+                this.renderBrushDecideWhatToDraw(g,tsX,tsY,i,j,newCoord);
+
+                // Reset TSY if it reached the maximum
+                tsY = tsY == this.tilesetHeight - 1 ? 0 : tsY + 1;
+            }
+
+            // Reset TSX if it reached the maximum
+            tsX = tsX == this.tilesetWidth - 1 ? 0 : tsX + 1;
+            tsY = 0;
+
+        }
+
+        // Reset the Opacity back to the default value
+        g.setGlobalAlpha(1.0);
+
+    }
+
+    /**
+     *
+     * @param g
+     * @param tsX
+     * @param tsY
+     * @param i
+     * @param j
+     * @param coords
+     */
+    private void renderBrushDecideWhatToDraw(GraphicsContext g, int tsX, int tsY, int i, int j, int[] coords) {
+        int yTSCoord = this.tilesetY + tsY;
+
+        if (Tileset.isTilesetCell(yTSCoord)) {
+            // Tileset Case
+            this.map.getTileset().drawTileTo(g, coords[0] + i, coords[1] + j,
+                    this.tilesetX + tsX, yTSCoord - 1);
+        } else {
+            // Terrain Case
         }
 
     }
@@ -284,108 +426,10 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
 
             if (this.activeToolId == TOOL_PEN || (this.activeToolId == MapCanvas.TOOL_BRUSH && !this.mouseIsDown)) {
-
-                if (mouseUpEvent && this.activeToolId == MapCanvas.TOOL_BRUSH) {
-
-                    int[] oldCoord = IgnisGlobals.fixCoords(this.brushStartX, this.brushStartY, this.lastX, this.lastY);
-                    int lastSelectionWidth = oldCoord[2] - oldCoord[0];
-                    int lastSelectionHeight = oldCoord[3] - oldCoord[1];
-
-                    g.clearRect(oldCoord[0] * 32, oldCoord[1] * 32,
-                            lastSelectionWidth * 32, lastSelectionHeight * 32);
-                } else {
-                    g.clearRect(lastX * 32, lastY * 32, w, h);
-                }
-
-                if (!clearOnly) {
-
-                    g.setGlobalAlpha(0.5);
-                    g.setFill(Color.RED);
-                    g.fillRect(x * 32, y * 32, w, h);
-
-                    // Draw Pen
-                    for (int i = 0; i < this.tilesetWidth; i++) {
-                        for (int j = 0; j < this.tilesetHeight; j++) {
-
-                            int yTSCoord = this.tilesetY + j;
-
-                            if (Tileset.isTilesetCell(yTSCoord)) {
-                                // Tileset Case
-                                this.map.getTileset().drawTileTo(g, x + i,
-                                        y + j,
-                                        this.tilesetX + i,
-                                        yTSCoord - 1);
-                            } else {
-                                // Terrain Case
-                            }
-                        }
-                    }
-
-                    g.setGlobalAlpha(1.0);
-                }
-
-
+                this.renderCursorRegular(g,x,y,w,h,clearOnly,mouseUpEvent);
             } else {
-
                 if (this.activeToolId == MapCanvas.TOOL_BRUSH) {
-
-                    int[] oldCoord = IgnisGlobals.fixCoords(this.brushStartX, this.brushStartY, this.lastX, this.lastY);
-                    int[] newCoord = IgnisGlobals.fixCoords(this.brushStartX, this.brushStartY, x, y);
-
-                    int lastSelectionWidth = oldCoord[2] - oldCoord[0];
-                    int lastSelectionHeight = oldCoord[3] - oldCoord[1];
-
-                    if (lastSelectionWidth < this.tilesetWidth) {
-                        lastSelectionWidth = this.tilesetWidth;
-                    }
-
-                    if (lastSelectionHeight < this.tilesetHeight) {
-                        lastSelectionHeight = this.tilesetHeight;
-                    }
-
-                    int selectionWidth = newCoord[2] - newCoord[0];
-                    int selectionHeight = newCoord[3] - newCoord[1];
-
-                    g.clearRect(oldCoord[0] * 32, oldCoord[1] * 32,
-                            lastSelectionWidth * 32, lastSelectionHeight * 32);
-
-                    g.setGlobalAlpha(0.5);
-                    g.setFill(Color.RED);
-                    g.fillRect(newCoord[0] * 32, newCoord[1] * 32,
-                            selectionWidth * 32, selectionHeight * 32);
-
-                    int tsX = 0;
-                    int tsY = 0;
-
-                    for (int i = 0; i < selectionWidth; i++) {
-                        for (int j = 0; j < selectionHeight; j++) {
-
-                            int yTSCoord = this.tilesetY + tsY;
-
-                            if (Tileset.isTilesetCell(yTSCoord)) {
-                                // Tileset Case
-                                this.map.getTileset().drawTileTo(g, newCoord[0] + i, newCoord[1] + j,
-                                        this.tilesetX + tsX, yTSCoord - 1);
-                            } else {
-                                // Terrain Case
-                            }
-                            tsY += 1;
-
-                            if (tsY == this.tilesetHeight) {
-                                tsY = 0;
-                            }
-                        }
-
-                        tsX += 1;
-                        tsY = 0;
-
-                        if (tsX == this.tilesetWidth) {
-                            tsX = 0;
-                        }
-                    }
-
-                    g.setGlobalAlpha(1.0);
-
+                    this.renderCursorBrushRect(g,x,y);
                 }
             }
         }

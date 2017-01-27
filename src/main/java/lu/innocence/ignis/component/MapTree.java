@@ -131,6 +131,7 @@ public class MapTree extends TreeView<String> {
         if (mapDialog.isAccepted()) {
             mapDialog.changeMap(map);
         }
+
     }
 
     /**
