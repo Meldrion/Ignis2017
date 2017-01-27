@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -21,6 +22,7 @@ public class EventEditor extends Stage {
      * @param parent
      */
     public EventEditor(Stage parent) {
+        this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Event Editor");
         this.buildUserInterface();
         this.setResizable(false);

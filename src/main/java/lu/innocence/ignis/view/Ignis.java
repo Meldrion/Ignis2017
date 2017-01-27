@@ -227,7 +227,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
         buildMainMenu(topContainer, primaryStage);
         buildToolbar(topContainer, primaryStage);
 
-        this.mapCanvas = new MapCanvas(640, 480);
+        this.mapCanvas = new MapCanvas(primaryStage,640, 480);
         Canvas uiLayer = new Canvas(640, 480);
         mapCanvas.linkFrontCanvas(uiLayer);
         Pane pane = new Pane(mapCanvas, uiLayer);

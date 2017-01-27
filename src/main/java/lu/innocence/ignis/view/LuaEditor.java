@@ -110,7 +110,6 @@ public class LuaEditor extends Stage {
             LOGGER.error("Cannot load stylesheet");
     }
 
-
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
 
         Matcher matcher = XML_TAG.matcher(text);

@@ -7,6 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.TileCell;
@@ -15,6 +16,7 @@ import lu.innocence.ignis.event.ActiveMapListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
 import lu.innocence.ignis.event.MapPropertiesUpdated;
 import lu.innocence.ignis.event.TilesetSelectionChanged;
+import lu.innocence.ignis.view.EventEditor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,6 +41,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     public static final int LAYER_EVENT = 0x3;
 
     private static final Logger LOGGER = LogManager.getLogger(MapCanvas.class);
+    private Stage parentStage;
 
     private int currentX = -1;
     private int currentY = -1;
@@ -63,8 +66,9 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * @param width
      * @param height
      */
-    public MapCanvas(int width, int height) {
+    public MapCanvas(Stage parent, int width, int height) {
         super(width, height);
+        this.parentStage = parent;
         this.guiButtonsUpdate = new ArrayList<>();
     }
 
@@ -159,14 +163,14 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         this.frontCanvas.addEventHandler(MouseEvent.MOUSE_PRESSED, t -> {
             this.currentX = (int) t.getX() / 32;
             this.currentY = (int) t.getY() / 32;
-            this.handleAction(this.currentX, this.currentY, MouseEvent.MOUSE_PRESSED);
+            this.handleAction(this.currentX, this.currentY, t,MouseEvent.MOUSE_PRESSED);
         });
 
         // Mouse Release Event
         this.frontCanvas.addEventFilter(MouseEvent.MOUSE_RELEASED, t -> {
             this.currentX = (int) t.getX() / 32;
             this.currentY = (int) t.getY() / 32;
-            this.handleAction(this.currentX, this.currentY, MouseEvent.MOUSE_RELEASED);
+            this.handleAction(this.currentX, this.currentY, t,MouseEvent.MOUSE_RELEASED);
         });
 
         // Mouse Drag Event
@@ -174,7 +178,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             this.currentX = (int) t.getX() / 32;
             this.currentY = (int) t.getY() / 32;
             if (this.currentX != lastX || this.currentY != lastY) {
-                this.handleAction(this.currentX, this.currentY, MouseEvent.MOUSE_DRAGGED);
+                this.handleAction(this.currentX, this.currentY, t,MouseEvent.MOUSE_DRAGGED);
                 lastX = this.currentX;
                 lastY = this.currentY;
             }
@@ -304,12 +308,40 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     }
 
     /**
+     *
+     * @param x
+     * @param y
+     * @param mouseEvent
+     * @param mouseEventType
+     */
+    private void handleAction(int x, int y,MouseEvent mouseEvent, EventType<MouseEvent> mouseEventType) {
+        if (this.activeLayerId != LAYER_EVENT) {
+            this.mapBuilderAction(x,y,mouseEventType);
+        } else {
+            this.eventBuilderAction(x,y,mouseEvent,mouseEventType);
+        }
+    }
+
+    /**
+     *
      * @param x
      * @param y
      * @param mouseEvent
      */
-    private void handleAction(int x, int y, EventType<MouseEvent> mouseEvent) {
+    private void eventBuilderAction(int x,int y,MouseEvent mouseEvent, EventType<MouseEvent> mouseEventType) {
+        if (mouseEvent.getClickCount() > 1) {
+            EventEditor eventEditor = new EventEditor(this.parentStage);
+            eventEditor.showAndWait();
+        }
+    }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param mouseEvent
+     */
+    private void mapBuilderAction(int x, int y, EventType<MouseEvent> mouseEvent) {
         if (mouseEvent == MouseEvent.MOUSE_PRESSED || mouseEvent == MouseEvent.MOUSE_DRAGGED) {
             if (this.activeToolId == TOOL_PEN) {
                 this.penAdd(x, y);
@@ -341,7 +373,6 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
             }
         }
-
     }
 
 
