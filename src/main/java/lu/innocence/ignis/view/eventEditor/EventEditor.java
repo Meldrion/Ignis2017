@@ -1,8 +1,11 @@
-package lu.innocence.ignis.view;
+package lu.innocence.ignis.view.eventEditor;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -43,6 +46,9 @@ public class EventEditor extends Stage {
         this.setScene(scene);
 
         HBox topBox = new HBox();
+        topBox.setSpacing(10);
+        topBox.setPadding(new Insets(10,10,10,10));
+        topBox.setAlignment(Pos.CENTER_LEFT);
 
         VBox nameBox = new VBox();
         Text nameLabel = new Text();
@@ -56,13 +62,44 @@ public class EventEditor extends Stage {
         TextField textFieldNote = new TextField();
         noteBox.getChildren().addAll(noteLabel,textFieldNote);
 
-        topBox.getChildren().addAll(nameBox,noteBox);
-        // Center Part
+        Button newPageButton = new Button();
+        newPageButton.setText("New Page");
+
+        Button copyPageButton = new Button();
+        copyPageButton.setText("Copy Page");
+
+        Button pastePageButton = new Button();
+        pastePageButton.setText("Paste Page");
+
+        Button deltePageButton = new Button();
+        deltePageButton.setText("Delete Page");
+
+        Button clearPageButton = new Button();
+        clearPageButton.setText("Clear Page");
+
+        topBox.getChildren().addAll(nameBox,noteBox,newPageButton,copyPageButton,
+                pastePageButton,deltePageButton,clearPageButton);
         root.setTop(topBox);
 
+        // Center
+        TabPane mainTabber = new TabPane();
+        root.setCenter(mainTabber);
+
+        // Tabs Part
+        EventEditorTab editorTabContent = new EventEditorTab("Page 1 ",this);
+        Tab editorPageTab = new Tab();
+        editorPageTab.setText("Page 01");
+        editorPageTab.setClosable(false);
+        editorPageTab.setContent(editorTabContent);
+
+        mainTabber.getTabs().add(editorPageTab);
+
         // Button Box
-        HBox hLayout = new HBox();
-        hLayout.setAlignment(Pos.BOTTOM_RIGHT);
+        HBox bottomBox = new HBox();
+        bottomBox.setSpacing(10);
+        bottomBox.setPadding(new Insets(10,10,10,10));
+        bottomBox.setAlignment(Pos.BOTTOM_RIGHT);
+
 
         Button okButton = new Button();
         okButton.setText("Accept");
@@ -70,8 +107,8 @@ public class EventEditor extends Stage {
         Button cancelButton = new Button();
         cancelButton.setText("Cancel");
 
-        hLayout.getChildren().addAll(okButton,cancelButton);
-        root.setBottom(hLayout);
+        bottomBox.getChildren().addAll(okButton,cancelButton);
+        root.setBottom(bottomBox);
 
 
     }

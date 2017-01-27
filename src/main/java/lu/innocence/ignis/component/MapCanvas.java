@@ -16,7 +16,7 @@ import lu.innocence.ignis.event.ActiveMapListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
 import lu.innocence.ignis.event.MapPropertiesUpdated;
 import lu.innocence.ignis.event.TilesetSelectionChanged;
-import lu.innocence.ignis.view.EventEditor;
+import lu.innocence.ignis.view.eventEditor.EventEditor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
