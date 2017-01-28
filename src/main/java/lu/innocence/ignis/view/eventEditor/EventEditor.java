@@ -3,10 +3,7 @@ package lu.innocence.ignis.view.eventEditor;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -95,6 +92,9 @@ public class EventEditor extends Stage {
         mainTabber.getTabs().add(editorPageTab);
 
         // Button Box
+        VBox bottom = new VBox();
+        Separator separator = new Separator();
+
         HBox bottomBox = new HBox();
         bottomBox.setSpacing(10);
         bottomBox.setPadding(new Insets(10,10,10,10));
@@ -108,7 +108,9 @@ public class EventEditor extends Stage {
         cancelButton.setText("Cancel");
 
         bottomBox.getChildren().addAll(okButton,cancelButton);
-        root.setBottom(bottomBox);
+
+        bottom.getChildren().addAll(separator,bottomBox);
+        root.setBottom(bottom);
 
 
     }
