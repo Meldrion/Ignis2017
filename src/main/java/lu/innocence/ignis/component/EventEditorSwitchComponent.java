@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
@@ -17,6 +18,7 @@ public class EventEditorSwitchComponent extends HBox{
     private CheckBox switch01;
     private TextField switch01TextField;
     private Button switch01TexButton;
+    private ComboBox<String> onOffCombobox;
 
     public EventEditorSwitchComponent() {
         this.setAlignment(Pos.CENTER_LEFT);
@@ -30,17 +32,18 @@ public class EventEditorSwitchComponent extends HBox{
         this.switch01TexButton.setText("...");
         switchButtonBox01.getChildren().addAll(switch01TextField,switch01TexButton);
 
-        switch01.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            this.update();
-        });
+        this.switch01.selectedProperty().addListener((observable, oldValue, newValue) -> this.update());
 
-        this.getChildren().addAll(switch01, switchButtonBox01);
+        this.onOffCombobox = new ComboBox<>();
+        this.onOffCombobox.getItems().addAll("True","False");
+        this.getChildren().addAll(switch01, switchButtonBox01,onOffCombobox);
         this.update();
     }
 
     private void update() {
         this.switch01TextField.setDisable(!switch01.isSelected());
         this.switch01TexButton.setDisable(!switch01.isSelected());
+        this.onOffCombobox.setDisable(!switch01.isSelected());
     }
 
 }
