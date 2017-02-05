@@ -45,7 +45,7 @@ public class TilesetTab extends GameDBTab {
         topGrid.setPadding(new Insets(10, 0, 10, 0));
         topGrid.setMaxWidth(Integer.MAX_VALUE);
 
-        Text tilesetName = new Text();
+        Label tilesetName = new Label();
         tilesetName.setText("Tileset Name:");
         topGrid.add(tilesetName, 0, 0);
 
@@ -61,7 +61,7 @@ public class TilesetTab extends GameDBTab {
         this.edtTilesetName.setMaxWidth(Integer.MAX_VALUE);
         topGrid.add(this.edtTilesetName, 1, 0);
 
-        Text lblTilesetImage = new Text();
+        Label lblTilesetImage = new Label();
         lblTilesetImage.setText("Tileset Image:");
         topGrid.add(lblTilesetImage, 0, 1);
 
@@ -102,7 +102,7 @@ public class TilesetTab extends GameDBTab {
 
         // Terrain
         GridPane innerLeftPanel = new GridPane();
-        Text lblTerrain = new Text();
+        Label lblTerrain = new Label();
         lblTerrain.setText("Terrain");
 
         innerLeftPanel.add(lblTerrain, 0, 0, 2, 1);

@@ -48,13 +48,13 @@ public class EventEditor extends Stage {
         topBox.setAlignment(Pos.CENTER_LEFT);
 
         VBox nameBox = new VBox();
-        Text nameLabel = new Text();
+        Label nameLabel = new Label();
         nameLabel.setText("Event Name");
         TextField textFieldName = new TextField();
         nameBox.getChildren().addAll(nameLabel,textFieldName);
 
         VBox noteBox = new VBox();
-        Text noteLabel = new Text();
+        Label noteLabel = new Label();
         noteLabel.setText("Notes");
         TextField textFieldNote = new TextField();
         noteBox.getChildren().addAll(noteLabel,textFieldNote);

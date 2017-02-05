@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -65,7 +66,7 @@ public class LoadProjectDialog extends Stage {
 
         grid.getColumnConstraints().addAll(column1, column2);
 
-        Text rootPathLabel = new Text();
+        Label rootPathLabel = new Label();
         rootPathLabel.setText("Root Path");
         grid.add(rootPathLabel, 0, 0);
 
@@ -84,7 +85,7 @@ public class LoadProjectDialog extends Stage {
 
         grid.add(button, 2, 0);
 
-        Text projectsLabel = new Text();
+        Label projectsLabel = new Label();
         projectsLabel.setText("Projects in this path: ");
         grid.add(projectsLabel, 0, 1, 3, 1);
 
@@ -150,7 +151,7 @@ public class LoadProjectDialog extends Stage {
             this.projectsList.getItems().add(current);
         }
 
-        if (projects.size() > 0) {
+        if (!projects.isEmpty()) {
             this.projectsList.getSelectionModel().selectFirst();
         }
 

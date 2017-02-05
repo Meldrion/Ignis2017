@@ -2,6 +2,7 @@ package lu.innocence.ignis.view.gamedb;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -22,7 +23,7 @@ public abstract class GameDBTab extends BorderPane {
         leftPanel.setSpacing(10);
         leftPanel.setPadding(new Insets(10, 10, 10, 10));
 
-        Text text = new Text();
+        Label text = new Label();
         text.setText(categoryName);
         leftPanel.getChildren().add(text);
 

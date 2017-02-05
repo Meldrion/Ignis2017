@@ -52,7 +52,7 @@ public class EventEditorVariableComponent extends VBox {
 
         Label valueText = new Label();
         valueText.setText("Value:");
-        valueText.setMinWidth(75);
+        valueText.setMinWidth(80);
 
         this.variableValueField = new Spinner<>();
         lowerBox.getChildren().addAll(valueText,this.variableValueField);
@@ -66,5 +66,7 @@ public class EventEditorVariableComponent extends VBox {
     private void update() {
         this.variableTextField.setDisable(!this.variableCheckbox.isSelected());
         this.variableButton.setDisable(!this.variableCheckbox.isSelected());
+        this.variableValueField.setDisable(!this.variableCheckbox.isSelected());
+        this.variableCombo.setDisable(!this.variableCheckbox.isSelected());
     }
 }

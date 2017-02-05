@@ -3,10 +3,7 @@ package lu.innocence.ignis.view;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -125,14 +122,14 @@ public class MapPropertiesDialog extends Stage {
         grid.setHgap(10);
         grid.setVgap(10);
 
-        Text labelMapName = new Text();
+        Label labelMapName = new Label();
         labelMapName.setText("Map Name: ");
         this.textFieldMapName = new TextField();
 
         grid.add(labelMapName, 0, 0);
         grid.add(textFieldMapName, 1, 0, 3, 1);
 
-        Text labelMapWidth = new Text();
+        Label labelMapWidth = new Label();
         labelMapWidth.setText("Width: ");
         grid.add(labelMapWidth, 0, 1);
 
@@ -141,7 +138,7 @@ public class MapPropertiesDialog extends Stage {
         widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(20, 200));
         grid.add(widthSpinner, 1, 1);
 
-        Text labelMapHeight = new Text();
+        Label labelMapHeight = new Label();
         labelMapHeight.setText("Height: ");
         grid.add(labelMapHeight, 2, 1);
 
@@ -150,7 +147,7 @@ public class MapPropertiesDialog extends Stage {
         heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(15, 200));
         grid.add(heightSpinner, 3, 1);
 
-        Text labelTileset = new Text();
+        Label labelTileset = new Label();
         labelTileset.setText("Tileset: ");
         grid.add(labelTileset, 0, 2);
 

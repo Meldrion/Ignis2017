@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -59,7 +60,7 @@ public class CreateProjectDialog extends Stage {
         grid.getColumnConstraints().addAll(column1, column2);
         grid.setPadding(new Insets(15, 10, 0, 15));
 
-        Text rootLabel = new Text("Project Root ");
+        Label rootLabel = new Label("Project Root ");
         grid.add(rootLabel, 0, 0);
 
         this.rootPathTextField = new TextField();
@@ -75,7 +76,7 @@ public class CreateProjectDialog extends Stage {
 
         grid.add(lookUpButton, 2, 0);
 
-        Text folderNameLabel = new Text("Project Folder Name ");
+        Label folderNameLabel = new Label("Project Folder Name ");
         grid.add(folderNameLabel, 0, 1);
 
         TextField folderNameTextField = new TextField();
@@ -83,7 +84,7 @@ public class CreateProjectDialog extends Stage {
 
         GridPane.setColumnSpan(folderNameTextField, 2);
 
-        Text titleLabel = new Text("Project Title ");
+        Label titleLabel = new Label("Project Title ");
         grid.add(titleLabel, 0, 2);
 
         TextField titleTextField = new TextField();
@@ -91,7 +92,7 @@ public class CreateProjectDialog extends Stage {
 
         GridPane.setColumnSpan(titleTextField, 2);
 
-        Text author = new Text("Author ");
+        Label author = new Label("Author ");
         grid.add(author, 0, 3);
 
         TextField authorTextField = new TextField();
@@ -99,7 +100,7 @@ public class CreateProjectDialog extends Stage {
 
         GridPane.setColumnSpan(authorTextField, 2);
 
-        Text company = new Text("Company ");
+        Label company = new Label("Company ");
         grid.add(company, 0, 4);
 
         TextField companyTextField = new TextField();

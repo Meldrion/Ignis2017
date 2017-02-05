@@ -1,11 +1,10 @@
 package lu.innocence.ignis.view.eventEditor;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -28,15 +27,16 @@ public class EventEditorTab extends BorderPane {
 
 
         VBox leftBox = new VBox();
+        leftBox.setSpacing(5);
 
 
-        Text charViewLabel = new Text();
+        Label charViewLabel = new Label();
         charViewLabel.setText("Character Image");
 
         CharViewCanvas charViewCanvas = new CharViewCanvas();
-        int widthForLeftObjects = 120;
+        int widthForLeftObjects = 100;
         charViewCanvas.setWidth(widthForLeftObjects);
-        charViewCanvas.setHeight(150);
+        charViewCanvas.setHeight(115);
         charViewCanvas.render();
 
         Button charViewChangeButton = new Button();
