@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import lu.innocence.ignis.component.CharViewCanvas;
 import lu.innocence.ignis.component.EventEditorSwitchComponent;
+import lu.innocence.ignis.component.EventEditorVariableComponent;
 
 /**
  * Created by Fabien Steines
@@ -47,9 +48,11 @@ public class EventEditorTab extends BorderPane {
         EventEditorSwitchComponent switchHBox01 = new EventEditorSwitchComponent();
         // Switch 2
         EventEditorSwitchComponent switchHBox02 = new EventEditorSwitchComponent();
+        // Varable 1
+        EventEditorVariableComponent varableHBox01 = new EventEditorVariableComponent();
 
         conditionsPane.setSpacing(5);
-        conditionsPane.getChildren().addAll(switchHBox01,switchHBox02);
+        conditionsPane.getChildren().addAll(switchHBox01,switchHBox02,varableHBox01);
 
 
         TitledPane titledPaneCondition = new TitledPane("Conditions",conditionsPane);

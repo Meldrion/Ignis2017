@@ -24,6 +24,7 @@ public class EventEditorSwitchComponent extends HBox{
         this.setAlignment(Pos.CENTER_LEFT);
         this.setSpacing(5);
         this.switch01 = new CheckBox("Switch");
+        this.switch01.setMinWidth(75);
 
         HBox switchButtonBox01 = new HBox();
         this.switch01TextField = new TextField();
@@ -36,6 +37,7 @@ public class EventEditorSwitchComponent extends HBox{
 
         this.onOffCombobox = new ComboBox<>();
         this.onOffCombobox.getItems().addAll("True","False");
+        this.onOffCombobox.getSelectionModel().select(1);
         this.getChildren().addAll(switch01, switchButtonBox01,onOffCombobox);
         this.update();
     }
