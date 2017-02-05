@@ -37,6 +37,7 @@ public class EventEditorSwitchComponent extends HBox{
 
         this.onOffCombobox = new ComboBox<>();
         this.onOffCombobox.getItems().addAll("True","False");
+        this.onOffCombobox.setMinWidth(75);
         this.onOffCombobox.getSelectionModel().select(1);
         this.getChildren().addAll(switch01, switchButtonBox01,onOffCombobox);
         this.update();

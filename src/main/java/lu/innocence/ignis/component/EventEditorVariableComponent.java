@@ -1,29 +1,33 @@
 package lu.innocence.ignis.component;
 
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 /**
  * Created by Fabien Steines
  * Last Update on: 05.02.2017.
  */
-public class EventEditorVariableComponent extends HBox {
+public class EventEditorVariableComponent extends VBox {
 
     private CheckBox variableCheckbox;
     private TextField variableTextField;
+    private Spinner<Integer> variableValueField;
     private Button variableButton;
+    private ComboBox<String> variableCombo;
 
     /**
      * Created by Fabien Steines
      * Last Update on: 05.02.2017.
      */
     public EventEditorVariableComponent() {
-        this.setAlignment(Pos.CENTER_LEFT);
         this.setSpacing(5);
+        HBox upperBox = new HBox();
+        upperBox.setAlignment(Pos.CENTER_LEFT);
+        upperBox.setSpacing(5);
+
         this.variableCheckbox = new CheckBox("Variable");
         this.variableCheckbox.setMinWidth(75);
 
@@ -36,19 +40,31 @@ public class EventEditorVariableComponent extends HBox {
 
         this.variableCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> this.update());
 
-/*        this.onOffCombobox = new ComboBox<>();
-        this.onOffCombobox.getItems().addAll("True","False");
-        this.onOffCombobox.getSelectionModel().select(1);
-        this.getChildren().addAll(switch01, variableButtonBox01,onOffCombobox);*/
+        this.variableCombo = new ComboBox<>();
+        this.variableCombo.getItems().addAll("==","!=","<=",">=","<",">");
+        this.variableCombo.setMinWidth(75);
+        this.variableCombo.getSelectionModel().select(1);
 
-        this.getChildren().addAll(this.variableCheckbox, variableButtonBox01);
+        upperBox.getChildren().addAll(this.variableCheckbox, variableButtonBox01,variableCombo);
+
+        HBox lowerBox = new HBox();
+        lowerBox.setAlignment(Pos.CENTER_LEFT);
+
+        Label valueText = new Label();
+        valueText.setText("Value:");
+        valueText.setMinWidth(75);
+
+        this.variableValueField = new Spinner<>();
+        lowerBox.getChildren().addAll(valueText,this.variableValueField);
+
+
+        this.getChildren().addAll(upperBox,lowerBox);
         this.update();
     }
 
 
     private void update() {
-/*        this.switch01TextField.setDisable(!switch01.isSelected());
-        this.switch01TexButton.setDisable(!switch01.isSelected());
-        this.onOffCombobox.setDisable(!switch01.isSelected());*/
+        this.variableTextField.setDisable(!this.variableCheckbox.isSelected());
+        this.variableButton.setDisable(!this.variableCheckbox.isSelected());
     }
 }
