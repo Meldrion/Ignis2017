@@ -1,7 +1,6 @@
 package lu.innocence.ignis.component;
 
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import lu.innocence.ignis.IgnisGlobals;

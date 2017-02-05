@@ -1,10 +1,8 @@
 package lu.innocence.ignis.view.eventEditor;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -12,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import lu.innocence.ignis.component.CharViewCanvas;
+import lu.innocence.ignis.component.EventEditorSwitchComponent;
 
 /**
  * Created by Fabien Steines
@@ -19,39 +18,22 @@ import lu.innocence.ignis.component.CharViewCanvas;
  */
 public class EventEditorTab extends BorderPane {
 
-    private final int widthForLeftObjects = 120;
-
     public EventEditorTab(String categoryName,Stage parent) {
 
-        HBox centerBox = new HBox();
+        this.setPadding(new Insets(10,10,10,10));
+
+        BorderPane centerBox = new BorderPane();
         centerBox.setPadding(new Insets(10,10,10,10));
+
+
         VBox leftBox = new VBox();
-        leftBox.setSpacing(10);
-        ToggleButton codeExecButton = new ToggleButton();
-        codeExecButton.setText("Executed Code");
-        codeExecButton.setMinWidth(widthForLeftObjects);
-        codeExecButton.setSelected(true);
-        ToggleButton triggerButton = new ToggleButton();
-        triggerButton.setText("Trigger");
-        triggerButton.setMinWidth(widthForLeftObjects);
-        ToggleButton conditionButton = new ToggleButton();
-        conditionButton.setText("Conditions");
-        conditionButton.setMinWidth(widthForLeftObjects);
-        ToggleButton behaviourButton = new ToggleButton();
-        behaviourButton.setText("Behaviour");
-        behaviourButton.setMinWidth(widthForLeftObjects);
 
-        ToggleGroup eventDesignerGroup = new ToggleGroup();
-        eventDesignerGroup.getToggles().addAll(codeExecButton,triggerButton,conditionButton,behaviourButton);
-
-
-        Pane spacer = new Pane();
-        spacer.setMinHeight(25);
 
         Text charViewLabel = new Text();
         charViewLabel.setText("Character Image");
 
         CharViewCanvas charViewCanvas = new CharViewCanvas();
+        int widthForLeftObjects = 120;
         charViewCanvas.setWidth(widthForLeftObjects);
         charViewCanvas.setHeight(150);
         charViewCanvas.render();
@@ -60,10 +42,22 @@ public class EventEditorTab extends BorderPane {
         charViewChangeButton.setText("Change");
         charViewChangeButton.setMinWidth(widthForLeftObjects);
 
-        leftBox.getChildren().addAll(codeExecButton,triggerButton,conditionButton,behaviourButton,
-                spacer,charViewLabel,charViewCanvas,charViewChangeButton);
+        VBox conditionsPane = new VBox();
+        // Switch 1
+        EventEditorSwitchComponent switchHBox01 = new EventEditorSwitchComponent();
+        // Switch 2
+        EventEditorSwitchComponent switchHBox02 = new EventEditorSwitchComponent();
 
-        centerBox.getChildren().addAll(leftBox);
+        conditionsPane.setSpacing(5);
+        conditionsPane.getChildren().addAll(switchHBox01,switchHBox02);
+
+
+        TitledPane titledPaneCondition = new TitledPane("Conditions",conditionsPane);
+        titledPaneCondition.setCollapsible(false);
+
+        leftBox.getChildren().addAll(titledPaneCondition,charViewLabel,charViewCanvas,charViewChangeButton);
+        this.setLeft(leftBox);
+
         this.setCenter(centerBox);
     }
 
