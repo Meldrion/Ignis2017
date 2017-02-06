@@ -62,6 +62,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     private int brushStartY;
     private boolean ctrlIsDown;
 
+    private int selectedGridCellX = -1;
+    private int selectedGridCellY = -1;
     /**
      * @param width
      * @param height
@@ -329,6 +331,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * @param mouseEvent
      */
     private void eventBuilderAction(int x,int y,MouseEvent mouseEvent, EventType<MouseEvent> mouseEventType) {
+        this.selectCellForEventEditore(x,y);
         if (mouseEvent.getClickCount() > 1) {
             EventEditor eventEditor = new EventEditor(this.parentStage);
             eventEditor.showAndWait();
@@ -694,6 +697,18 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         if (this.map != null) {
             TileCell cell = this.map.removeCell(this.activeLayerId, x, y);
             this.renderPartial(x, y,cell != null && !Tileset.isTilesetCell(cell.getTsY()));
+        }
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     */
+    private void selectCellForEventEditore(int x,int y) {
+        if (this.selectedGridCellX != x || this.selectedGridCellY != y) {
+            this.selectedGridCellX = x;
+            this.selectedGridCellY = y;
         }
     }
 
