@@ -14,6 +14,6 @@ public class VisualScriptEditor extends TreeView<String> {
     private static final Logger LOGGER = LogManager.getLogger(VisualScriptEditor.class);
 
     public VisualScriptEditor(Stage parentStage) {
-
+        this.setMinWidth(450);
     }
 }

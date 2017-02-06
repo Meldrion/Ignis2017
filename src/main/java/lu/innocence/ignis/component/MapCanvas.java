@@ -331,7 +331,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * @param mouseEvent
      */
     private void eventBuilderAction(int x,int y,MouseEvent mouseEvent, EventType<MouseEvent> mouseEventType) {
-        this.selectCellForEventEditore(x,y);
+
+        this.selectCellForEventEditor(x,y);
         if (mouseEvent.getClickCount() > 1) {
             EventEditor eventEditor = new EventEditor(this.parentStage);
             eventEditor.showAndWait();
@@ -534,13 +535,20 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             int h = this.tilesetHeight * 32;
             GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
 
+            if (this.activeLayerId == LAYER_EVENT && x != -1 && y != -1) {
+                g.clearRect(this.selectedGridCellX * 32 ,this.selectedGridCellY * 32,32,32);
+                g.fillRect(x * 32 ,y * 32,32,32);
+            }
+
             if (this.activeToolId == TOOL_PEN || (this.activeToolId == MapCanvas.TOOL_BRUSH && !this.mouseIsDown)) {
                 this.renderCursorRegular(g,x,y,w,h,clearOnly,mouseUpEvent);
-            } else {
-                if (this.activeToolId == MapCanvas.TOOL_BRUSH) {
-                    this.renderCursorBrushRect(g,x,y);
-                }
+                return;
             }
+
+            if (this.activeToolId == MapCanvas.TOOL_BRUSH) {
+                this.renderCursorBrushRect(g,x,y);
+            }
+
         }
     }
 
@@ -705,8 +713,9 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * @param x
      * @param y
      */
-    private void selectCellForEventEditore(int x,int y) {
+    private void selectCellForEventEditor(int x, int y) {
         if (this.selectedGridCellX != x || this.selectedGridCellY != y) {
+            this.renderCursor(x,y,false,false);
             this.selectedGridCellX = x;
             this.selectedGridCellY = y;
         }

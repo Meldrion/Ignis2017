@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import lu.innocence.ignis.component.CharViewCanvas;
 import lu.innocence.ignis.component.EventEditorSwitchComponent;
 import lu.innocence.ignis.component.EventEditorVariableComponent;
+import lu.innocence.ignis.component.VisualScriptEditor;
 
 /**
  * Created by Fabien Steines
@@ -21,9 +22,6 @@ public class EventEditorTab extends BorderPane {
     public EventEditorTab(String categoryName,Stage parent) {
 
         this.setPadding(new Insets(10,10,10,10));
-
-        BorderPane centerBox = new BorderPane();
-        centerBox.setPadding(new Insets(10,10,10,10));
 
 
         VBox leftBox = new VBox();
@@ -61,7 +59,11 @@ public class EventEditorTab extends BorderPane {
         leftBox.getChildren().addAll(titledPaneCondition,charViewLabel,charViewCanvas,charViewChangeButton);
         this.setLeft(leftBox);
 
+        BorderPane centerBox = new BorderPane();
+        centerBox.setPadding(new Insets(0,0,0,10));
         this.setCenter(centerBox);
+        VisualScriptEditor visualScriptEditor = new VisualScriptEditor(parent);
+        centerBox.setCenter(visualScriptEditor);
     }
 
 }
