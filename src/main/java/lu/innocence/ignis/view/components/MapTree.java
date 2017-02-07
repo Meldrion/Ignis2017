@@ -1,4 +1,4 @@
-package lu.innocence.ignis.component;
+package lu.innocence.ignis.view.components;
 
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -89,7 +89,7 @@ public class MapTree extends TreeView<String> {
         MapPropertiesDialog mapDialog = new MapPropertiesDialog(this.parentStage, this.project, MapPropertiesDialog.MODE_CREATE);
         mapDialog.showAndWait();
 
-        // Check if the Dialog has been accepted
+        // Check if the Dialog ha   s been accepted
         if (mapDialog.isAccepted()) {
 
             Map newMap = mapDialog.createMap();

@@ -1,4 +1,4 @@
-package lu.innocence.ignis.component;
+package lu.innocence.ignis.view.components;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.*;

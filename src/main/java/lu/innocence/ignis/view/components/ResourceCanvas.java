@@ -4,7 +4,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import lu.innocence.ignis.component.ChessBGDrawer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -6,12 +6,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import lu.innocence.ignis.component.CharViewCanvas;
-import lu.innocence.ignis.component.EventEditorSwitchComponent;
-import lu.innocence.ignis.component.EventEditorVariableComponent;
-import lu.innocence.ignis.component.VisualScriptEditor;
+import lu.innocence.ignis.view.components.CharViewCanvas;
+import lu.innocence.ignis.view.components.EventEditorSwitchComponent;
+import lu.innocence.ignis.view.components.EventEditorVariableComponent;
+import lu.innocence.ignis.view.components.VisualScriptEditor;
 
 /**
  * Created by Fabien Steines

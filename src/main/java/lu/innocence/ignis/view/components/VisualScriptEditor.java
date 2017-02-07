@@ -1,4 +1,4 @@
-package lu.innocence.ignis.component;
+package lu.innocence.ignis.view.components;
 
 import javafx.scene.control.TreeView;
 import javafx.stage.Stage;

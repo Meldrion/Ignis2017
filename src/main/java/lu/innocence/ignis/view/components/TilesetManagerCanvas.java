@@ -1,11 +1,8 @@
-package lu.innocence.ignis.component;
+package lu.innocence.ignis.view.components;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -13,8 +10,6 @@ import javafx.scene.text.FontWeight;
 import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Terrain;
 import lu.innocence.ignis.engine.Tileset;
-
-import java.awt.image.BufferedImage;
 
 /**
  * @author Fabien Steines
