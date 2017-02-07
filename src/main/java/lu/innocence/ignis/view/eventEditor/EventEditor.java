@@ -21,6 +21,9 @@ import javafx.stage.Stage;
  */
 public class EventEditor extends Stage {
 
+    private TabPane mainTabber;
+
+
     /**
      *
      * @param parent
@@ -61,6 +64,7 @@ public class EventEditor extends Stage {
 
         Button newPageButton = new Button();
         newPageButton.setText("New Page");
+        newPageButton.setOnAction(event -> this.createNewEventPage());
 
         Button copyPageButton = new Button();
         copyPageButton.setText("Copy Page");
@@ -79,18 +83,22 @@ public class EventEditor extends Stage {
         root.setTop(topBox);
 
         // Center
-        TabPane mainTabber = new TabPane();
+        this.mainTabber = new TabPane();
         root.setCenter(mainTabber);
 
         // Tabs Part
-        EventEditorTab editorTabContent = new EventEditorTab("Page 1 ",this);
-        Tab editorPageTab = new Tab();
-        editorPageTab.setText("Page 01");
-        editorPageTab.setClosable(false);
-        editorPageTab.setContent(editorTabContent);
+        this.createNewEventPage(); // First Page
 
-        mainTabber.getTabs().add(editorPageTab);
 
+        this.createButtomBox(root);
+
+    }
+
+    /**
+     *
+     * @param root
+     */
+    private void createButtomBox(BorderPane root) {
         // Button Box
         VBox bottom = new VBox();
         Separator separator = new Separator();
@@ -111,8 +119,24 @@ public class EventEditor extends Stage {
 
         bottom.getChildren().addAll(separator,bottomBox);
         root.setBottom(bottom);
+    }
 
+    /**
+     *
+     */
+    private void createNewEventPage() {
 
+        int cCount = this.mainTabber.getTabs().size();
+        String tabName = String.format("Page %s",cCount + 1);
+
+        EventEditorTab editorTabContent = new EventEditorTab(tabName,this);
+        Tab editorPageTab = new Tab();
+        editorPageTab.setText(tabName);
+        editorPageTab.setClosable(false);
+        editorPageTab.setContent(editorTabContent);
+
+        this.mainTabber.getTabs().add(editorPageTab);
+        this.mainTabber.getSelectionModel().select(editorPageTab);
     }
 
 }

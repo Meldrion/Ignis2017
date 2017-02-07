@@ -64,6 +64,8 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     private int selectedGridCellX = -1;
     private int selectedGridCellY = -1;
+    private int lastSelectedGridCellX = -1;
+    private int lastSelectedGridCellY = -1;
     /**
      * @param width
      * @param height
@@ -535,10 +537,23 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
             int h = this.tilesetHeight * 32;
             GraphicsContext g = this.frontCanvas.getGraphicsContext2D();
 
-            if (this.activeLayerId == LAYER_EVENT && x != -1 && y != -1) {
-                g.clearRect(this.selectedGridCellX * 32 ,this.selectedGridCellY * 32,32,32);
-                g.fillRect(x * 32 ,y * 32,32,32);
+            // Handle Selecting an Event Cell
+            if (this.activeLayerId == LAYER_EVENT && this.selectedGridCellX != -1 && this.selectedGridCellY != -1) {
+                g.clearRect(this.lastSelectedGridCellX * 32 - 5,this.lastSelectedGridCellY * 32 - 5,42,42);
+
+                g.setStroke(Color.BLACK);
+                g.setLineWidth(4);
+                g.strokeRect(this.selectedGridCellX * 32 ,this.selectedGridCellY * 32,32,32);
+                g.setLineWidth(2);
+                g.setStroke(Color.WHITE);
+                g.strokeRect(this.selectedGridCellX * 32 ,this.selectedGridCellY * 32,32,32);
+
+                return;
             }
+
+            // Handle Regular Map Builder Cursor
+            if (this.selectedGridCellX != -1 && this.selectedGridCellY != -1)
+                g.clearRect(this.selectedGridCellX * 32 ,this.selectedGridCellY * 32,32,32);
 
             if (this.activeToolId == TOOL_PEN || (this.activeToolId == MapCanvas.TOOL_BRUSH && !this.mouseIsDown)) {
                 this.renderCursorRegular(g,x,y,w,h,clearOnly,mouseUpEvent);
@@ -714,10 +729,12 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * @param y
      */
     private void selectCellForEventEditor(int x, int y) {
-        if (this.selectedGridCellX != x || this.selectedGridCellY != y) {
-            this.renderCursor(x,y,false,false);
+        if (this.lastSelectedGridCellX != x || this.lastSelectedGridCellY != y) {
             this.selectedGridCellX = x;
             this.selectedGridCellY = y;
+            this.renderCursor(x,y,false,false);
+            this.lastSelectedGridCellX = x;
+            this.lastSelectedGridCellY = y;
         }
     }
 
