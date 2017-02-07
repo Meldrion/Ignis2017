@@ -2,9 +2,11 @@ package lu.innocence.ignis.view.eventEditor;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lu.innocence.ignis.view.components.CharViewCanvas;
@@ -22,13 +24,8 @@ public class EventEditorTab extends BorderPane {
 
         this.setPadding(new Insets(10,10,10,10));
 
-
         VBox leftBox = new VBox();
         leftBox.setSpacing(5);
-
-
-        Label charViewLabel = new Label();
-        charViewLabel.setText("Character Image");
 
         CharViewCanvas charViewCanvas = new CharViewCanvas();
         int widthForLeftObjects = 100;
@@ -51,11 +48,29 @@ public class EventEditorTab extends BorderPane {
         conditionsPane.setSpacing(5);
         conditionsPane.getChildren().addAll(switchHBox01,switchHBox02,varableHBox01);
 
-
         TitledPane titledPaneCondition = new TitledPane("Conditions",conditionsPane);
         titledPaneCondition.setCollapsible(false);
 
-        leftBox.getChildren().addAll(titledPaneCondition,charViewLabel,charViewCanvas,charViewChangeButton);
+        HBox middleBox = new HBox();
+        middleBox.setSpacing(5);
+        VBox middleBoxLeft = new VBox();
+        middleBoxLeft.getChildren().addAll(charViewCanvas,charViewChangeButton);
+
+        VBox middleBoxRight = new VBox();
+        middleBoxRight.setSpacing(5);
+        Label triggerLabel = new Label();
+        triggerLabel.setText("Trigger");
+
+        ComboBox<String> triggerComboBox = new ComboBox<>();
+        triggerComboBox.getItems().addAll("Push Key","Actor Touch","Event Touch",
+                "Parallel Event","Auto Start","Called Only");
+        triggerComboBox.getSelectionModel().select(0);
+
+        middleBoxRight.getChildren().addAll(triggerLabel,triggerComboBox);
+
+        middleBox.getChildren().addAll(middleBoxLeft,middleBoxRight);
+
+        leftBox.getChildren().addAll(titledPaneCondition,middleBox);
         this.setLeft(leftBox);
 
         BorderPane centerBox = new BorderPane();
