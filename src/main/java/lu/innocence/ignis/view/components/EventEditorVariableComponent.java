@@ -29,7 +29,7 @@ public class EventEditorVariableComponent extends VBox {
         upperBox.setSpacing(5);
 
         this.variableCheckbox = new CheckBox("Variable");
-        this.variableCheckbox.setMinWidth(75);
+        this.variableCheckbox.setMinWidth(80);
 
         HBox variableButtonBox01 = new HBox();
         this.variableTextField = new TextField();
@@ -42,7 +42,7 @@ public class EventEditorVariableComponent extends VBox {
 
         this.variableCombo = new ComboBox<>();
         this.variableCombo.getItems().addAll("==","!=","<=",">=","<",">");
-        this.variableCombo.setMinWidth(75);
+        this.variableCombo.setMinWidth(80);
         this.variableCombo.getSelectionModel().select(1);
 
         upperBox.getChildren().addAll(this.variableCheckbox, variableButtonBox01,variableCombo);
@@ -52,7 +52,7 @@ public class EventEditorVariableComponent extends VBox {
 
         Label valueText = new Label();
         valueText.setText("Value:");
-        valueText.setMinWidth(80);
+        valueText.setMinWidth(85);
 
         this.variableValueField = new Spinner<>();
         lowerBox.getChildren().addAll(valueText,this.variableValueField);

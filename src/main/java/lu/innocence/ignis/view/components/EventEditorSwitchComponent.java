@@ -24,7 +24,7 @@ public class EventEditorSwitchComponent extends HBox{
         this.setAlignment(Pos.CENTER_LEFT);
         this.setSpacing(5);
         this.switch01 = new CheckBox("Switch");
-        this.switch01.setMinWidth(75);
+        this.switch01.setMinWidth(80);
 
         HBox switchButtonBox01 = new HBox();
         this.switch01TextField = new TextField();
