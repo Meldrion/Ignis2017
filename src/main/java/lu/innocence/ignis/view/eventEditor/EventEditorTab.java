@@ -5,9 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lu.innocence.ignis.view.components.CharViewCanvas;
 import lu.innocence.ignis.view.components.EventEditorSwitchComponent;
@@ -66,7 +64,65 @@ public class EventEditorTab extends BorderPane {
                 "Parallel Event","Auto Start","Called Only");
         triggerComboBox.getSelectionModel().select(0);
 
-        middleBoxRight.getChildren().addAll(triggerLabel,triggerComboBox);
+
+        GridPane movementPane = new GridPane();
+
+        movementPane.setHgap(3);
+        movementPane.setVgap(3);
+
+        ColumnConstraints column1 = new ColumnConstraints(80);
+        ColumnConstraints column2 = new ColumnConstraints(130);
+
+        movementPane.getColumnConstraints().addAll(column1, column2);
+        movementPane.setPadding(new Insets(3, 10, 0, 15));
+
+        Label movementLabel = new Label();
+        movementLabel.setText("Type");
+
+        movementPane.add(movementLabel,0,0);
+
+        ComboBox<String> movementComboBox = new ComboBox<>();
+        movementComboBox.getItems().addAll("Fixed","Random",
+                "Follow","Move Away","Scripted");
+        movementComboBox.getSelectionModel().select(0);
+
+        movementPane.add(movementComboBox,1,0);
+
+        Button defineMovementButton = new Button();
+        defineMovementButton.setText("Define Route");
+
+        movementPane.add(defineMovementButton,1,1);
+
+        Label movementLabelSpeed = new Label();
+        movementLabelSpeed.setText("Speed");
+
+        movementPane.add(movementLabelSpeed,0,2);
+
+        ComboBox<String> movementSpeedComboBox = new ComboBox<>();
+        movementSpeedComboBox.getItems().addAll("Very slow","slow",
+                "normal","Fast","Very fast");
+        movementSpeedComboBox.getSelectionModel().select(2);
+
+        movementPane.add(movementSpeedComboBox,1,2);
+
+        Label movementLabelFreq = new Label();
+        movementLabelFreq.setText("Freq");
+
+        movementPane.add(movementLabelFreq,0,3);
+
+        ComboBox<String> movementFreqComboBox = new ComboBox<>();
+        movementFreqComboBox.getItems().addAll("Very Low","Low","Normal","High","Very High");
+        movementFreqComboBox.getSelectionModel().select(2);
+
+        movementPane.add(movementFreqComboBox,1,3);
+
+
+        TitledPane titledPaneMove = new TitledPane("Movement",movementPane);
+        titledPaneMove.setCollapsible(false);
+
+
+
+        middleBoxRight.getChildren().addAll(triggerLabel,triggerComboBox, titledPaneMove);
 
         middleBox.getChildren().addAll(middleBoxLeft,middleBoxRight);
 
