@@ -1,10 +1,7 @@
 package lu.innocence.ignis.view.eventEditor;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lu.innocence.ignis.view.components.CharViewCanvas;
@@ -18,6 +15,11 @@ import lu.innocence.ignis.view.components.VisualScriptEditor;
  */
 public class EventEditorTab extends BorderPane {
 
+    /**
+     *
+     * @param categoryName
+     * @param parent
+     */
     public EventEditorTab(String categoryName,Stage parent) {
 
         this.setPadding(new Insets(10,10,10,10));
@@ -56,15 +58,27 @@ public class EventEditorTab extends BorderPane {
 
         VBox middleBoxRight = new VBox();
         middleBoxRight.setSpacing(5);
-        Label triggerLabel = new Label();
-        triggerLabel.setText("Trigger");
-
-        ComboBox<String> triggerComboBox = new ComboBox<>();
-        triggerComboBox.getItems().addAll("Push Key","Actor Touch","Event Touch",
-                "Parallel Event","Auto Start","Called Only");
-        triggerComboBox.getSelectionModel().select(0);
 
 
+        middleBoxRight.getChildren().addAll(createMovementPane(),createTriggerPane());
+
+        middleBox.getChildren().addAll(middleBoxLeft,middleBoxRight);
+
+        leftBox.getChildren().addAll(titledPaneCondition,middleBox);
+        this.setLeft(leftBox);
+
+        BorderPane centerBox = new BorderPane();
+        centerBox.setPadding(new Insets(0,0,0,10));
+        this.setCenter(centerBox);
+        VisualScriptEditor visualScriptEditor = new VisualScriptEditor(parent);
+        centerBox.setCenter(visualScriptEditor);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private TitledPane createMovementPane() {
         GridPane movementPane = new GridPane();
 
         movementPane.setHgap(3);
@@ -74,7 +88,7 @@ public class EventEditorTab extends BorderPane {
         ColumnConstraints column2 = new ColumnConstraints(130);
 
         movementPane.getColumnConstraints().addAll(column1, column2);
-        movementPane.setPadding(new Insets(3, 10, 0, 15));
+        movementPane.setPadding(new Insets(3, 10, 3, 15));
 
         Label movementLabel = new Label();
         movementLabel.setText("Type");
@@ -120,20 +134,37 @@ public class EventEditorTab extends BorderPane {
         TitledPane titledPaneMove = new TitledPane("Movement",movementPane);
         titledPaneMove.setCollapsible(false);
 
+        return titledPaneMove;
+    }
 
+    /**
+     *
+     */
+    private TitledPane createTriggerPane() {
 
-        middleBoxRight.getChildren().addAll(triggerLabel,triggerComboBox, titledPaneMove);
+        RadioButton rbTriggerPush = new RadioButton();
+        rbTriggerPush.setText("Push Key");
 
-        middleBox.getChildren().addAll(middleBoxLeft,middleBoxRight);
+        RadioButton rbTriggerTouchActor = new RadioButton();
+        rbTriggerTouchActor.setText("Actor Touch");
 
-        leftBox.getChildren().addAll(titledPaneCondition,middleBox);
-        this.setLeft(leftBox);
+        RadioButton rbTriggerTouchEvent = new RadioButton();
+        rbTriggerTouchEvent.setText("Event Touch");
 
-        BorderPane centerBox = new BorderPane();
-        centerBox.setPadding(new Insets(0,0,0,10));
-        this.setCenter(centerBox);
-        VisualScriptEditor visualScriptEditor = new VisualScriptEditor(parent);
-        centerBox.setCenter(visualScriptEditor);
+        RadioButton rbTriggerParallel = new RadioButton();
+        rbTriggerParallel.setText("Parallel Event");
+
+        RadioButton rbTriggerAutostart = new RadioButton();
+        rbTriggerAutostart.setText("Auto Start");
+
+        VBox triggerPane = new VBox();
+        triggerPane.getChildren().addAll(rbTriggerPush,rbTriggerTouchActor,
+                rbTriggerTouchEvent,rbTriggerParallel,rbTriggerAutostart);
+
+        TitledPane triggerPaneTitled = new TitledPane("Trigger",triggerPane);
+        triggerPaneTitled.setCollapsible(false);
+
+        return triggerPaneTitled;
     }
 
 }
