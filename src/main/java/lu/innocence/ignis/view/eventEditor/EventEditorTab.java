@@ -27,6 +27,7 @@ public class EventEditorTab extends BorderPane {
         VBox leftBox = new VBox();
         leftBox.setSpacing(5);
 
+        VBox charView = new VBox();
         CharViewCanvas charViewCanvas = new CharViewCanvas();
         int widthForLeftObjects = 100;
         charViewCanvas.setWidth(widthForLeftObjects);
@@ -36,6 +37,8 @@ public class EventEditorTab extends BorderPane {
         Button charViewChangeButton = new Button();
         charViewChangeButton.setText("Change");
         charViewChangeButton.setMinWidth(widthForLeftObjects);
+
+        charView.getChildren().addAll(charViewCanvas,charViewChangeButton);
 
         VBox conditionsPane = new VBox();
         // Switch 1
@@ -51,20 +54,23 @@ public class EventEditorTab extends BorderPane {
         TitledPane titledPaneCondition = new TitledPane("Conditions",conditionsPane);
         titledPaneCondition.setCollapsible(false);
 
-        HBox middleBox = new HBox();
-        middleBox.setSpacing(5);
-        VBox middleBoxLeft = new VBox();
-        middleBoxLeft.getChildren().addAll(charViewCanvas,charViewChangeButton);
 
-        VBox middleBoxRight = new VBox();
-        middleBoxRight.setSpacing(5);
+        TabPane tabber = new TabPane();
+
+        Tab triggerTab = new Tab("Trigger",createTriggerPane());
+        tabber.getTabs().add(triggerTab);
+        triggerTab.setClosable(false);
+
+        Tab movementTab = new Tab("Movement",createMovementPane());
+        movementTab.setClosable(false);
+        tabber.getTabs().add(movementTab);
+
+        Tab optionsTab = new Tab("Options",createOptionsPane());
+        optionsTab.setClosable(false);
+        tabber.getTabs().add(optionsTab);
 
 
-        middleBoxRight.getChildren().addAll(createMovementPane(),createTriggerPane());
-
-        middleBox.getChildren().addAll(middleBoxLeft,middleBoxRight);
-
-        leftBox.getChildren().addAll(titledPaneCondition,middleBox);
+        leftBox.getChildren().addAll(titledPaneCondition,tabber);
         this.setLeft(leftBox);
 
         BorderPane centerBox = new BorderPane();
@@ -78,7 +84,7 @@ public class EventEditorTab extends BorderPane {
      *
      * @return
      */
-    private TitledPane createMovementPane() {
+    private GridPane createMovementPane() {
         GridPane movementPane = new GridPane();
 
         movementPane.setHgap(3);
@@ -95,15 +101,20 @@ public class EventEditorTab extends BorderPane {
 
         movementPane.add(movementLabel,0,0);
 
+
+        Button defineMovementButton = new Button();
+        defineMovementButton.setText("Define Route");
+        defineMovementButton.setDisable(true);
+
         ComboBox<String> movementComboBox = new ComboBox<>();
         movementComboBox.getItems().addAll("Fixed","Random",
                 "Follow","Move Away","Scripted");
         movementComboBox.getSelectionModel().select(0);
+        movementComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            defineMovementButton.setDisable(!"Scripted".equals(newValue));
+        });
 
         movementPane.add(movementComboBox,1,0);
-
-        Button defineMovementButton = new Button();
-        defineMovementButton.setText("Define Route");
 
         movementPane.add(defineMovementButton,1,1);
 
@@ -130,17 +141,14 @@ public class EventEditorTab extends BorderPane {
 
         movementPane.add(movementFreqComboBox,1,3);
 
-
-        TitledPane titledPaneMove = new TitledPane("Movement",movementPane);
-        titledPaneMove.setCollapsible(false);
-
-        return titledPaneMove;
+        return movementPane;
     }
 
     /**
      *
+     * @return
      */
-    private TitledPane createTriggerPane() {
+    private VBox createTriggerPane() {
 
         RadioButton rbTriggerPush = new RadioButton();
         rbTriggerPush.setText("Push Key");
@@ -161,10 +169,12 @@ public class EventEditorTab extends BorderPane {
         triggerPane.getChildren().addAll(rbTriggerPush,rbTriggerTouchActor,
                 rbTriggerTouchEvent,rbTriggerParallel,rbTriggerAutostart);
 
-        TitledPane triggerPaneTitled = new TitledPane("Trigger",triggerPane);
-        triggerPaneTitled.setCollapsible(false);
-
-        return triggerPaneTitled;
+        return triggerPane;
     }
 
+    private VBox createOptionsPane() {
+
+        VBox optionsPane = new VBox();
+        return optionsPane;
+    }
 }
