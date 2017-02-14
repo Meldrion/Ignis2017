@@ -1,5 +1,6 @@
 package lu.innocence.ignis.view.components;
 
+import javafx.geometry.Dimension2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -21,11 +22,10 @@ public class CharViewCanvas extends Canvas {
     private Stage parent;
 
     /**
-     *
      * @param assetManager
      * @param parent
      */
-    public CharViewCanvas(AssetStructure assetManager,Stage parent) {
+    public CharViewCanvas(AssetStructure assetManager, Stage parent) {
 
         this.assetManager = assetManager;
         this.parent = parent;
@@ -45,20 +45,27 @@ public class CharViewCanvas extends Canvas {
     public void render() {
         GraphicsContext g = this.getGraphicsContext2D();
         g.setFill(Color.WHITE);
-        g.fillRect(0,0,getWidth(),getHeight());
-        ChessBGDrawer.drawChessBackground(g,(int)this.getWidth(),(int)this.getHeight(),32,32);
+        g.fillRect(0, 0, getWidth(), getHeight());
+        ChessBGDrawer.drawChessBackground(g, (int) this.getWidth(), (int) this.getHeight(), 32, 32);
 
         if (this.charImage != null) {
-            g.drawImage(this.charImage,0,0,this.charImage.getWidth() / 4,this.charImage.getHeight() / 4,
-                    10,10,getWidth() - 20,getHeight() - 20 );
+
+            Dimension2D newRatio = AspectRatioCalculator.
+                    getScaledDimension(new Dimension2D(this.charImage.getWidth(),
+                            this.charImage.getHeight()), new Dimension2D(getWidth() - 20, getHeight() - 20));
+
+            double centerX = (getWidth() - newRatio.getWidth()) / 2;
+            double centerY = (getHeight() - newRatio.getHeight()) / 2;
+
+            g.drawImage(this.charImage, 0, 0, this.charImage.getWidth() / 4, this.charImage.getHeight() / 4,
+                    centerX, centerY, newRatio.getWidth(), newRatio.getHeight());
         }
 
         g.setStroke(Color.LIGHTGRAY);
-        g.strokeRect(1,1,getWidth()-1,getHeight()-1);
+        g.strokeRect(1, 1, getWidth() - 1, getHeight() - 1);
     }
 
     /**
-     *
      * @param selectedName
      * @param image
      */
@@ -75,7 +82,7 @@ public class CharViewCanvas extends Canvas {
         ImageView imageView = new ImageView(parent);
         imageView.setAssetManager(this.assetManager, AssetStructure.CHARACTER);
         imageView.showAndWait();
-        this.setCharacter(imageView.getSelectedName(),imageView.getSelected());
+        this.setCharacter(imageView.getSelectedName(), imageView.getSelected());
     }
 
 }
