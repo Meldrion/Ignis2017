@@ -28,6 +28,8 @@ public class EventEditorSwitchComponent extends HBox{
 
         HBox switchButtonBox01 = new HBox();
         this.switch01TextField = new TextField();
+        this.switch01TextField.setEditable(false);
+        this.switch01TextField.setPrefWidth(130);
 
         this.switch01TexButton = new Button();
         this.switch01TexButton.setText("...");

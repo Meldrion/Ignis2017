@@ -183,10 +183,11 @@ public class EventEditorTab extends BorderPane {
      */
     private VBox createCharView() {
         VBox charView = new VBox();
+        charView.setSpacing(5);
         CharViewCanvas charViewCanvas = new CharViewCanvas();
-        int widthForLeftObjects = 100;
+        int widthForLeftObjects = 125;
         charViewCanvas.setWidth(widthForLeftObjects);
-        charViewCanvas.setHeight(115);
+        charViewCanvas.setHeight(125);
         charViewCanvas.render();
 
         Button charViewChangeButton = new Button();

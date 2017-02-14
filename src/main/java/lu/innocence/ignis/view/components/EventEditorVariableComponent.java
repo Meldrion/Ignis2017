@@ -33,6 +33,8 @@ public class EventEditorVariableComponent extends VBox {
 
         HBox variableButtonBox01 = new HBox();
         this.variableTextField = new TextField();
+        this.variableTextField.setEditable(false);
+        this.variableTextField.setPrefWidth(130);
 
         this.variableButton = new Button();
         this.variableButton.setText("...");
