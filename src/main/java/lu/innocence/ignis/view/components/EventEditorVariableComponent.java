@@ -57,8 +57,8 @@ public class EventEditorVariableComponent extends VBox {
         valueText.setMinWidth(85);
 
         this.variableValueField = new Spinner<>();
+        this.variableValueField.setPrefWidth(130);
         lowerBox.getChildren().addAll(valueText,this.variableValueField);
-
 
         this.getChildren().addAll(upperBox,lowerBox);
         this.update();

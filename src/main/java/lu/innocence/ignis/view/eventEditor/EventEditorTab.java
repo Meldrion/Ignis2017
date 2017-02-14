@@ -174,6 +174,17 @@ public class EventEditorTab extends BorderPane {
         VBox optionsPane = new VBox();
         optionsPane.setSpacing(5);
         optionsPane.setPadding(new Insets(10,5,5,5));
+        CheckBox moveAnimation = new CheckBox();
+        moveAnimation.setText("Move Animation");
+        CheckBox stopAnimation = new CheckBox();
+        stopAnimation.setText("Stop Animation");
+        CheckBox directionFix = new CheckBox();
+        directionFix.setText("Direction Fix");
+        CheckBox through = new CheckBox();
+        through.setText("Through");
+        CheckBox alwaysOnTop = new CheckBox();
+        alwaysOnTop.setText("Always on top");
+        optionsPane.getChildren().addAll(moveAnimation,stopAnimation,directionFix,through,alwaysOnTop);
         return optionsPane;
     }
 
