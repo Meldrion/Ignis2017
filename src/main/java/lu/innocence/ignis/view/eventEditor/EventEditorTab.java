@@ -27,19 +27,6 @@ public class EventEditorTab extends BorderPane {
         VBox leftBox = new VBox();
         leftBox.setSpacing(5);
 
-        VBox charView = new VBox();
-        CharViewCanvas charViewCanvas = new CharViewCanvas();
-        int widthForLeftObjects = 100;
-        charViewCanvas.setWidth(widthForLeftObjects);
-        charViewCanvas.setHeight(115);
-        charViewCanvas.render();
-
-        Button charViewChangeButton = new Button();
-        charViewChangeButton.setText("Change");
-        charViewChangeButton.setMinWidth(widthForLeftObjects);
-
-        charView.getChildren().addAll(charViewCanvas,charViewChangeButton);
-
         VBox conditionsPane = new VBox();
         // Switch 1
         EventEditorSwitchComponent switchHBox01 = new EventEditorSwitchComponent();
@@ -54,10 +41,14 @@ public class EventEditorTab extends BorderPane {
         TitledPane titledPaneCondition = new TitledPane("Conditions",conditionsPane);
         titledPaneCondition.setCollapsible(false);
 
-
         TabPane tabber = new TabPane();
 
-        Tab triggerTab = new Tab("Trigger",createTriggerPane());
+
+        HBox basicBox = new HBox();
+        basicBox.setSpacing(5);
+        basicBox.setPadding(new Insets(10,5,5,5));
+        basicBox.getChildren().addAll(createCharView(),createTriggerPane());
+        Tab triggerTab = new Tab("Basic",basicBox);
         tabber.getTabs().add(triggerTab);
         triggerTab.setClosable(false);
 
@@ -94,7 +85,7 @@ public class EventEditorTab extends BorderPane {
         ColumnConstraints column2 = new ColumnConstraints(130);
 
         movementPane.getColumnConstraints().addAll(column1, column2);
-        movementPane.setPadding(new Insets(3, 10, 3, 15));
+        movementPane.setPadding(new Insets(10, 10, 3, 15));
 
         Label movementLabel = new Label();
         movementLabel.setText("Type");
@@ -148,7 +139,7 @@ public class EventEditorTab extends BorderPane {
      *
      * @return
      */
-    private VBox createTriggerPane() {
+    private TitledPane createTriggerPane() {
 
         RadioButton rbTriggerPush = new RadioButton();
         rbTriggerPush.setText("Push Key");
@@ -166,15 +157,43 @@ public class EventEditorTab extends BorderPane {
         rbTriggerAutostart.setText("Auto Start");
 
         VBox triggerPane = new VBox();
+        triggerPane.setSpacing(5);
         triggerPane.getChildren().addAll(rbTriggerPush,rbTriggerTouchActor,
                 rbTriggerTouchEvent,rbTriggerParallel,rbTriggerAutostart);
-
-        return triggerPane;
+        TitledPane triggerTitledPane = new TitledPane("Trigger",triggerPane);
+        triggerTitledPane.setCollapsible(false);
+        return triggerTitledPane;
     }
 
+    /**
+     *
+     * @return
+     */
     private VBox createOptionsPane() {
 
         VBox optionsPane = new VBox();
+        optionsPane.setSpacing(5);
+        optionsPane.setPadding(new Insets(10,5,5,5));
         return optionsPane;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private VBox createCharView() {
+        VBox charView = new VBox();
+        CharViewCanvas charViewCanvas = new CharViewCanvas();
+        int widthForLeftObjects = 100;
+        charViewCanvas.setWidth(widthForLeftObjects);
+        charViewCanvas.setHeight(115);
+        charViewCanvas.render();
+
+        Button charViewChangeButton = new Button();
+        charViewChangeButton.setText("Change");
+        charViewChangeButton.setMinWidth(widthForLeftObjects);
+
+        charView.getChildren().addAll(charViewCanvas,charViewChangeButton);
+        return charView;
     }
 }
