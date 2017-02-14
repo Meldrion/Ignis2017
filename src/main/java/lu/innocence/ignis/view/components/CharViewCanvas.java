@@ -18,6 +18,8 @@ public class CharViewCanvas extends Canvas {
         GraphicsContext g = this.getGraphicsContext2D();
         g.setFill(Color.WHITE);
         g.fillRect(0,0,getWidth(),getHeight());
+        ChessBGDrawer.drawChessBackground(g,(int)this.getWidth(),(int)this.getHeight(),32,32);
+
         g.setStroke(Color.LIGHTGRAY);
         g.strokeRect(1,1,getWidth()-1,getHeight()-1);
     }

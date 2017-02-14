@@ -311,7 +311,11 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
             mapManager.addActiveMapListener(tilesetCanvas);
             mapManager.addActiveMapListener(mapCanvas);
 
+            mapCanvas.setAssetManager(p.getAssetStructure());
+
             this.mapTree.setProject(p);
+        } else {
+            mapCanvas.setAssetManager(null);
         }
 
         this.userInterfaceChanges(p);

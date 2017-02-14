@@ -4,10 +4,12 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import lu.innocence.ignis.engine.AssetStructure;
 import lu.innocence.ignis.view.components.CharViewCanvas;
 import lu.innocence.ignis.view.components.EventEditorSwitchComponent;
 import lu.innocence.ignis.view.components.EventEditorVariableComponent;
 import lu.innocence.ignis.view.components.VisualScriptEditor;
+import lu.innocence.ignis.view.resourceView.ImageView;
 
 /**
  * Created by Fabien Steines
@@ -20,7 +22,7 @@ public class EventEditorTab extends BorderPane {
      * @param categoryName
      * @param parent
      */
-    public EventEditorTab(String categoryName,Stage parent) {
+    public EventEditorTab(String categoryName,Stage parent,AssetStructure assetManager) {
 
         this.setPadding(new Insets(10,10,10,10));
 
@@ -47,12 +49,12 @@ public class EventEditorTab extends BorderPane {
         HBox basicBox = new HBox();
         basicBox.setSpacing(5);
         basicBox.setPadding(new Insets(10,5,5,5));
-        basicBox.getChildren().addAll(createCharView(),createTriggerPane());
+        basicBox.getChildren().addAll(createCharView(parent,assetManager),createTriggerPane());
         Tab triggerTab = new Tab("Basic",basicBox);
         tabber.getTabs().add(triggerTab);
         triggerTab.setClosable(false);
 
-        Tab movementTab = new Tab("Movement",createMovementPane());
+        Tab movementTab = new Tab("Movement",createMovementPane(parent));
         movementTab.setClosable(false);
         tabber.getTabs().add(movementTab);
 
@@ -75,7 +77,7 @@ public class EventEditorTab extends BorderPane {
      *
      * @return
      */
-    private GridPane createMovementPane() {
+    private GridPane createMovementPane(Stage parent) {
         GridPane movementPane = new GridPane();
 
         movementPane.setHgap(3);
@@ -192,7 +194,7 @@ public class EventEditorTab extends BorderPane {
      *
      * @return
      */
-    private VBox createCharView() {
+    private VBox createCharView(Stage parent,AssetStructure assetManager) {
         VBox charView = new VBox();
         charView.setSpacing(5);
         CharViewCanvas charViewCanvas = new CharViewCanvas();
@@ -204,6 +206,11 @@ public class EventEditorTab extends BorderPane {
         Button charViewChangeButton = new Button();
         charViewChangeButton.setText("Change");
         charViewChangeButton.setMinWidth(widthForLeftObjects);
+        charViewChangeButton.setOnAction(event -> {
+            ImageView imageView = new ImageView(parent);
+            imageView.setAssetManager(assetManager, AssetStructure.CHARACTER);
+            imageView.showAndWait();
+        });
 
         charView.getChildren().addAll(charViewCanvas,charViewChangeButton);
         return charView;

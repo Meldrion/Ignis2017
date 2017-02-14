@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lu.innocence.ignis.engine.AssetStructure;
 
 /**
  * @author Fabien Steines
@@ -28,10 +29,10 @@ public class EventEditor extends Stage {
      *
      * @param parent
      */
-    public EventEditor(Stage parent) {
+    public EventEditor(Stage parent, AssetStructure assetManager) {
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Event Editor");
-        this.buildUserInterface();
+        this.buildUserInterface(assetManager);
         this.setResizable(false);
         this.initOwner(parent);
         this.sizeToScene();
@@ -40,7 +41,7 @@ public class EventEditor extends Stage {
     /**
      *
      */
-    private void buildUserInterface() {
+    private void buildUserInterface(AssetStructure assetManager) {
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
         this.setScene(scene);
@@ -64,7 +65,7 @@ public class EventEditor extends Stage {
 
         Button newPageButton = new Button();
         newPageButton.setText("New Page");
-        newPageButton.setOnAction(event -> this.createNewEventPage());
+        newPageButton.setOnAction(event -> this.createNewEventPage(assetManager));
 
         Button copyPageButton = new Button();
         copyPageButton.setText("Copy Page");
@@ -87,7 +88,7 @@ public class EventEditor extends Stage {
         root.setCenter(mainTabber);
 
         // Tabs Part
-        this.createNewEventPage(); // First Page
+        this.createNewEventPage(assetManager); // First Page
 
 
         this.createButtomBox(root);
@@ -124,12 +125,12 @@ public class EventEditor extends Stage {
     /**
      *
      */
-    private void createNewEventPage() {
+    private void createNewEventPage(AssetStructure assetManager) {
 
         int cCount = this.mainTabber.getTabs().size();
         String tabName = String.format("Page %s",cCount + 1);
 
-        EventEditorTab editorTabContent = new EventEditorTab(tabName,this);
+        EventEditorTab editorTabContent = new EventEditorTab(tabName,this,assetManager);
         Tab editorPageTab = new Tab();
         editorPageTab.setText(tabName);
         editorPageTab.setClosable(false);
