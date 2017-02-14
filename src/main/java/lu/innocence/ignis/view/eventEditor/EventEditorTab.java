@@ -197,7 +197,7 @@ public class EventEditorTab extends BorderPane {
     private VBox createCharView(Stage parent,AssetStructure assetManager) {
         VBox charView = new VBox();
         charView.setSpacing(5);
-        CharViewCanvas charViewCanvas = new CharViewCanvas();
+        CharViewCanvas charViewCanvas = new CharViewCanvas(assetManager,parent);
         int widthForLeftObjects = 125;
         charViewCanvas.setWidth(widthForLeftObjects);
         charViewCanvas.setHeight(125);
@@ -207,10 +207,7 @@ public class EventEditorTab extends BorderPane {
         charViewChangeButton.setText("Change");
         charViewChangeButton.setMinWidth(widthForLeftObjects);
         charViewChangeButton.setOnAction(event -> {
-            ImageView imageView = new ImageView(parent);
-            imageView.setAssetManager(assetManager, AssetStructure.CHARACTER);
-            imageView.showAndWait();
-            charViewCanvas.setCharacter(imageView.getSelectedName(),imageView.getSelected());
+            charViewCanvas.action();
         });
 
         charView.getChildren().addAll(charViewCanvas,charViewChangeButton);
