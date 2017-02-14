@@ -210,6 +210,7 @@ public class EventEditorTab extends BorderPane {
             ImageView imageView = new ImageView(parent);
             imageView.setAssetManager(assetManager, AssetStructure.CHARACTER);
             imageView.showAndWait();
+            charViewCanvas.setCharacter(imageView.getSelectedName(),imageView.getSelected());
         });
 
         charView.getChildren().addAll(charViewCanvas,charViewChangeButton);
