@@ -14,16 +14,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lu.innocence.ignis.IgnisGlobals;
-import lu.innocence.ignis.view.components.CenterWindowOnParent;
-import lu.innocence.ignis.view.components.MapCanvas;
-import lu.innocence.ignis.view.components.MapTree;
-import lu.innocence.ignis.view.components.TilesetCanvas;
 import lu.innocence.ignis.engine.AudioManager;
 import lu.innocence.ignis.engine.MapManager;
 import lu.innocence.ignis.engine.Project;
 import lu.innocence.ignis.engine.ProjectManager;
 import lu.innocence.ignis.event.ActiveProjectListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
+import lu.innocence.ignis.view.components.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -312,8 +309,15 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
         AudioManager.initAudioSystem();
         primaryStage.setOnCloseRequest(event -> {
-            AudioManager.shutdownAudioSystem();
-            // event.consume(); // This prevents the closing action
+            if (IgnisDialogs.openConfirmationDialog(
+                    primaryStage,
+                    "Exit Program",
+                    "Are you sure that you want to close Ignis ?",
+                    "Any unsaved changes will be lost !")) {
+                AudioManager.shutdownAudioSystem();
+            } else {
+                event.consume(); // This prevents the closing action
+            }
         });
 
     }
@@ -473,5 +477,6 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
         gameDatabase.show();
         CenterWindowOnParent.center(mainStage,gameDatabase);
     }
+
 
 }
