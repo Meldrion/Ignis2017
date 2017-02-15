@@ -425,8 +425,8 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
      */
     private void openCreateProjectWindow(Stage mainStage) {
         CreateProjectDialog createProjectDialog = new CreateProjectDialog(mainStage);
-        createProjectDialog.show();
         CenterWindowOnParent.center(mainStage,createProjectDialog);
+        createProjectDialog.show();
     }
 
     /**
@@ -435,8 +435,8 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
      */
     private void openLoadProjectWindow(Stage mainStage) {
         LoadProjectDialog loadProjectDialog = new LoadProjectDialog(mainStage);
-        loadProjectDialog.show();
         CenterWindowOnParent.center(mainStage,loadProjectDialog);
+        loadProjectDialog.show();
     }
 
     /**
@@ -454,8 +454,8 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
      */
     private void openImportWindow(Stage mainStage) {
         ImportDialog importDialog = new ImportDialog(mainStage, this.project);
-        importDialog.show();
         CenterWindowOnParent.center(mainStage,importDialog);
+        importDialog.show();
     }
 
     /**
@@ -464,8 +464,9 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
      */
     private void openAudioDialog(Stage mainStage) {
         AudioDialog audioDialog = new AudioDialog(mainStage,this.project.getAudioManager());
-        audioDialog.show();
         CenterWindowOnParent.center(mainStage,audioDialog);
+        audioDialog.show();
+
     }
 
     /**
@@ -474,8 +475,8 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
      */
     private void openGameDatabase(Stage mainStage) {
         GameDatabase gameDatabase = new GameDatabase(mainStage, this.project);
-        gameDatabase.show();
         CenterWindowOnParent.center(mainStage,gameDatabase);
+        gameDatabase.show();
     }
 
 

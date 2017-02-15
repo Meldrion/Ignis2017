@@ -9,6 +9,7 @@ import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.Terrain;
 import lu.innocence.ignis.engine.Tileset;
 import lu.innocence.ignis.event.ActiveMapListener;
+import lu.innocence.ignis.event.MapPropertiesUpdated;
 import lu.innocence.ignis.event.TilesetSelectionChanged;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * @author Fabien Steines
  */
-public class TilesetCanvas extends Canvas implements ActiveMapListener {
+public class TilesetCanvas extends Canvas implements ActiveMapListener , MapPropertiesUpdated {
 
     private final int cellSize;
     private Tileset linkedTileset;
@@ -34,6 +35,9 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
 
     private List<TilesetSelectionChanged> tilesetSelectionListener;
 
+    /**
+     *
+     */
     public TilesetCanvas() {
 
         this.containerWidth = 0;
@@ -76,11 +80,12 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
             }
         });
 
-        this.addEventHandler(MouseEvent.MOUSE_RELEASED, t -> {
-            fireUpdate();
-        });
+        this.addEventHandler(MouseEvent.MOUSE_RELEASED, t -> fireUpdate());
     }
 
+    /**
+     *
+     */
     public void render() {
         GraphicsContext g = this.getGraphicsContext2D();
 
@@ -110,9 +115,12 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         }
     }
 
-
+    /**
+     *
+     * @param tileset
+     */
     public void setTileset(Tileset tileset) {
-        if (tileset != null) {
+        if (tileset != null && tileset.getTilesetImage() != null) {
             this.setWidth(tileset.getTilesetImage().getWidth());
             this.setHeight(tileset.getTilesetImage().getHeight());
             this.linkedTileset = tileset;
@@ -125,12 +133,19 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         }
     }
 
+    /**
+     *
+     * @param listener
+     */
     public void addSelecitonListener(TilesetSelectionChanged listener) {
         if (!this.tilesetSelectionListener.contains(listener)) {
             this.tilesetSelectionListener.add(listener);
         }
     }
 
+    /**
+     *
+     */
     private void fireUpdate() {
 
         int[] coords = IgnisGlobals.fixCoords(this.mouseStartX, this.mouseStartY, this.mouseEndX, this.mouseEndY);
@@ -142,6 +157,11 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         }
     }
 
+    /**
+     *
+     * @param width
+     * @param height
+     */
     private void fitToContainer(int width, int height) {
         if (this.linkedTileset != null) {
 
@@ -161,14 +181,40 @@ public class TilesetCanvas extends Canvas implements ActiveMapListener {
         this.render();
     }
 
+    /**
+     *
+     * @param width
+     * @param height
+     */
     public void containerSizeChanged(int width, int height) {
         this.containerWidth = width;
         this.containerHeight = height;
         this.fitToContainer(width, height);
     }
 
+    /**
+     * @param map the current map
+     *            Can be null
+     */
     @Override
     public void activeMapChanged(Map map) {
-        this.setTileset(map != null ? map.getTileset() : null);
+
+        if (map != null) {
+            map.addMapPropertiesListener(this);
+            this.setTileset(map.getTileset());
+        } else {
+            this.setTileset(null);
+        }
+
+    }
+
+    /**
+     *
+     * @param map the current map
+     *            Can be null
+     */
+    @Override
+    public void mapPropertiesUpdated(Map map) {
+        activeMapChanged(map);
     }
 }

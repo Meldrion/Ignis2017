@@ -122,14 +122,18 @@ public class MapTree extends TreeView<String> {
     private void callToMapEditDialog(Map map) {
 
         // Open the Map Dialog || Tell the Dialog that it was opened in edit mode
-        MapPropertiesDialog mapDialog = new MapPropertiesDialog(this.parentStage, this.project, MapPropertiesDialog.MODE_EDIT);
+        MapPropertiesDialog mapDialog = new MapPropertiesDialog(this.parentStage, this.project,
+                MapPropertiesDialog.MODE_EDIT);
         mapDialog.initMap(map);
-        mapDialog.showAndWait();
 
-        // Check if the Dialog has been accepted
-        if (mapDialog.isAccepted()) {
-            mapDialog.changeMap(map);
-        }
+        mapDialog.setOnHidden(event -> {
+            // Check if the Dialog has been accepted
+            if (mapDialog.isAccepted()) {
+                mapDialog.changeMap(map);
+            }
+        });
+        mapDialog.show();
+        CenterWindowOnParent.center(this.parentStage,mapDialog);
 
     }
 

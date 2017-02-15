@@ -123,19 +123,7 @@ public class ImportDialog extends Stage {
         Button importButton = new Button();
         importButton.setText("Import");
         importButton.setPrefWidth(120);
-        importButton.setOnAction(event -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Import Resource...");
-            File file = fileChooser.showOpenDialog(this);
-            if (file != null) {
-
-                String cat = this.categoriesListView.getSelectionModel().getSelectedItem();
-                String dir = this.project.getAssetStructure().getPath(cat);
-                if (FilesystemHandler.copy(file.getAbsolutePath(), FilesystemHandler.concat(dir, file.getName()))) {
-                    this.initSelectedCategory(cat);
-                }
-            }
-        });
+        importButton.setOnAction(event -> importAction());
 
         Button deleteButton = new Button();
         deleteButton.setText("Delete");
@@ -148,6 +136,23 @@ public class ImportDialog extends Stage {
         rightPanel.getChildren().addAll(importButton, previewButton, deleteButton);
 
         return rightPanel;
+    }
+
+    /**
+     * What happens when we click on the import button
+     */
+    private void importAction() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import Resource...");
+        File file = fileChooser.showOpenDialog(this);
+        if (file != null) {
+
+            String cat = this.categoriesListView.getSelectionModel().getSelectedItem();
+            String dir = this.project.getAssetStructure().getPath(cat);
+            if (FilesystemHandler.copy(file.getAbsolutePath(), FilesystemHandler.concat(dir, file.getName()))) {
+                this.initSelectedCategory(cat);
+            }
+        }
     }
 
     /**

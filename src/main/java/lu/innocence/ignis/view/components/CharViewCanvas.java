@@ -80,8 +80,13 @@ public class CharViewCanvas extends Canvas {
     public void action() {
         ImageView imageView = new ImageView(parent);
         imageView.setAssetManager(this.assetManager, AssetStructure.CHARACTER);
-        imageView.showAndWait();
-        this.setCharacter(imageView.getSelectedName(), imageView.getSelected());
+        imageView.setOnHidden(event -> {
+            if (imageView.isAccepted()) {
+                this.setCharacter(imageView.getSelectedName(), imageView.getSelected());
+            }
+        });
+        CenterWindowOnParent.center(parent,imageView);
+        imageView.show();
     }
 
 }

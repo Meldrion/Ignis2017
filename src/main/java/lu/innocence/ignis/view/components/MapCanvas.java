@@ -753,7 +753,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
      * Map Properties Update Event
      */
     @Override
-    public void mapPropertiesUpdated() {
+    public void mapPropertiesUpdated(Map map) {
         this.applyMapProperties();
     }
 

@@ -16,6 +16,8 @@ import java.util.Optional;
  */
 public class IgnisDialogs {
 
+    private IgnisDialogs() {}
+
     /**
      *
      * @param title Dialog Title

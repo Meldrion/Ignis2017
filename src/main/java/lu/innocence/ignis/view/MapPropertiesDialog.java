@@ -15,6 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.Project;
+import lu.innocence.ignis.view.components.CenterWindowOnParent;
 import lu.innocence.ignis.view.resourceView.TilesetResourceView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,7 +46,7 @@ public class MapPropertiesDialog extends Stage {
         this.accepted = false;
         this.project = project;
         this.selectedTilesetIndex = -1;
-        this.initModality(Modality.APPLICATION_MODAL);
+        this.initModality(Modality.WINDOW_MODAL);
 
         if (mode == MODE_EDIT) {
             this.setTitle(EDIT_MAP_TITLE);
@@ -157,19 +158,7 @@ public class MapPropertiesDialog extends Stage {
 
         Button tilesetSearchButton = new Button();
         tilesetSearchButton.setText("...");
-        tilesetSearchButton.setOnAction(event -> {
-
-            TilesetResourceView tsView = new TilesetResourceView(this);
-            tsView.setTilesetManager(this.project.getTilesetManager());
-            tsView.setSelectedIndex(selectedTilesetIndex);
-            tsView.showAndWait();
-
-            if (tsView.isAccepted()) {
-                tilesetTextField.setText(tsView.getSelectedString());
-                this.selectedTilesetIndex = tsView.getSelectedIndex();
-            }
-
-        });
+        tilesetSearchButton.setOnAction(event -> openTilesetSearchDialog(this));
 
         HBox lineEditWithButton = new HBox();
         lineEditWithButton.setSpacing(10);
@@ -179,7 +168,32 @@ public class MapPropertiesDialog extends Stage {
         grid.add(lineEditWithButton, 1, 2, 3, 1);
 
         root.setCenter(grid);
+        root.setBottom(createButtomBox());
+    }
 
+    /**
+     *
+     * @param parent
+     */
+    private void openTilesetSearchDialog(Stage parent) {
+        TilesetResourceView tsView = new TilesetResourceView(parent);
+        tsView.setTilesetManager(this.project.getTilesetManager());
+        tsView.setSelectedIndex(selectedTilesetIndex);
+        tsView.setOnHidden(event1 -> {
+            if (tsView.isAccepted()) {
+                tilesetTextField.setText(tsView.getSelectedString());
+                this.selectedTilesetIndex = tsView.getSelectedIndex();
+            }
+        });
+        CenterWindowOnParent.center(parent,tsView);
+        tsView.show();
+    }
+
+    /**
+     *
+     * @return
+     */
+    private HBox createButtomBox() {
         // Box on the Bottom
         HBox bottomBar = new HBox();
 
@@ -199,7 +213,7 @@ public class MapPropertiesDialog extends Stage {
         cancelButton.setOnAction(event -> this.close());
 
         bottomBar.getChildren().addAll(cancelButton, acceptButton);
-        root.setBottom(bottomBar);
+        return bottomBar;
     }
 
     /**

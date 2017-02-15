@@ -373,7 +373,7 @@ public class Map {
      */
     private void fireMapProprtiesUpdated() {
         for (MapPropertiesUpdated current : this.mapPropertiesListeners) {
-            current.mapPropertiesUpdated();
+            current.mapPropertiesUpdated(this);
         }
     }
 }
