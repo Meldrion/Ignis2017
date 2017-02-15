@@ -24,17 +24,17 @@ public class EventEditor extends Stage {
 
     private TabPane mainTabber;
 
-
     /**
      *
      * @param parent
      */
     public EventEditor(Stage parent, AssetStructure assetManager) {
-        this.initModality(Modality.APPLICATION_MODAL);
+        super();
+        this.initOwner(parent);
+        this.initModality(Modality.WINDOW_MODAL);
+        this.setResizable(false);
         this.setTitle("Event Editor");
         this.buildUserInterface(assetManager);
-        this.setResizable(false);
-        this.initOwner(parent);
         this.sizeToScene();
     }
 
@@ -112,9 +112,15 @@ public class EventEditor extends Stage {
 
         Button okButton = new Button();
         okButton.setText("Accept");
+        okButton.setOnAction(event -> {
+
+        });
 
         Button cancelButton = new Button();
         cancelButton.setText("Cancel");
+        cancelButton.setOnAction(event -> {
+            this.close();
+        });
 
         bottomBox.getChildren().addAll(okButton,cancelButton);
 

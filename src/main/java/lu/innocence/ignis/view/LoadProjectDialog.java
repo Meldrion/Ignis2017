@@ -40,7 +40,6 @@ public class LoadProjectDialog extends Stage {
         this.initData();
         this.initOwner(parent);
         this.sizeToScene();
-        this.show();
     }
 
     private void buildGUI() {

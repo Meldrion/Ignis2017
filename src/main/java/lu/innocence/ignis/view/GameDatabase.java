@@ -28,15 +28,17 @@ public class GameDatabase extends Stage {
     private Project project;
 
     public GameDatabase(Stage parentStage, Project project) {
-        this.accepted = false;
-        this.project = project;
-        this.initModality(Modality.APPLICATION_MODAL);
-        this.setTitle("Game Database");
+
+        this.initOwner(parentStage);
+        this.initModality(Modality.WINDOW_MODAL);
         this.setResizable(false);
+        this.setTitle("Game Database");
         this.buildGUI(project);
         this.initData();
-        this.initOwner(parentStage);
         this.sizeToScene();
+        this.accepted = false;
+        this.project = project;
+
     }
 
     private void buildGUI(Project project) {

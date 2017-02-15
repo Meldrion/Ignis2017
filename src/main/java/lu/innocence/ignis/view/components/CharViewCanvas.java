@@ -36,7 +36,6 @@ public class CharViewCanvas extends Canvas {
                 action();
             }
         });
-
     }
 
     /**

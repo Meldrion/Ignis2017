@@ -27,14 +27,13 @@ public class CreateProjectDialog extends Stage {
 
     public CreateProjectDialog(Stage parentStage) {
 
-        this.initModality(Modality.APPLICATION_MODAL);
+        this.initOwner(parentStage);
+        this.initModality(Modality.WINDOW_MODAL);
         this.setTitle("Create Project Window");
         this.setResizable(false);
         this.buildGUI();
         this.initData();
-        this.initOwner(parentStage);
         this.sizeToScene();
-        this.show();
     }
 
     private void buildGUI() {
