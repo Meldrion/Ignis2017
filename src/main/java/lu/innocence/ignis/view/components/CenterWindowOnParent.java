@@ -36,6 +36,7 @@ public class CenterWindowOnParent {
                 CenterWindowOnParent.setPosition(xDone,yDone,xPos,yPos,toBeCentered);
             }
         };
+
         toBeCentered.widthProperty().addListener(listenerW);
 
         ChangeListener<Number> listenerH = (observable, oldValue, newValue) -> {
