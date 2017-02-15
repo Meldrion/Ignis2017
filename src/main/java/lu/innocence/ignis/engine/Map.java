@@ -16,8 +16,7 @@ import java.util.List;
  */
 public class Map {
 
-    private static Logger LOGGER = LogManager.getLogger(Map.class);
-
+    private static final Logger LOGGER = LogManager.getLogger(Map.class);
     private List<MapPropertiesUpdated> mapPropertiesListeners;
     private List<TilesetLayer> layers;
     private int width;
@@ -35,7 +34,7 @@ public class Map {
     /**
      *
      */
-    public Map() {
+    Map() {
 
         this.uniqueId = "root";
         this.cellSize = 32;
@@ -64,7 +63,7 @@ public class Map {
      *
      * @param path
      */
-    public void setMapFilePath(String path) {
+    void setMapFilePath(String path) {
         this.mapFilePath = path;
     }
 
@@ -80,7 +79,7 @@ public class Map {
      *
      * @param uniqueId
      */
-    public void setUniqueId(String uniqueId) {
+    void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
     }
 
@@ -298,7 +297,7 @@ public class Map {
     /**
      *
      */
-    public void load() {
+    void load() {
 
         JSONObject mapData = FilesystemHandler.readJSON(this.mapFilePath);
         LOGGER.info(this.getMapId());

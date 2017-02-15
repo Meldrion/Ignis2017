@@ -77,6 +77,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         super(width, height);
         this.parentStage = parent;
         this.guiButtonsUpdate = new ArrayList<>();
+        LOGGER.info("Map Canvas created");
     }
 
     /**
@@ -253,7 +254,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     /**
      *
-     * @param key
+     * @param key KeyCode of the pressed Key
      */
     private void reactOnKeyBoardPress(final KeyCode key) {
         switch (key) {
@@ -278,7 +279,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     }
 
     /**
-     *
+     * Digit Key 1 Pressed action
      */
     private void digit1Pressed() {
         if (this.ctrlIsDown) {
@@ -289,7 +290,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     }
 
     /**
-     *
+     * Digit Key 2 Pressed action
      */
     private void digit2Pressed() {
         if (this.ctrlIsDown) {
@@ -300,7 +301,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     }
 
     /**
-     *
+     * Digit Key 3 Pressed action
      */
     private void digit3Pressed() {
         if (this.ctrlIsDown) {
@@ -311,7 +312,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     }
 
     /**
-     *
+     * Digit Key 4 Pressed action
      */
     private void digit4Pressed() {
         if (this.ctrlIsDown) {
@@ -323,33 +324,33 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
     /**
      *
-     * @param x
-     * @param y
-     * @param mouseEvent
-     * @param mouseEventType
+     * @param x X Position of the Mouse Event
+     * @param y Y Position of the Mouse Event
+     * @param mouseEvent Mouse Event
+     * @param mouseEventType Mouse Event Type
      */
     private void handleAction(int x, int y,MouseEvent mouseEvent, EventType<MouseEvent> mouseEventType) {
         if (this.activeLayerId != LAYER_EVENT) {
             this.mapBuilderAction(x,y,mouseEventType);
         } else {
-            this.eventBuilderAction(x,y,mouseEvent,mouseEventType);
+            this.eventBuilderAction(x,y,mouseEvent);
         }
     }
 
     /**
      *
-     * @param x
-     * @param y
-     * @param mouseEvent
+     * @param x X Position of the Mouse Event
+     * @param y Y Position of the Mouse Event
+     * @param mouseEvent Mouse Event
      */
-    private void eventBuilderAction(int x,int y,MouseEvent mouseEvent, EventType<MouseEvent> mouseEventType) {
+    private void eventBuilderAction(int x,int y,MouseEvent mouseEvent) {
 
         this.selectCellForEventEditor(x,y);
         if (mouseEvent.getClickCount() > 1) {
-            EventEditor eventEditor = new EventEditor(this.parentStage,this.assetManager);
-            eventEditor.showAndWait();
+            openEventEditor(this.parentStage);
         }
     }
+
 
     /**
      *
@@ -748,10 +749,22 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         }
     }
 
-
+    /**
+     * Map Properties Update Event
+     */
     @Override
     public void mapPropertiesUpdated() {
         this.applyMapProperties();
+    }
+
+
+    /**
+     * @param parentStage The Main Stage
+     */
+    private void openEventEditor(Stage parentStage) {
+        EventEditor eventEditor = new EventEditor(this.parentStage,this.assetManager);
+        eventEditor.show();
+        CenterWindowOnParent.center(parentStage,eventEditor);
     }
 
 }
