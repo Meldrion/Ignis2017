@@ -31,7 +31,12 @@ public class ImportDialog extends Stage {
     private ListView<String> categoriesListView;
     private ListView<String> elementsListView;
 
-    public ImportDialog(Stage parent, Project project) {
+    /**
+     *
+     * @param parent the parent of this dialog
+     * @param project the currently loaded project
+     */
+    ImportDialog(Stage parent, Project project) {
         this.project = project;
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Import Manager Window");
@@ -40,8 +45,12 @@ public class ImportDialog extends Stage {
         this.initData();
         this.initOwner(parent);
         this.sizeToScene();
+        LOGGER.info("Import Dialog created");
     }
 
+    /**
+     * Call to build the User Interface
+     */
     private void buildGUI() {
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root);
@@ -74,6 +83,40 @@ public class ImportDialog extends Stage {
 
         this.categoriesListView.setCellFactory(param -> new CustomListCell());
 
+        grid.add(createRightPanel(), 2, 0);
+        root.setCenter(grid);
+        buildButtonBoxButtom();
+
+        root.setBottom(buildButtonBoxButtom());
+
+    }
+
+    /**
+     *
+     * @return HBox holding the Bottombox
+     */
+    private HBox buildButtonBoxButtom() {
+        // Box on the Bottom
+        HBox bottomBar = new HBox();
+
+        bottomBar.setSpacing(10);
+        bottomBar.setPadding(new Insets(15));
+        bottomBar.setAlignment(Pos.CENTER);
+
+        Button cancelButton = new Button();
+        cancelButton.setText("Close");
+        cancelButton.setOnAction(event -> this.close());
+
+        bottomBar.getChildren().addAll(cancelButton);
+        return bottomBar;
+    }
+
+    /**
+     *
+     * @return VBox holding the right panel
+     */
+    private VBox createRightPanel() {
+
         VBox rightPanel = new VBox();
         rightPanel.setSpacing(10);
 
@@ -104,25 +147,12 @@ public class ImportDialog extends Stage {
 
         rightPanel.getChildren().addAll(importButton, previewButton, deleteButton);
 
-        grid.add(rightPanel, 2, 0);
-
-        root.setCenter(grid);
-
-        // Box on the Bottom
-        HBox bottomBar = new HBox();
-
-        bottomBar.setSpacing(10);
-        bottomBar.setPadding(new Insets(15));
-        bottomBar.setAlignment(Pos.CENTER);
-
-        Button cancelButton = new Button();
-        cancelButton.setText("Close");
-        cancelButton.setOnAction(event -> this.close());
-
-        bottomBar.getChildren().addAll(cancelButton);
-        root.setBottom(bottomBar);
+        return rightPanel;
     }
 
+    /**
+     *  Init the Category list, then load the data for the first one
+     */
     private void initData() {
         for (String current : AssetStructure.getAssetNames()) {
             this.categoriesListView.getItems().add(current);
@@ -130,6 +160,10 @@ public class ImportDialog extends Stage {
         initSelectedCategory(this.categoriesListView.getItems().get(0));
     }
 
+    /**
+     * Get called to pass the data from the project into the list
+     * @param category The category of which we want tob receive the data
+     */
     private void initSelectedCategory(String category) {
 
         this.elementsListView.getItems().clear();
