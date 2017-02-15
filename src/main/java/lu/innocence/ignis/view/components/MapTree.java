@@ -132,8 +132,9 @@ public class MapTree extends TreeView<String> {
                 mapDialog.changeMap(map);
             }
         });
-        mapDialog.show();
         CenterWindowOnParent.center(this.parentStage,mapDialog);
+        mapDialog.show();
+
 
     }
 

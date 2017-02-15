@@ -1,4 +1,4 @@
-package lu.innocence.ignis.view.eventEditor;
+package lu.innocence.ignis.view.eventeditor;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.AssetStructure;

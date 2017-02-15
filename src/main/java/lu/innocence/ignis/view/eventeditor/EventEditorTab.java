@@ -1,4 +1,4 @@
-package lu.innocence.ignis.view.eventEditor;
+package lu.innocence.ignis.view.eventeditor;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -9,7 +9,6 @@ import lu.innocence.ignis.view.components.CharViewCanvas;
 import lu.innocence.ignis.view.components.EventEditorSwitchComponent;
 import lu.innocence.ignis.view.components.EventEditorVariableComponent;
 import lu.innocence.ignis.view.components.VisualScriptEditor;
-import lu.innocence.ignis.view.resourceView.ImageView;
 
 /**
  * Created by Fabien Steines
