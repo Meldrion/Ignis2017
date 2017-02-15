@@ -50,16 +50,18 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
     private Button gameDBButton;
     private Button audioManagerButton;
     private Button saveProjectBtn;
+    private Button openProjectBtn;
+    private ButtonBase newProjectBtn;
 
     // RunConfig Linux
     // -Dprism.verbose=true -Dprism.forceGPU=true
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         launch(args);
     }
 
     /**
-     * @param topContainer
-     * @param mainStage
+     * @param topContainer Container for the Main Menu
+     * @param mainStage The MainStage
      */
     private void buildMainMenu(VBox topContainer, Stage mainStage) {
         MenuBar menuBar = new MenuBar();
@@ -87,26 +89,63 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
     }
 
     /**
-     * @param topContainer
-     * @param mainStage
+     * @param topContainer Container for the Toolbar
+     * @param mainStage The MainStage
      */
     private void buildToolbar(VBox topContainer, Stage mainStage) {
         ToolBar toolBar = new ToolBar();  //Creates our tool-bar to hold the buttons.
         topContainer.getChildren().add(toolBar);
-        Button newProjectBtn = new Button();
-        newProjectBtn.setFocusTraversable(false);
 
-        newProjectBtn.setGraphic(new ImageView(IgnisGlobals.getIconNewProject()));
-        newProjectBtn.setOnAction(e -> openCreateProjectWindow(mainStage));
-        Button openProjectBtn = new Button();
-        openProjectBtn.setOnAction(e -> openLoadProjectWindow(mainStage));
-        openProjectBtn.setFocusTraversable(false);
-        openProjectBtn.setGraphic(new ImageView(IgnisGlobals.getIconLoadProject()));
+        buildDialogButtons(mainStage);
+        buildToolButtons();
+        buildLayerButtons();
+
+        toolBar.getItems().addAll(newProjectBtn, openProjectBtn, saveProjectBtn, new Separator(),
+                penToolButton, brushToolButton, fillToolButton, eraseToolButton, new Separator(),
+                layer1Button, layer2Button, layer3Button, layer4Button, new Separator(), importManagerButton, gameDBButton, audioManagerButton);
+
+    }
+
+    /**
+     *
+     * @param mainStage The MainStage
+     */
+    private void buildDialogButtons(Stage mainStage) {
+        this.newProjectBtn = new Button();
+        this.newProjectBtn.setFocusTraversable(false);
+
+        this.newProjectBtn.setGraphic(new ImageView(IgnisGlobals.getIconNewProject()));
+        this.newProjectBtn.setOnAction(e -> openCreateProjectWindow(mainStage));
+
+        this.openProjectBtn = new Button();
+        this.openProjectBtn.setOnAction(e -> openLoadProjectWindow(mainStage));
+        this.openProjectBtn.setFocusTraversable(false);
+        this.openProjectBtn.setGraphic(new ImageView(IgnisGlobals.getIconLoadProject()));
         this.saveProjectBtn = new Button();
         this.saveProjectBtn.setFocusTraversable(false);
         this.saveProjectBtn.setGraphic(new ImageView(IgnisGlobals.getIconSaveProject()));
         this.saveProjectBtn.setOnAction(event -> saveProject());
 
+        this.importManagerButton = new Button();
+        this.importManagerButton.setFocusTraversable(false);
+        this.importManagerButton.setGraphic(new ImageView(IgnisGlobals.getIconImport()));
+        this.importManagerButton.setOnAction(event -> openImportWindow(mainStage));
+
+        this.gameDBButton = new Button();
+        this.gameDBButton.setFocusTraversable(false);
+        this.gameDBButton.setOnAction(event -> openGameDatabase(mainStage));
+        this.gameDBButton.setGraphic(new ImageView(IgnisGlobals.getIconIgnis24px()));
+
+        this.audioManagerButton = new Button();
+        this.audioManagerButton.setFocusTraversable(false);
+        this.audioManagerButton.setOnAction(event -> openAudioDialog(mainStage));
+        this.audioManagerButton.setGraphic(new ImageView(IgnisGlobals.getIconAudioManager()));
+    }
+
+    /**
+     *
+     */
+    private void buildToolButtons() {
         // Tools Button Group
         ToggleGroup toolsGroup = new ToggleGroup();
         this.penToolButton = new ToggleButton();
@@ -144,7 +183,12 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
                 }
             }
         });
+    }
 
+    /**
+     *
+     */
+    private void buildLayerButtons() {
         // Tools Button Group
         ToggleGroup layersGroup = new ToggleGroup();
         this.layer1Button = new ToggleButton();
@@ -182,33 +226,11 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
                 }
             }
         });
-
-        this.importManagerButton = new Button();
-        this.importManagerButton.setFocusTraversable(false);
-        this.importManagerButton.setGraphic(new ImageView(IgnisGlobals.getIconImport()));
-        this.importManagerButton.setOnAction(event -> openImportWindow(mainStage));
-
-        this.gameDBButton = new Button();
-        this.gameDBButton.setFocusTraversable(false);
-        this.gameDBButton.setOnAction(event -> {
-            openGameDatabase(mainStage);
-        });
-        this.gameDBButton.setGraphic(new ImageView(IgnisGlobals.getIconIgnis24px()));
-
-        this.audioManagerButton = new Button();
-        this.audioManagerButton.setFocusTraversable(false);
-        this.audioManagerButton.setOnAction(event -> openAudioDialog(mainStage));
-
-        this.audioManagerButton.setGraphic(new ImageView(IgnisGlobals.getIconAudioManager()));
-        toolBar.getItems().addAll(newProjectBtn, openProjectBtn, saveProjectBtn, new Separator(),
-                penToolButton, brushToolButton, fillToolButton, eraseToolButton, new Separator(),
-                layer1Button, layer2Button, layer3Button, layer4Button, new Separator(), importManagerButton, gameDBButton, audioManagerButton);
-
     }
 
 
     /**
-     * @param primaryStage
+     * @param primaryStage The Main Stage
      */
     private void buildUserInterface(Stage primaryStage) {
 
@@ -270,8 +292,8 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
     }
 
     /**
-     * @param primaryStage
-     * @throws Exception
+     * @param primaryStage The Main Stage
+     * @throws Exception if building process went wrong
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -297,7 +319,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
     }
 
     /**
-     * @param p
+     * @param p The project that is now active... can be null
      */
     @Override
     public void activeProjectChanged(Project p) {
@@ -324,7 +346,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
     /**
      *
-     * @param p
+     * @param p The project that is now active... can be null
      */
     private void userInterfaceChanges(Project p) {
 
@@ -347,7 +369,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
     }
 
     /**
-     * @param layerIndex
+     * @param layerIndex the currently active Layer
      */
     @Override
     public void activeLayerChanged(int layerIndex) {
@@ -370,7 +392,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
     }
 
     /**
-     * @param toolIndex
+     * @param toolIndex the currently active Tool Index
      */
     @Override
     public void activeToolChanged(int toolIndex) {
@@ -395,7 +417,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
     /**
      *
-     * @param mainStage
+     * @param mainStage The MainStage
      */
     private void openCreateProjectWindow(Stage mainStage) {
         CreateProjectDialog createProjectDialog = new CreateProjectDialog(mainStage);
@@ -405,7 +427,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
     /**
      *
-     * @param mainStage
+     * @param mainStage The MainStage
      */
     private void openLoadProjectWindow(Stage mainStage) {
         LoadProjectDialog loadProjectDialog = new LoadProjectDialog(mainStage);
@@ -424,7 +446,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
     /**
      *
-     * @param mainStage
+     * @param mainStage The MainStage
      */
     private void openImportWindow(Stage mainStage) {
         ImportDialog importDialog = new ImportDialog(mainStage, this.project);
@@ -434,7 +456,7 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
     /**
      *
-     * @param mainStage
+     * @param mainStage The MainStage
      */
     private void openAudioDialog(Stage mainStage) {
         AudioDialog audioDialog = new AudioDialog(mainStage,this.project.getAudioManager());
@@ -444,11 +466,12 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
     /**
      *
-     * @param mainStage
+     * @param mainStage The MainStage
      */
     private void openGameDatabase(Stage mainStage) {
         GameDatabase gameDatabase = new GameDatabase(mainStage, this.project);
         gameDatabase.show();
         CenterWindowOnParent.center(mainStage,gameDatabase);
     }
+
 }
