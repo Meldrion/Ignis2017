@@ -22,10 +22,6 @@ public class Layer<T> {
         this.height = 0;
     }
 
-/*    public void setT(T type) {
-        this.type = type;
-    }*/
-
     /**
      * @param x
      * @param y
@@ -43,7 +39,7 @@ public class Layer<T> {
     /**
      *
      */
-    public void buildMatrix() {
+    private void buildMatrix() {
 
         List<List<T>> old = this.matrix;
 
@@ -124,17 +120,38 @@ public class Layer<T> {
      * @param y
      * @param type
      */
-    public void addCell(int x, int y,T type) {
+    void setAt(int x, int y, T type) {
 
         if (this.isInRange(x,y)) {
             this.matrix.get(x).set(y, type);
         }
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
+    T removeAt(int x, int y) {
+        T current = this.getFrom(x,y);
+        this.setAt(x,y,null);
+        return current;
+    }
 
     /**
      *
-     * @return
+     * @param x x pos
+     * @param y y pos
+     * @return element from the matrix
+     */
+    T getFrom(int x,int y) {
+        return this.isInRange(x,y) ? this.matrix.get(x).get(y) : null;
+    }
+
+
+    /**
+     * Returns the inner Matrix
+     * @return Matrix containing the elements
      */
     List<List<T>> getMatrix() {
        return this.matrix;
@@ -144,7 +161,7 @@ public class Layer<T> {
     /**
      *
      */
-    public void clearLayer() {
+    void clearLayer() {
         this.matrix.clear();
     }
 

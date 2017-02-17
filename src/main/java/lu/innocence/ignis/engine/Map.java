@@ -186,7 +186,7 @@ public class Map {
      * @return
      */
     public TileCell removeCell(int layerIndex, int x, int y) {
-        return this.layers.get(layerIndex).removeCell(x, y);
+        return this.layers.get(layerIndex).removeAt(x, y);
     }
 
     /**
@@ -334,7 +334,7 @@ public class Map {
      */
     public TileCell addTile(int layerId, int x, int y, int tsX, int tsY) {
         TileCell tCell = new TileCell(x,y,tsX, tsY);
-        this.layers.get(layerId).addCell(x, y, tCell);
+        this.layers.get(layerId).setAt(x, y, tCell);
         return tCell;
     }
 

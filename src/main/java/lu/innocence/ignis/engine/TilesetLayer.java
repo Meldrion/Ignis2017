@@ -5,9 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Fabien Steines
  */
@@ -23,44 +20,6 @@ public class TilesetLayer extends Layer<TileCell> {
         super();
         LOGGER.info("Created TileLayer");
     }
-
-    /**
-     *
-     * @param width
-     * @param height
-     */
-    void setDimension(int width, int height) {
-
-        if (this.getWidth() != width|| this.getHeight() != height) {
-            this.setWidth(width);
-            this.setHeight(height);
-            this.buildMatrix();
-        }
-
-    }
-
-/*    *//**
-     *
-     *//*
-    public void buildMatrix() {
-
-        List<List<TileCell>> old = this.matrix;
-
-        this.matrix = new ArrayList<>();
-        for (int i = 0; i < this.width; i++) {
-
-            List<TileCell> innerMatrix = new ArrayList<>();
-            for (int j = 0; j < this.height; j++) {
-                if (old != null && isInRange(i,j,old.size(),old.get(0).size())) {
-                    innerMatrix.add(old.get(i).get(j));
-                } else {
-                    innerMatrix.add(null);
-                }
-            }
-            this.matrix.add(innerMatrix);
-        }
-
-    }*/
 
 
     /**
@@ -154,9 +113,9 @@ public class TilesetLayer extends Layer<TileCell> {
      * @param y
      * @param tileset
      */
-    public void renderPartial(GraphicsContext g, int x, int y, Tileset tileset) {
+    void renderPartial(GraphicsContext g, int x, int y, Tileset tileset) {
         if (-1 < x && -1 < y && x < this.getWidth() && y < this.getHeight()) {
-            TileCell cell = this.getMatrix().get(x).get(y);
+            TileCell cell = this.getFrom(x,y);
             if (cell != null) {
                 if (Tileset.isTilesetCell(cell.tsY)) {
                     // Tileset
@@ -170,20 +129,10 @@ public class TilesetLayer extends Layer<TileCell> {
     }
 
     /**
-     * @param x
-     * @param y
-     */
-    public TileCell removeCell(int x, int y) {
-        TileCell cell = this.getMatrix().get(x).get(y);
-        this.getMatrix().get(x).set(y, null);
-        return cell;
-    }
-
-    /**
      * @return
      */
     @SuppressWarnings("unchecked")
-    public JSONArray saveLayer() {
+    JSONArray saveLayer() {
         JSONArray layer = new JSONArray();
         for (int i = 0; i < this.getMatrix().size(); i++) {
             for (int j = 0; j < this.getMatrix().get(0).size(); j++) {
