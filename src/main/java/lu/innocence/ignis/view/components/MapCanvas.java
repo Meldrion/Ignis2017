@@ -9,10 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import lu.innocence.ignis.IgnisGlobals;
-import lu.innocence.ignis.engine.AssetStructure;
-import lu.innocence.ignis.engine.Map;
-import lu.innocence.ignis.engine.TileCell;
-import lu.innocence.ignis.engine.Tileset;
+import lu.innocence.ignis.engine.*;
 import lu.innocence.ignis.event.ActiveMapListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
 import lu.innocence.ignis.event.MapPropertiesUpdated;
@@ -347,7 +344,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
 
         this.selectCellForEventEditor(x,y);
         if (mouseEvent.getClickCount() > 1) {
-            openEventEditor(this.parentStage);
+            openEventEditor(this.parentStage,x,y);
         }
     }
 
@@ -761,10 +758,16 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     /**
      * @param parentStage The Main Stage
      */
-    private void openEventEditor(Stage parentStage) {
+    private void openEventEditor(Stage parentStage,int x,int y) {
+        Event event = this.map.handleEvent(x,y);
         EventEditor eventEditor = new EventEditor(this.parentStage,this.assetManager);
-        eventEditor.show();
         CenterWindowOnParent.center(parentStage,eventEditor);
+        eventEditor.setOnHidden(e -> {
+            if (eventEditor.isAccepted()) {
+                this.map.addEvent(x,y,event);
+            }
+        });
+        eventEditor.show();
     }
 
 }

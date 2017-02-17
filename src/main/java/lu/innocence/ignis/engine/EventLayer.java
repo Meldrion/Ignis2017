@@ -34,13 +34,12 @@ public class EventLayer extends Layer<Event> {
 
     /**
      *
-     * @param name
      * @param x
      * @param y
      * @return
      */
-    public Event handleEvent(String name,int x,int y) {
-        return this.getFrom(x,y) == null ? new Event(x,y,name) : this.getFrom(x,y);
+    public Event handleEvent(int x,int y) {
+        return this.getFrom(x,y) == null ? new Event(x,y) : this.getFrom(x,y);
     }
 
 

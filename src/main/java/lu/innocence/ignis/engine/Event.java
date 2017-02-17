@@ -16,7 +16,7 @@ public class Event {
     private int yPos;
     private String name;
 
-    public Event(int x,int y,String name) {
+    public Event(int x,int y) {
         this.setPosition(x,y);
     }
 

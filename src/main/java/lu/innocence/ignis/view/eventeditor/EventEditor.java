@@ -13,8 +13,8 @@ import lu.innocence.ignis.engine.AssetStructure;
 
 /**
  * @author Fabien Steines
- *         mailto:fabien.steines@post.lu
- *         Copyright by POST Technologies
+ *         mailto:fabien.steines@gmail.com
+ *         Copyright by Innocence Studios
  *         <p>
  *         <p>
  *         Last revision - 27.01.2017 - Fabien Steines
@@ -22,13 +22,16 @@ import lu.innocence.ignis.engine.AssetStructure;
 public class EventEditor extends Stage {
 
     private TabPane mainTabber;
+    private boolean accepted;
 
     /**
      *
      * @param parent
+     * @param assetManager
      */
     public EventEditor(Stage parent, AssetStructure assetManager) {
         super();
+        this.accepted = false;
         this.initOwner(parent);
         this.initModality(Modality.WINDOW_MODAL);
         this.setResizable(false);
@@ -112,12 +115,14 @@ public class EventEditor extends Stage {
         Button okButton = new Button();
         okButton.setText("Accept");
         okButton.setOnAction(event -> {
-
+            this.accepted = true;
+            this.close();
         });
 
         Button cancelButton = new Button();
         cancelButton.setText("Cancel");
         cancelButton.setOnAction(event -> {
+            this.accepted = false;
             this.close();
         });
 
@@ -143,6 +148,14 @@ public class EventEditor extends Stage {
 
         this.mainTabber.getTabs().add(editorPageTab);
         this.mainTabber.getSelectionModel().select(editorPageTab);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isAccepted() {
+        return accepted;
     }
 
 }

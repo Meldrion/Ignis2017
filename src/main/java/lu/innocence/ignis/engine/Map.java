@@ -19,6 +19,7 @@ public class Map {
     private static final Logger LOGGER = LogManager.getLogger(Map.class);
     private List<MapPropertiesUpdated> mapPropertiesListeners;
     private List<TilesetLayer> layers;
+    private EventLayer eventLayer;
     private int width;
     private int height;
     private int cellSize;
@@ -45,9 +46,13 @@ public class Map {
         this.mapPropertiesListeners = new ArrayList<>();
         this.layers = new ArrayList<>();
 
+        // Create the Tile Layers
         for (int i = 0; i < 3; i++) {
             this.layers.add(new TilesetLayer());
         }
+
+        // Create the Event Layer
+        this.eventLayer = new EventLayer();
     }
 
     /**
@@ -110,6 +115,7 @@ public class Map {
         for (TilesetLayer layer : this.layers) {
             layer.setDimension(x, y);
         }
+        this.eventLayer.setDimension(x,y);
         this.fireMapProprtiesUpdated();
     }
 
@@ -148,6 +154,8 @@ public class Map {
 
             }
         }
+
+        this.eventLayer.render(g);
     }
 
     /**
@@ -377,5 +385,25 @@ public class Map {
         for (MapPropertiesUpdated current : this.mapPropertiesListeners) {
             current.mapPropertiesUpdated(this);
         }
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public Event handleEvent(int x,int y) {
+        return this.eventLayer.handleEvent(x,y);
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param event
+     */
+    public void addEvent(int x, int y, Event event) {
+        this.eventLayer.setAt(x,y,event);
     }
 }
