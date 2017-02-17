@@ -1,6 +1,7 @@
 package lu.innocence.ignis.engine;
 
 import javafx.scene.canvas.GraphicsContext;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 
@@ -10,39 +11,37 @@ import java.util.List;
 /**
  * @author Fabien Steines
  */
-public class TilesetLayer {
+public class TilesetLayer extends Layer<TileCell> {
 
-    private final int cellSize = 32;
-    private List<List<TileCell>> matrix;
-    private int width;
-    private int height;
-    private static final Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(TilesetLayer.class);
+
+    private static final Logger LOGGER = LogManager.getLogger(TilesetLayer.class);
 
     /**
      *
      */
-    public TilesetLayer() {
-        this.width = 0;
-        this.height = 0;
+    TilesetLayer() {
+        super();
+        LOGGER.info("Created TileLayer");
     }
 
     /**
-     * @param x
-     * @param y
+     *
+     * @param width
+     * @param height
      */
-    public void setDimension(int x, int y) {
+    void setDimension(int width, int height) {
 
-        if (this.width != x || this.height != y) {
-            this.width = x;
-            this.height = y;
+        if (this.getWidth() != width|| this.getHeight() != height) {
+            this.setWidth(width);
+            this.setHeight(height);
             this.buildMatrix();
         }
 
     }
 
-    /**
+/*    *//**
      *
-     */
+     *//*
     public void buildMatrix() {
 
         List<List<TileCell>> old = this.matrix;
@@ -61,22 +60,8 @@ public class TilesetLayer {
             this.matrix.add(innerMatrix);
         }
 
-    }
+    }*/
 
-    /**
-     * @param x
-     * @param y
-     * @param tsX
-     * @param tsY
-     */
-    public TileCell addCell(int x, int y, int tsX, int tsY) {
-        if (this.isInRange(x,y)) {
-            TileCell tsCell = new TileCell(x, y, tsX, tsY);
-            return this.matrix.get(x).set(y, tsCell);
-        } else {
-            return null;
-        }
-    }
 
     /**
      * @param g
@@ -84,9 +69,9 @@ public class TilesetLayer {
      */
     public void render(GraphicsContext g, Tileset tileset) {
 
-        for (int i = 0; i < this.width; i++) {
-            for (int j = 0; j < this.height; j++) {
-                TileCell cell = this.matrix.get(i).get(j);
+        for (int i = 0; i < this.getWidth(); i++) {
+            for (int j = 0; j < this.getHeight(); j++) {
+                TileCell cell = this.getMatrix().get(i).get(j);
                 if (cell != null) {
                     cellDrawing(g, tileset, cell, i, j);
                 }
@@ -120,7 +105,7 @@ public class TilesetLayer {
      * @return
      */
     private boolean[][] buildNeightbourMatrix(int x, int y) {
-        TileCell cellToTest = this.matrix.get(x).get(y);
+        TileCell cellToTest = this.getMatrix().get(x).get(y);
 
         // Create the Matrix the will be analysed later
         boolean[][] matrix = new boolean[3][3];
@@ -135,7 +120,7 @@ public class TilesetLayer {
                 // If the tile is not in range, the result will
                 // always be true
                 if (this.isInRange(nX + i, nY + j)) {
-                    TileCell cTile = this.matrix.get(nX + i).get(nY + j);
+                    TileCell cTile = this.getMatrix().get(nX + i).get(nY + j);
                     matrix[i][j] = cTile != null && cTile.sameTileAs(cellToTest);
                 } else {
                     matrix[i][j] = true;
@@ -160,27 +145,7 @@ public class TilesetLayer {
         return totalScore;
     }
 
-    /**
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    private boolean isInRange(int x,int y) {
-        return this.isInRange(x,y,this.width,this.height);
-    }
 
-    /**
-     *
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @return
-     */
-    private boolean isInRange(int x,int y,int width,int height) {
-        return 0 <= x && x < width && 0 <= y && y < height;
-    }
 
 
     /**
@@ -190,8 +155,8 @@ public class TilesetLayer {
      * @param tileset
      */
     public void renderPartial(GraphicsContext g, int x, int y, Tileset tileset) {
-        if (-1 < x && -1 < y && x < this.width && y < this.height) {
-            TileCell cell = this.matrix.get(x).get(y);
+        if (-1 < x && -1 < y && x < this.getWidth() && y < this.getHeight()) {
+            TileCell cell = this.getMatrix().get(x).get(y);
             if (cell != null) {
                 if (Tileset.isTilesetCell(cell.tsY)) {
                     // Tileset
@@ -209,8 +174,8 @@ public class TilesetLayer {
      * @param y
      */
     public TileCell removeCell(int x, int y) {
-        TileCell cell = this.matrix.get(x).get(y);
-        this.matrix.get(x).set(y, null);
+        TileCell cell = this.getMatrix().get(x).get(y);
+        this.getMatrix().get(x).set(y, null);
         return cell;
     }
 
@@ -220,9 +185,9 @@ public class TilesetLayer {
     @SuppressWarnings("unchecked")
     public JSONArray saveLayer() {
         JSONArray layer = new JSONArray();
-        for (int i = 0; i < this.matrix.size(); i++) {
-            for (int j = 0; j < this.matrix.get(0).size(); j++) {
-                TileCell cell = this.matrix.get(i).get(j);
+        for (int i = 0; i < this.getMatrix().size(); i++) {
+            for (int j = 0; j < this.getMatrix().get(0).size(); j++) {
+                TileCell cell = this.getMatrix().get(i).get(j);
                 if (cell != null) {
                     layer.add(cell.save());
                 }
@@ -231,11 +196,6 @@ public class TilesetLayer {
         return layer;
     }
 
-    /**
-     *
-     */
-    public void clearLayer() {
-        this.matrix.clear();
-    }
+
 
 }

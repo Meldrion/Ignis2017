@@ -310,13 +310,13 @@ public class Map {
         if (layersJSON != null) {
             for (int layer = 0; layer < layersJSON.size(); layer++) {
                 JSONArray layerData = (JSONArray) layersJSON.get(layer);
-                for (int i = 0; i < layerData.size(); i++) {
-                    JSONObject tileData = (JSONObject) layerData.get(i);
+                for (Object aLayerData : layerData) {
+                    JSONObject tileData = (JSONObject) aLayerData;
                     int x = (int) (long) tileData.get("x");
                     int y = (int) (long) tileData.get("y");
                     int tsX = (int) (long) tileData.get("tsX");
                     int tsY = (int) (long) tileData.get("tsY");
-                    this.layers.get(layer).addCell(x, y, tsX, tsY);
+                    this.addTile(layer, x, y, tsX, tsY);
                 }
             }
         }
@@ -333,7 +333,9 @@ public class Map {
      * @return
      */
     public TileCell addTile(int layerId, int x, int y, int tsX, int tsY) {
-        return this.layers.get(layerId).addCell(x, y, tsX, tsY);
+        TileCell tCell = new TileCell(x,y,tsX, tsY);
+        this.layers.get(layerId).addCell(x, y, tCell);
+        return tCell;
     }
 
     /**
