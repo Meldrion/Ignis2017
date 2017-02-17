@@ -92,7 +92,11 @@ public class TilesetLayer extends Layer<TileCell> {
         return matrix;
     }
 
-    // Get the Score Value depending on the 9x9 Matrix
+    /**
+     * Get the Score Value depending on the 9x9 Matrix
+     * @param neightbours array holding the same neighbours
+     * @return the current score of this node
+     */
     private int calculateScore(boolean[][] neightbours) {
         int totalScore = 0;
 
@@ -103,8 +107,6 @@ public class TilesetLayer extends Layer<TileCell> {
 
         return totalScore;
     }
-
-
 
 
     /**
