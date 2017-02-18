@@ -293,13 +293,14 @@ public class Map {
         mapJSON.put("height", this.getHeight());
         mapJSON.put("tilesetIndex", this.getTilesetId());
 
-        JSONArray layers = new JSONArray();
+        JSONArray tileLayers = new JSONArray();
         for (TilesetLayer layer : this.layers) {
             JSONArray layerJSON = layer.saveLayer();
-            layers.add(layerJSON);
+            tileLayers.add(layerJSON);
         }
 
-        mapJSON.put("layers", layers);
+        mapJSON.put("tileLayers", tileLayers);
+        mapJSON.put("eventLayer",this.eventLayer.saveLayer());
 
         FilesystemHandler.writeJson(mapJSON, this.mapFilePath);
     }
@@ -316,10 +317,10 @@ public class Map {
         this.height = (int) (long) mapData.get("height");
         this.setDimension(this.width, this.height);
         this.tilesetId = (int) (long) mapData.get("tilesetIndex");
-        JSONArray layersJSON = (JSONArray) mapData.get("layers");
-        if (layersJSON != null) {
-            for (int layer = 0; layer < layersJSON.size(); layer++) {
-                JSONArray layerData = (JSONArray) layersJSON.get(layer);
+        JSONArray tileLayersJSON = (JSONArray) mapData.get("tileLayers");
+        if (tileLayersJSON != null) {
+            for (int layer = 0; layer < tileLayersJSON.size(); layer++) {
+                JSONArray layerData = (JSONArray) tileLayersJSON.get(layer);
                 for (Object aLayerData : layerData) {
                     JSONObject tileData = (JSONObject) aLayerData;
                     int x = (int) (long) tileData.get("x");
@@ -329,6 +330,11 @@ public class Map {
                     this.addTile(layer, x, y, tsX, tsY);
                 }
             }
+        }
+
+        JSONArray eventLayerJSON = (JSONArray) mapData.get("eventLayer");
+        if (eventLayerJSON != null) {
+            LOGGER.info("Found Event Layer");
         }
 
     }
