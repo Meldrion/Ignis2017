@@ -334,7 +334,14 @@ public class Map {
 
         JSONArray eventLayerJSON = (JSONArray) mapData.get("eventLayer");
         if (eventLayerJSON != null) {
+
             LOGGER.info("Found Event Layer");
+            for (int eventIndex = 0; eventIndex < eventLayerJSON.size(); eventIndex++) {
+                JSONObject eventData = (JSONObject) eventLayerJSON.get(eventIndex);
+                int x = (int) (long) eventData.get("x");
+                int y = (int) (long) eventData.get("y");
+                this.addEvent(x,y,new Event(x,y));
+            }
         }
 
     }
