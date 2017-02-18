@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * @author Fabien Steines
@@ -19,6 +20,11 @@ public class TilesetLayer extends Layer<TileCell> {
     TilesetLayer() {
         super();
         LOGGER.info("Created TileLayer");
+    }
+
+    @Override
+    JSONObject save(TileCell tileCell) {
+        return tileCell.save();
     }
 
 
@@ -116,7 +122,7 @@ public class TilesetLayer extends Layer<TileCell> {
      * @param tileset
      */
     void renderPartial(GraphicsContext g, int x, int y, Tileset tileset) {
-        if (-1 < x && -1 < y && x < this.getWidth() && y < this.getHeight()) {
+        if (this.isInRange(x,y)) {
             TileCell cell = this.getFrom(x,y);
             if (cell != null) {
                 if (Tileset.isTilesetCell(cell.tsY)) {
@@ -129,24 +135,5 @@ public class TilesetLayer extends Layer<TileCell> {
             }
         }
     }
-
-    /**
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    JSONArray saveLayer() {
-        JSONArray layer = new JSONArray();
-        for (int i = 0; i < this.getMatrix().size(); i++) {
-            for (int j = 0; j < this.getMatrix().get(0).size(); j++) {
-                TileCell cell = this.getMatrix().get(i).get(j);
-                if (cell != null) {
-                    layer.add(cell.save());
-                }
-            }
-        }
-        return layer;
-    }
-
-
 
 }

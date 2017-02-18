@@ -19,11 +19,19 @@ public class TileCell {
         this.tsY = tsY;
     }
 
+    /**
+     *
+     * @return
+     */
     public JSONObject save() {
         JSONObject tile = new JSONObject();
+        //noinspection unchecked
         tile.put("x", x);
+        //noinspection unchecked
         tile.put("y", y);
+        //noinspection unchecked
         tile.put("tsX", tsX);
+        //noinspection unchecked
         tile.put("tsY", tsY);
         return tile;
     }

@@ -765,6 +765,7 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
         eventEditor.setOnHidden(e -> {
             if (eventEditor.isAccepted()) {
                 this.map.addEvent(x,y,event);
+                this.renderPartial(x,y,false);
             }
         });
         eventEditor.show();

@@ -183,6 +183,8 @@ public class Map {
                 this.layers.get(index).renderPartial(g, x, y, this.tileset);
                 g.setGlobalAlpha(1.0);
             }
+
+            this.eventLayer.renderPartial(g,x,y);
         }
     }
 

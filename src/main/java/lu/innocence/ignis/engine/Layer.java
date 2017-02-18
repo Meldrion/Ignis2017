@@ -1,5 +1,8 @@
 package lu.innocence.ignis.engine;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +14,7 @@ import java.util.List;
  *         <p>
  *         Last revision - $(DATE) - Fabien Steines
  */
-public class Layer<T> {
+public abstract class Layer<T> {
 
     private List<List<T>> matrix;
     private int width;
@@ -165,4 +168,23 @@ public class Layer<T> {
         this.matrix.clear();
     }
 
+
+    /**
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    JSONArray saveLayer() {
+        JSONArray layer = new JSONArray();
+        for (int i = 0; i < this.getMatrix().size(); i++) {
+            for (int j = 0; j < this.getMatrix().get(0).size(); j++) {
+                T c = this.getMatrix().get(i).get(j);
+                if (c != null) {
+                    layer.add(save(c));
+                }
+            }
+        }
+        return layer;
+    }
+
+    abstract JSONObject save(T t);
 }
