@@ -172,4 +172,5 @@ public class IgnisGlobals {
     public static Image getIconMap() {
         return iconMap;
     }
+
 }
