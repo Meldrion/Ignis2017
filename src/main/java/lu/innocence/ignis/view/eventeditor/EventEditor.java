@@ -4,12 +4,18 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.AssetStructure;
+import lu.innocence.ignis.engine.Event;
+import lu.innocence.ignis.engine.EventPage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Fabien Steines
@@ -23,6 +29,7 @@ public class EventEditor extends Stage {
 
     private TabPane mainTabber;
     private boolean accepted;
+    private AssetStructure assetManager;
 
     /**
      *
@@ -31,6 +38,7 @@ public class EventEditor extends Stage {
      */
     public EventEditor(Stage parent, AssetStructure assetManager) {
         super();
+        this.assetManager = assetManager;
         this.accepted = false;
         this.initOwner(parent);
         this.initModality(Modality.WINDOW_MODAL);
@@ -67,7 +75,7 @@ public class EventEditor extends Stage {
 
         Button newPageButton = new Button();
         newPageButton.setText("New Page");
-        newPageButton.setOnAction(event -> this.createNewEventPage(assetManager));
+        newPageButton.setOnAction(event -> this.createNewEventPage(assetManager,new EventPage()));
 
         Button copyPageButton = new Button();
         copyPageButton.setText("Copy Page");
@@ -88,10 +96,6 @@ public class EventEditor extends Stage {
         // Center
         this.mainTabber = new TabPane();
         root.setCenter(mainTabber);
-
-        // Tabs Part
-        this.createNewEventPage(assetManager); // First Page
-
 
         this.createButtomBox(root);
 
@@ -135,12 +139,13 @@ public class EventEditor extends Stage {
     /**
      *
      */
-    private void createNewEventPage(AssetStructure assetManager) {
+    private void createNewEventPage(AssetStructure assetManager,EventPage linkedEventPage) {
 
         int cCount = this.mainTabber.getTabs().size();
         String tabName = String.format("Page %s",cCount + 1);
 
         EventEditorTab editorTabContent = new EventEditorTab(tabName,this,assetManager);
+        editorTabContent.setLinkedPage(linkedEventPage);
         Tab editorPageTab = new Tab();
         editorPageTab.setText(tabName);
         editorPageTab.setClosable(false);
@@ -158,4 +163,28 @@ public class EventEditor extends Stage {
         return accepted;
     }
 
+    /**
+     *
+     */
+    public void setEvent(Event event) {
+        if (event != null) {
+            for (EventPage page : event.getEventPages()) {
+                this.createNewEventPage(this.assetManager,page);
+            }
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<EventPage> getEventPages() {
+        List<EventPage> pages = new ArrayList<>();
+        for (Tab currentTab : this.mainTabber.getTabs()) {
+            EventEditorTab currEventEditorTab = (EventEditorTab) currentTab.getContent();
+            currEventEditorTab.applyToEventObject();
+            pages.add(currEventEditorTab.getLinkedPage());
+        }
+        return pages;
+    }
 }

@@ -76,6 +76,22 @@ public class CharViewCanvas extends Canvas {
 
     /**
      *
+     * @return
+     */
+    public Image getCharImage() {
+        return this.charImage;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getCharName() {
+        return this.charName;
+    }
+
+    /**
+     *
      */
     public void action() {
         ImageView imageView = new ImageView(parent);

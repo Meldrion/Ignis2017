@@ -761,9 +761,11 @@ public class MapCanvas extends Canvas implements TilesetSelectionChanged, Active
     private void openEventEditor(Stage parentStage,int x,int y) {
         Event event = this.map.handleEvent(x,y);
         EventEditor eventEditor = new EventEditor(this.parentStage,this.assetManager);
+        eventEditor.setEvent(event);
         CenterWindowOnParent.center(parentStage,eventEditor);
         eventEditor.setOnHidden(e -> {
             if (eventEditor.isAccepted()) {
+                event.setEventPages(eventEditor.getEventPages());
                 this.map.addEvent(x,y,event);
                 this.renderPartial(x,y,false);
             }

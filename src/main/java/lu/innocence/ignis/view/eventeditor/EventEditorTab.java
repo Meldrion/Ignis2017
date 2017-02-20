@@ -2,9 +2,11 @@ package lu.innocence.ignis.view.eventeditor;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lu.innocence.ignis.engine.AssetStructure;
+import lu.innocence.ignis.engine.EventPage;
 import lu.innocence.ignis.view.components.CharViewCanvas;
 import lu.innocence.ignis.view.components.EventEditorSwitchComponent;
 import lu.innocence.ignis.view.components.EventEditorVariableComponent;
@@ -15,6 +17,9 @@ import lu.innocence.ignis.view.components.VisualScriptEditor;
  * Last Update on: 27.01.2017.
  */
 public class EventEditorTab extends BorderPane {
+
+    private CharViewCanvas charViewCanvas;
+    private EventPage linkedPage;
 
     /**
      *
@@ -196,7 +201,7 @@ public class EventEditorTab extends BorderPane {
     private VBox createCharView(Stage parent,AssetStructure assetManager) {
         VBox charView = new VBox();
         charView.setSpacing(5);
-        CharViewCanvas charViewCanvas = new CharViewCanvas(assetManager,parent);
+        this.charViewCanvas = new CharViewCanvas(assetManager,parent);
         int widthForLeftObjects = 125;
         charViewCanvas.setWidth(widthForLeftObjects);
         charViewCanvas.setHeight(125);
@@ -211,5 +216,31 @@ public class EventEditorTab extends BorderPane {
 
         charView.getChildren().addAll(charViewCanvas,charViewChangeButton);
         return charView;
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public EventPage getLinkedPage() {
+        return linkedPage;
+    }
+
+    /**
+     *
+     * @param linkedPage
+     */
+    public void setLinkedPage(EventPage linkedPage) {
+        this.linkedPage = linkedPage;
+        this.charViewCanvas.setCharacter(linkedPage.getCharacterSpriteName(),linkedPage.getSpriteImage());
+    }
+
+    /**
+     *
+     */
+    public void applyToEventObject() {
+        this.linkedPage.setSpriteImage(this.charViewCanvas.getCharImage());
+        this.linkedPage.setCharacterSpriteName(this.charViewCanvas.getCharName());
     }
 }
