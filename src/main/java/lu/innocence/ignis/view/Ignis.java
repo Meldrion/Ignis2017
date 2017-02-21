@@ -99,7 +99,8 @@ public class Ignis extends Application implements ActiveProjectListener, GUIButt
 
         toolBar.getItems().addAll(newProjectBtn, openProjectBtn, saveProjectBtn, new Separator(),
                 penToolButton, brushToolButton, fillToolButton, eraseToolButton, new Separator(),
-                layer1Button, layer2Button, layer3Button, layer4Button, new Separator(), importManagerButton, gameDBButton, audioManagerButton);
+                layer1Button, layer2Button, layer3Button, layer4Button, new Separator(),
+                importManagerButton, gameDBButton, audioManagerButton);
 
     }
 

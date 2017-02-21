@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -45,6 +46,16 @@ public class Event {
         event.put("x", xPos);
         //noinspection unchecked
         event.put("y", yPos);
+
+        JSONArray pagesJSON = new JSONArray();
+        for (EventPage page : this.eventPages) {
+            //noinspection unchecked
+            pagesJSON.add(page.save());
+        }
+
+        //noinspection unchecked
+        event.put("pages",pagesJSON);
+
         return event;
     }
 

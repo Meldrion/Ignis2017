@@ -1,6 +1,7 @@
 package lu.innocence.ignis.engine;
 
 import javafx.scene.image.Image;
+import org.json.simple.JSONObject;
 
 /**
  * Created by Fabien Steines
@@ -25,6 +26,13 @@ public class EventPage {
 
     public Image getSpriteImage() {
         return spriteImage;
+    }
+
+    public JSONObject save() {
+        JSONObject pageDetails = new JSONObject();
+        //noinspection unchecked
+        pageDetails.put("sprite",this.characterSpriteName);
+        return pageDetails;
     }
 
 }
