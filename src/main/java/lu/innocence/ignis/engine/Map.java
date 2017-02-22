@@ -31,12 +31,11 @@ public class Map {
     private String name;
     private String mapFilePath;
     private int tilesetId;
+    private AssetManager assetManager;
 
-    /**
-     *
-     */
-    Map() {
 
+    public Map(AssetManager assetManager) {
+        this.assetManager = assetManager;
         this.uniqueId = "root";
         this.cellSize = 32;
         this.activeLayerIndex = 0;

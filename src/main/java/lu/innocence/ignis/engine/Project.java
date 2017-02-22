@@ -14,6 +14,7 @@ public class Project {
     private AssetStructure assetStructure;
     private TilesetManager tilesetManager;
     private AudioManager audioManager;
+    private AssetManager assetManager;
     private String projectTitle;
     private String author;
     private String devCompany;
@@ -25,6 +26,7 @@ public class Project {
         this.mapManager = new MapManager();
         this.tilesetManager = new TilesetManager();
         this.audioManager = new AudioManager();
+        this.assetManager = new AssetManager();
     }
 
 
@@ -36,15 +38,17 @@ public class Project {
      * @param devCompany the name of the company
      * @return true of the project was created without any errors
      */
-    @SuppressWarnings("unchecked")
-    public boolean create(String rootPath, String projectName, String projectTitle, String author, String devCompany) {
+    boolean create(String rootPath, String projectName, String projectTitle, String author, String devCompany) {
 
         this.rootFolder = FilesystemHandler.concat(rootPath, projectName);
 
         if (FilesystemHandler.createFolder(this.rootFolder)) {
             JSONObject projectJSON = new JSONObject();
+            //noinspection unchecked
             projectJSON.put("title", projectTitle);
+            //noinspection unchecked
             projectJSON.put("author", author);
+            //noinspection unchecked
             projectJSON.put("company", devCompany);
 
             this.assetStructure = new AssetStructure(this.rootFolder);
@@ -106,6 +110,7 @@ public class Project {
      *
      */
     private void init() {
+        this.mapManager.setAssetManager(this.assetManager);
         this.mapManager.setMapFolder(this.assetStructure.getPath(AssetStructure.MAP));
         this.mapManager.setJsonFolder(this.assetStructure.getPath(AssetStructure.JSON));
         this.mapManager.setTilesetManager(this.tilesetManager);
@@ -208,4 +213,7 @@ public class Project {
         this.devCompany = devCompany;
     }
 
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
 }

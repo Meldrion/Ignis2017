@@ -19,11 +19,12 @@ public class MapManager {
     private String mapFolder;
     private String jsonFolder;
     private TilesetManager tilesetManager;
+    private AssetManager assetManager;
 
 
     public MapManager() {
         this.idGenerator = new MapIDGenerator();
-        this.root = new Map();
+        this.root = new Map(null);
         this.mapListener = new ArrayList<>();
     }
 
@@ -79,7 +80,7 @@ public class MapManager {
     }
 
     public Map createNewMap() {
-        Map map = new Map();
+        Map map = new Map(this.assetManager);
         map.setUniqueId(String.format("%s.json", this.generateMapId()));
         map.setMapFilePath(FilesystemHandler.concat(this.mapFolder, map.getMapId()));
         return map;
@@ -132,7 +133,7 @@ public class MapManager {
     }
 
     public void readMap(JSONObject currentJSON, Map parent) {
-        Map map = new Map();
+        Map map = new Map(this.assetManager);
         map.setUniqueId((String) currentJSON.get("id"));
         map.setMapFilePath(FilesystemHandler.concat(this.mapFolder, map.getMapId()));
         int idNum = this.extractMapIdNumber(map.getMapId());
@@ -178,4 +179,7 @@ public class MapManager {
         this.tilesetManager = tilesetManager;
     }
 
+    public void setAssetManager(AssetManager assetManager) {
+        this.assetManager = assetManager;
+    }
 }
