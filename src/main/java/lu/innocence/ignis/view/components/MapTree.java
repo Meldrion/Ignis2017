@@ -7,7 +7,7 @@ import lu.innocence.ignis.IgnisGlobals;
 import lu.innocence.ignis.engine.Map;
 import lu.innocence.ignis.engine.MapManager;
 import lu.innocence.ignis.engine.Project;
-import lu.innocence.ignis.view.MapPropertiesDialog;
+import lu.innocence.ignis.view.dialog.MapPropertiesDialog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

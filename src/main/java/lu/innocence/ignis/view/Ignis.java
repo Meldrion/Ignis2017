@@ -21,6 +21,10 @@ import lu.innocence.ignis.engine.ProjectManager;
 import lu.innocence.ignis.event.ActiveProjectListener;
 import lu.innocence.ignis.event.GUIButtonsUpdate;
 import lu.innocence.ignis.view.components.*;
+import lu.innocence.ignis.view.dialog.AudioDialog;
+import lu.innocence.ignis.view.dialog.CreateProjectDialog;
+import lu.innocence.ignis.view.dialog.ImportDialog;
+import lu.innocence.ignis.view.dialog.LoadProjectDialog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

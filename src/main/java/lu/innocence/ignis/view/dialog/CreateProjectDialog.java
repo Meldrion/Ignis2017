@@ -1,4 +1,4 @@
-package lu.innocence.ignis.view;
+package lu.innocence.ignis.view.dialog;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -67,7 +67,7 @@ public class CreateProjectDialog extends Stage {
         grid.add(this.rootPathTextField, 1, 0);
 
         Button lookUpButton = new Button();
-        lookUpButton.setText("...");
+        lookUpButton.setText("Search");
         lookUpButton.setOnAction(t -> {
             IgnisGlobals.chooseProjectRoot(this);
             this.rootPathTextField.setText(ProjectManager.getInstance().getRootFolder());

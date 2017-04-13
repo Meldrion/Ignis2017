@@ -1,4 +1,4 @@
-package lu.innocence.ignis.view;
+package lu.innocence.ignis.view.dialog;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,7 +28,6 @@ import java.util.List;
  */
 public class LoadProjectDialog extends Stage {
 
-    //ProjectManager.getInstance().loadProject(ProjectManager.getInstance().getRootFolder() + "/ES2016")
     private TextField rootPathTextField;
     private ListView<String> projectsList;
 

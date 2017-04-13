@@ -1,4 +1,4 @@
-package lu.innocence.ignis.view;
+package lu.innocence.ignis.view.dialog;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

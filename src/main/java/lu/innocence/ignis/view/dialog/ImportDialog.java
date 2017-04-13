@@ -1,4 +1,4 @@
-package lu.innocence.ignis.view;
+package lu.innocence.ignis.view.dialog;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,7 +36,7 @@ public class ImportDialog extends Stage {
      * @param parent the parent of this dialog
      * @param project the currently loaded project
      */
-    ImportDialog(Stage parent, Project project) {
+    public ImportDialog(Stage parent, Project project) {
         this.project = project;
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Import Manager Window");
